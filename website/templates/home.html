@@ -1,0 +1,123 @@
+{% extends "base.html" %} {% block title %}Šípkareň{% endblock %} {% block
+content %}
+<h1 align="center" class="pt-0">
+  <img src="{{ url_for('static', filename='img/logo.svg') }}" width="100%" />
+</h1>
+<div>
+  
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <div id="carouselExampleControls" class="carousel carousel-dark slide" data-bs-ride="carousel">
+          <div class="carousel-inner text-center">
+            {% for data12 in data123 %}
+            {% set de = data_name_tabz %}
+            <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+              {% set list1 =  de[loop.index0].split('-') %}
+              <h1>{{ list1[0] }} {{ list1[1] }}</h1>
+              <table class="table table-dark table-striped table-borderless" id="datas">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Player</th>
+                    <th scope="col">P</th>
+                    <th scope="col">Leg</th>
+                    <th scope="col">+/-</th>
+                  </tr>
+                </thead>
+                {% for i in data12 %} {% for j in i %}
+                <tr>
+                  {% for k in j %}
+                  <td>{{ k }}</td>
+                  {% endfor %}
+                </tr>
+                {% endfor %} {% endfor %}
+              </table>
+              
+            </div>
+            {% endfor %}
+          </div>
+          <button style="margin-left:-50px;" class="carousel-control-prev " type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button style="margin-right:-50px;"  class="carousel-control-next " type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+      <div class="col">
+        <h1>{{ 'complete list' }}</h1>
+        <table class="table table-striped table-dark table-borderless" id="datas">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Meno</th>
+              <th scope="col">Body</th>
+              <th scope="col">Legy</th>
+              <th scope="col">+/-</th>
+              <th scope="col">Gr/#</th>
+            </tr>
+          </thead>
+          
+          {% for uu in data_all|sort(attribute=2, reverse = True)|sort(attribute=4*1.001, reverse = True) %} 
+          <tr>
+            {% for u in uu %}
+          <td>{{ u }}</td>
+          {% endfor %}
+          <td>
+            {{ uu[0] }}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+
+      </div>
+    </div>
+  </div>
+  
+  <div>
+
+  </div>
+
+</div>
+     
+
+         
+</div>
+  
+
+
+
+  <!-- <ul class="list-group list-group-flush" id="notes">
+    {% for note in user.notes %}
+    <li class="list-group-item">
+      {{ note.data }}
+      <button type="button" class="close" onClick="deleteNote({{ note.id }})">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </li>
+    {% endfor %}
+  </ul> -->
+  <!-- <form method="POST">
+  <textarea
+    name="note"
+    id="note"
+    cols="20"
+    rows="2"
+    class="form-control"
+  ></textarea>
+  <div align="center">
+    <button type="submit" class="btn btn-primary mt-4 btn-block">
+      <i class="fa fa-circle-o-notch fa-spin"></i>
+      Add result
+    </button>
+  </div>
+</form> -->
+  <!-- <a href="/?group=a">GROUP A</a>
+  <a href="/?group=b">GROUP B</a>
+  <a href="/?group=c">GROUP C</a> -->
+  {% endblock %}
+</div>
+
