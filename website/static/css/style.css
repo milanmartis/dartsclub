@@ -4,74 +4,300 @@ body {
 
 
 h1 {
-    color:#bfb5ac;
+    color:#00EE00;
     text-transform: capitalize;
     text-align: center;
     padding-top:16px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
 }
+
+.form-control-check {
+    font-family: system-ui, sans-serif;
+    font-size: 12rem;
+    font-weight: bold;
+    line-height: 1.1;
+    display: grid;
+    grid-template-columns: 1em auto;
+    gap: 0.5em;
+    cursor: pointer;
+}
+input[type="checkbox"] {
+    appearance: none;
+    border: 2px solid #00EE00;
+    border-radius: 14px;
+    background-color: #030303;
+    color: #00EE00;
+    font-weight: 600;
+    font-size: 370%;
+    margin: 4px;
+    width: 0.75em;
+    height: 0.75em;
+    display: grid;
+    place-content: center;
+    transform: translateY(-0.075em);
+}
+input[type="checkbox"]::before {
+    place-content: center;
+    content: "\2713";
+    width: 0.35em;
+    height: 0.35em;
+    padding: 2px 1px 3px 1px;
+    margin-top: -45px;
+    margin-left: 25px;
+    transform: scale(0);
+    transition: 80ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--form-control-color);
+}
+input[type="checkbox"]:checked::before {
+    transform: scale(1);
+  }
 
 .col {
 padding:20px;
+margin:10px;
 }
+
+nav{
+    border-radius: 14px !important;
+    background-color: #030303;
+    border: 4px solid #00EE00;
+    color: #00EE00;
+    font-weight: 600;
+    font-size: 120%;
+    padding: 2px 18px 3px 18px;
+    text-align:center;
+    overflow: hidden;
+
+}
+
+.nav-item a{
+    color: #00EE00;
+}
+.navbar-dark .navbar-toggler{
+    color: #00EE00;
+    background-color: transparent;
+    opacity:1.0;
+    border: 0px solid #00EE00;
+    margin: 5px;
+    padding: 5px;;
+}
+
+.navbar-dark .brand {
+    position: absolute;
+    left: 50%;
+    margin-left: -100px !important;  /* 50% of your logo width */
+    margin-top:-16px;
+    display: block;
+    width:300px;
+}
+
+/* // `md` applies to small devices (landscape phones, less than 768px) */
+@media (max-width: 767.98px) {
+    .navbar-dark .brand {
+        display: none;
+    }
+    
+}
+
+@media (min-width: 1200.00px) {
+    .navbar-dark .brand {
+        margin-left: -269px !important;  /* 50% of your logo width */
+
+        width:600px;
+    }
+      
+
+}
+
+
+
+.navbar-dark .navbar-nav .nav-link{
+    color:#00EE00;
+}
+.navbar-dark .navbar-nav .nav-link:hover{
+    color:#e5e5e5;
+}
+
+.navbar-right {
+    float: right;
+  }
+.navbar-dark .navbar-toggler-icon{
+    filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+    margin-top: -20px;
+    margin-bottom: -20px;
+    margin-left: -148px;
+    padding:10px;
+    width:300px;
+        display:inline-block;
+        font-size:50px;
+        text-rendering:auto;
+        background-image: url("../img/sipka.svg")
+    
+    
+    }
+    
+    .navbar-light .navbar-toggler-icon:before {
+        content:"\f07b";
+    }
+    
+    .navbar-light .navbar-toggler[aria-expanded=true] .navbar-toggler-icon:before {
+          color: #00EE00;
+        content:"\f07c";
+      }
+    
+    
+    
+    .navbar-toggler:focus,
+    .navbar-toggler:active,
+    .navbar-toggler-icon:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+/* // `sm` applies to x-small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+    .col {
+    padding:0px;
+    }
+    
+}
+
+/* // `md` applies to small devices (landscape phones, less than 768px) */
+@media (max-width: 767.98px) {
+    
+}
+
+/* // `lg` applies to medium devices (tablets, less than 992px) */
+@media (max-width: 991.98px) {
+    
+}
+
+/* // `xl` applies to large devices (desktops, less than 1200px) */
+@media (max-width: 1199.98px) {
+    
+}
+
+/* // `xxl` applies to x-large devices (large desktops, less than 1400px) */
+@media (max-width: 1399.98px) {
+    
+}
+
 
 input {
     border-radius: 14px !important;
-    background-color: red;
-    border: 6px solid #b52828;
-    border-style: solid;
-    border-width: 4px;
-    border-color: #b52828;
-    font-weight: 800;
-    color: #b52828;
-    font-size: 140%;
+    background-color: #030303;
+    border: 4px solid #00EE00;
+    color: #00EE00;
+    padding: 2px 2px 3px 2px;
+}
+
+.form-control {
+    border-radius: 14px !important;
+    background-color: #030303;
+    border: 0px solid #00EE00;
+    color: #00EE00;
+    padding: 2px 2px 3px 2px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 230px;
+}
+
+
+
+input[type="number"] {
+max-width: 200px;
+font-size: 130px;
+text-align: center;
+padding:8px;
+margin:8px;
+-moz-appearance:textfield; /* Firefox */
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
 input[type="text"] {
-    /* color: #b52828; */
-    font-size: 140%;
+    /* color: #00EE00; */
+
+    font-size: 130%;
     text-align: center;
+    padding:4px;
+    margin:0px;
 }
 
 input[type="email"] {
-    /* color: #b52828; */
-    font-size: 140%;
+    /* color: #00EE00; */
+    font-size: 130%;
     text-align: center;
+    padding:4px;
+    margin:0px;
 }
 
 input[type="password"] {
-    /* color: #b52828; */
-    font-size: 140%;
+    /* color: #00EE00; */
+    font-size: 130%;
     text-align: center;
 }
 
 input[type="textarea"] {
-    /* color: #b52828; */
-    font-size: 140%;
+    /* color: #00EE00; */
+    font-size: 130%;
     text-align: center;
 }
 
+
+
 .btn {
     border-radius: 14px !important;
-    background-color: #bfb5ac;
-    border: 4px solid #b52828;
-    color: #b52828;
+    background-color: #030303;
+    border: 2px solid #00EE00;
+    color: #00EE00;
     font-weight: 600;
-    font-size: 120%;
-    padding: 2px 0px 3px 0px;
+    font-size: 80%;
+    padding: 0px 6px 4px 6px;
+    margin:2px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+}
+
+.form-control:disabled{
+
+
+    background-color: #030303;
+}
+
+.form-control:focus{
+
+    background-color: transparent;
+    border: 2px solid #00EE00;
+    color:#00EE00;
 }
 
 .btn:hover {
-    background-color: #b52828;
-    border: 4px solid #bfb5ac;
-    color: #bfb5ac;
+    background-color: #00EE00;
+    border: 2px solid #00EE00;
+    color: #030303;
 
+}
+
+.btn.btn-primary[disabled] {
+    border-color:transparent !important;
+    box-shadow:none !important;
+    outline:none !important;
+    background-color: transparent;
+    border: 0px solid #00EE00;
+    color:#00EE00;
 }
 
 .btn:click,
 .btn:active {
 
-    background-color: #b52828;
-    border: 4px solid #b52828;
+    background-color: #00EE00;
+    border: 4px solid #00EE00;
     color: #bfb5ac;
 }
 
@@ -107,7 +333,9 @@ input[type="textarea"] {
     text-align: center;
     font-weight: 700;
     margin-top: -6px;
-    color: #6e7a18;
+    color: #00EE00;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
 
 }
 
@@ -119,7 +347,9 @@ input[type="textarea"] {
     text-align: center;
     font-weight: 700;
     margin-top: -6px;
-    color: #b52828;
+    color: #00EE00;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
 }
 
 .alert {
@@ -155,35 +385,69 @@ input[type="textarea"] {
     margin-right: 8px;
 }
 
+.table .stylez td {
+    text-align: left;
+}
+
 .table td {
     text-align: center;
-    width: 40px;
-    font-size: 80%;
+    width: 30px;
+    font-size: 90%;
+    background-color: transparent;
+    border:0px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
 }
-.table-all td {
-    text-align: center;
+.table .rights td {
+    text-align: left;
     width: 40px;
-    font-size: 60%;
+    font-size: 130%;
+    background-color: transparent;
+    border:0px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+}
+
+.filter-green{
+    filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+/* https://codepen.io/sosuke/pen/Pjoqqp */
+
+.table-all td {
+    border:0px;
+    text-align: left;
+    width: 40px;
+    font-size: 170%;
     color:#e5e5e5;
+    background-color: transparent;
 }
 
 .table .druhy td {
+    border:0px;
     text-align: left;
     width: 40px;
-    font-size: 180%;
+    font-size: 170%;
 }
 
 .table th {
     width: 40px;
     text-align: center;
     background-color: transparent;
+    font-size: 100%;
+    border-collapse: collapse;
+    border: 0px;
+
+}
+.table thead th{
+    border-bottom:0.02pt solid #00EE00
 }
 
 .table-all th {
     width: 40px;
     text-align: center;
     background-color: transparent;
-    font-size: 70%;
+    font-size: 100%;
+    border: 0px;
 }
 
 .table tr {
@@ -194,10 +458,11 @@ input[type="textarea"] {
 }
 
 table {
-    border-collapse: collapse;
-    border-radius: 26px;
+    border-radius: 30px;
     overflow: hidden;
-    border: 0px;
+    border: 0px solid #00EE00;
+
+    padding: 6px 18px 3px 18px;
     background-color: transparent;
 }
 
@@ -205,6 +470,11 @@ th,
 td {
     padding: 0em;
     border: 0px;
+    color: #00EE00;
+    font-weight: 600;
+    font-size: 170%;
+    background-color: transparent;
+
 }
 
 thead {
@@ -223,6 +493,10 @@ body {
 
 nav {
     border-radius: 20px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color:#00EE00;
+    font-size: 23px;
+
 }
 
 .carousel-control-prev-icon,
@@ -231,21 +505,52 @@ nav {
   width: 100px;
   background-size: 100%, 100%;
   background-image: none;
+  background-color: transparent;
 }
 
 .carousel-control-next-icon:after
 {
-  content: '}';
-  font-size: 45px;
-  color: red;
-  /* padding-top: 60px; */
-  margin-left: 10px;
+    background-color: transparent;
+    content: '';
+    font-size: 45px;
+    /* padding-top: 60px; */
 }
 
 .carousel-control-prev-icon:after {
-  content: '{';
+    background-color: transparent;
+  content: '';
   font-size: 45px;
-  color: red;
-  margin-right: 10px;
   /* padding-top: 60px; */
 }
+
+.carousel-item {
+    width: 99%;
+    overflow-x: hidden;
+  }
+  
+ol.carousel-indicators {
+    position: absolute;
+    bottom: -25px;
+    margin: 0;
+    left: -3px;
+    right: 3px;
+    width: auto;
+    cursor:pointer;
+  }
+  
+  ol.carousel-indicators li,
+  ol.carousel-indicators li.active {
+    float: left;
+    width: 33%;
+    height: 17px;
+    margin-top: 2px;
+    border-radius: 10px;
+    border: 0;
+    background: #00EE00;
+
+  }
+  
+  ol.carousel-indicators li.active {
+    background: #00EE00;
+  }
+

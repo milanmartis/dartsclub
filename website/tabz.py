@@ -3,99 +3,45 @@ import pandas as pd
 import numpy as np
 from openpyxl import Workbook, load_workbook
 import itertools
-# import gspread as gs
+import sqlite3
+from itertools import groupby
 
-# data = load_workbook('data/sipkaren-tab.xlsx')
-# data['group-a']['D2'].value = '0/6'
-# data.save('data/sipkaren-tab.xlsx')
-
-# excel_app = xlwings.App(visible=False)
-# excel_book = excel_app.books.open('data/sipkaren-tab.xlsx')
-# excel_book.save()
-# excel_book.close()
-# excel_app.quit()
-
-# data = load_workbook('data/sipkaren-tab.xlsx', data_only=True)
 
 def show_name_table():
-    groups = ['group-a', 'group-b', 'group-b2','group-c']
+    groups = ['group-a', 'group-b', 'group-b2', 'group-c']
     return groups
-
 
 
 def show_table():
     valz = []
-    groups = show_name_table()
+    season = 1
+    group = 1
+    connection = sqlite3.connect('instance/database.db')
+    cursor = connection.cursor()
+    cursor.execute("SELECT user_group.groupz_id, user.first_name, user_duel.result, user_duel.against, user_duel.points, user_duel.checked, user.id FROM user_duel JOIN duel ON duel.id = user_duel.duel_id JOIN user ON user_duel.user_id = user.id JOIN user_group ON user_group.user_id = user.id JOIN season ON season.id = duel.season_id WHERE season.id = 1")
+    groups = cursor.fetchall()
+    connection.commit()
+    connection.close()
+    # print(groups)
+    result = {k: [*map(lambda v: v, values)]
+              for k, values in groupby(sorted(groups, key=lambda x: x[0]), lambda x: x[0])
+              }
+    # print(result)
+    for group in result.values():
 
-    
-    for g in groups:
-        # gc = gs.service_account(filename='service_account.json')
-        # sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1_thWOdagM4q6Cx2qdnToPNTuJrj8343b/edit')
+        df = pd.DataFrame(group, columns=['duel_id', 'player', 'plus', 'minus', 'points', 'check', 'user_id'])
+        df = df.replace('?', np.NaN)
+        df['plusminus'] = df['plus'] - df['minus']
+        df = df.groupby(by="player", as_index=False)["points", "plus","minus","plusminus"].sum()
+        df = df.sort_values(['points','plus','plusminus'], ascending=False)
+        # df['dif'] = df[['plus', 'minus']].agg('/'.join, axis=1)
+        df['plusminus2'] = df['plus'].astype(str) +"/"+ df["minus"].astype(str)
+        df = df[['player', 'points', 'plusminus2', 'plusminus']]
 
-        # ws = sh.worksheet(g)
 
-        # df = pd.DataFrame(ws.get_all_records())
-        data = pd.read_excel('website/static/data/sipkaren-tab.xlsx', g) 
-
-        df = pd.DataFrame(data, columns=['Poradie', 'player','Body','Legy', 'plus'])
-        # df = df.replace('?', np.NaN)
-        df = df.sort_values(by=['Poradie'], ascending=True)
-
-        
-        # df = df.hide_index()
-        # df = df.iloc[:,1:]
-        # df.drop(columns = df.columns[0], axis = 0, inplace= True)
+        # print(df)
         der = df.to_string(index=False)
         der = df.values.tolist()
-        
-        # valz.append(der)
-        # return der
-        # valz = der
-        # return valz
-        # print(valz)
-        # valz[g] = der[g]
         valz.append([der])
-        # valz = append(der)
+
     return valz
-
-
-def show_table_all():
-    valz = []
-    groups = show_name_table()
-
-    
-    for g in groups:
-        # gc = gs.service_account(filename='service_account.json')
-        # sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1_thWOdagM4q6Cx2qdnToPNTuJrj8343b/edit')
-
-        # ws = sh.worksheet(g)
-
-        # df = pd.DataFrame(ws.get_all_records())
-        data = pd.read_excel('website/static/data/sipkaren-tab.xlsx', g) 
-
-        df = pd.DataFrame(data, columns=['Poradie', 'player','Body','Legy', 'plus'])
-        # df = df.replace('?', np.NaN)
-        df = df.sort_values(by=['Poradie'], ascending=True)
-
-        
-        # df = df.hide_index()
-        # df = df.iloc[:,1:]
-        # df.drop(columns = df.columns[0], axis = 0, inplace= True)
-        der = df.to_string(index=False)
-        der = df.values.tolist()
-        
-        # valz.append(der)
-        # return der
-        # valz = der
-        # return valz
-        # print(valz)
-        # valz[g] = der[g]
-        valz.append(der)
-        # valz = append(der)
-    # return valz
-    valz = itertools.chain(*valz)
-    # res = str(list(valz))[1:-1]
-    return list(valz)
-
-
-# show_table_all()

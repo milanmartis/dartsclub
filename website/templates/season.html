@@ -1,0 +1,38 @@
+{% extends "base.html" %} {% block title %}Duel{% endblock %} {% block content
+  %}
+  
+  <br />
+  <h1 align="center">
+    <img src="{{ url_for('static', filename='img/seasons.svg') }}" class="filter-green" width="290" />
+  </h1>
+  
+
+  <div class="container">
+    <div class="row">
+      {% for season in seasons %}
+      <div class="col">
+        <form method="POST">
+          <input type="hidden" id="ide_season" name="ide_season" value="{{season.id}}"> 
+          <button type="submit" class="btn btn-primary mt-4 btn-block shadow-none" >
+            <font style="font-size:180%">{{season.name}}</font> 
+          </button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <!-- <div class="container">
+    <form method="POST">
+      <div align="center">
+        <input type="hidden" id="ide_season" name="ide_season" value="1">
+        <button type="submit" class="btn btn-primary mt-4 btn-block">
+          <i class="fa fa-circle-o-notch fa-spin"></i>
+          Create Season
+        </button>
+      </div>
+    </form>
+    
+    </div> -->
+
+  {% endblock %}
+  

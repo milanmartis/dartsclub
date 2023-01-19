@@ -1,0 +1,91 @@
+{% extends "base.html" %} {% block title %}Duel{% endblock %} {% block content
+%}
+<br />
+<h1 align="center">
+  <img src="{{ url_for('static', filename='img/matchup.svg') }}" class="filter-green" width="290" />
+</h1>
+
+<div class="container-fluid pl-0 pr-0">
+  <div class="row justify-content-center">
+    {% for player in duel %}
+    <form method="POST" id="updateResult[{{loop.index}}]" action="javascript:;">
+      <div class="col">
+        <input
+          type="hidden"
+          id="duel_id[{{loop.index}}]"
+          name="duel_id[{{loop.index}}]"
+          value="{{player[6]}}"
+        />
+        <input
+          type="hidden"
+          id="user_duel_id[{{loop.index}}]"
+          name="user_duel_id[{{loop.index}}]"
+          value="{{player[4]}}"
+        />
+        {% if not user.id in [player[4], adminz] %} {% set disabled= "disabled" %} {% endif %}
+        <input
+        {{disabled}}
+          class="form-control form-control-lg resultscore"
+          type="number"
+          max="6"
+          min="0"
+          id="user_duel_result[{{loop.index}}]"
+          name="user_duel_result[{{loop.index}}]"
+          autocomplete="off"
+          value="{{player[2]}}"
+          style="height:160px;"
+        />
+        <br />
+        <button type="submit" {{disabled}} class="btn btn-primary mt-4 btn-block" onClick="updateDuel2({{loop.index}})">
+          <i class="fa fa-circle-o-notch fa-spin"></i>
+          <font style="text-align: center; font-size: 180%;">
+            {{player[1] | upper | replace("_"," ")}}
+          </font>
+        </button>
+        <br />
+        <br />
+        <div class="conntainer mt-20">
+          <div class="row justify-content-center pt-20">
+            <form method="POST" id="checkForm[{{loop.index}}]">
+              <br>
+              <input
+                type="hidden"
+                id="duel[{{loop.index}}]"
+                name="duel[{{loop.index}}]"
+                value="{{player[6]}}"
+              />
+              <input
+                type="hidden"
+                id="player[{{loop.index}}]"
+                name="player[{{loop.index}}]"
+                value="{{player[4]}}"
+              />
+              {% if not user.id in [player[4], adminz]  %} {% set dis = "disabled" %} {% endif %} 
+ 
+              {% if player[5] == 'false' or player[5] == null or player[5] ==
+              '' %} {% set ch = "unchecked" %} {% else %} {% set ch = "checked"
+              %} {% endif %} {% if user.is_authenticated %}
+              <input
+              type="checkbox"
+              class="form-control-check"
+              {{ch}}
+              {{disabled}}
+              id="checked[{{loop.index}}]"
+              name="checked[{{loop.index}}]"
+              value="{{player[5]}}"
+              onClick="updateDuel({{loop.index}})"
+              />
+              
+              {% endif %} 
+              <!-- <button type="button" class="close" onClick="deleteNote()"><span aria-hidden="true">&times;</span>
+      </button> -->
+            </form>
+          </div>
+        </div>
+      </div>
+    </form>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

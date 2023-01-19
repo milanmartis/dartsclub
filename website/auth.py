@@ -42,8 +42,6 @@ def register():
         first_name = request.form.get('first_name')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
-        group_id = 1
-
         user = User.query.filter_by(email=email).first()
 
         if user:
@@ -57,7 +55,7 @@ def register():
         elif len(password1) < 7:
             flash("Passwords must be at least 7 chars", category="error")
         else:
-            new_user = User(email=email, first_name=first_name, group_id=group_id,
+            new_user = User(email=email, first_name=first_name,
                             password=generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
@@ -66,5 +64,5 @@ def register():
             flash("Account created", category="success")
             return redirect(url_for('views.home'))
             # add user to database
-    request.form = ""
+    # request.form = ""
     return render_template("sign_up.html", user=current_user)
