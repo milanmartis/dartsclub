@@ -1,0 +1,50 @@
+{% if not user.id in [adminz[0], adminz[1]] %}
+<h1 align="center">
+  <img
+    src="{{ url_for('static', filename='img/my-duels.svg') }}"
+    class="filter-green"
+    width="200"
+  />
+</h1>
+
+
+<div class="container readinglazy">
+    <div class="row">
+      {% for duel in duels %} 
+      {% if user.id == duel.useride[0].user_id or user.id == duel.useride[1].user_id %}
+      {% if 'true' == duel.checking[0].checked and 'true' == duel.checking[1].checked %} {% set checked =
+        "btn btn-outline-dark btn-block shadow-none" %} {% else %} {% set checked =
+        "btn2 btn-outline-dark btn-block shadow-none" %} {% endif %}
+  
+      <div class="col-12">
+        <form method="POST">
+          <input type="hidden" id="duelz" name="duelz" value="{{duel.duel_id}}" />
+          <button type="submit" class="{{checked}}">
+            <div class="row">
+              <div class="col-2" style="text-align:center;">
+              </div>
+              <div class="col-8"style="text-align:center;">
+                {{duel.player[0].first_name[:3] | upper }}
+  
+                {% if 'true' == duel.checking[0].checked and 'true' == duel.checking[1].checked %}
+  
+                {{duel.result_[0].result}} : {{duel.result_[1].result}}
+                {% else %}
+                -
+                {% endif %}
+                {{duel.player[1].first_name[:3] | upper}}
+              </div>
+              <div class="col-2" style="text-align:center;">
+              </div>
+            </div>
+          </button>
+        </form>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+</div>
+
+{% endif %}
+
+

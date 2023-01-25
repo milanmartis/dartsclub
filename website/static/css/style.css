@@ -1,20 +1,85 @@
 body {
     background-color: #030303;
+    margin-left: 4px;
+    margin-right: 4px;
+    overflow-x: hidden;
+}
+
+html{
+    padding: 0px;
+    overflow-x:hidden;
+
+}
+
+
+
+label{
+    color: #ffffff;
+}
+
+
+input[type=button] {
+
+    display: block;
+
+    border: none;
+    outline: none;
 }
 
 
 h1 {
     color:#00EE00;
-    text-transform: capitalize;
+    text-transform: uppercase;
     text-align: center;
     padding-top:16px;
+    font-size: 22px;
     font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+}
+
+
+h3 {
+    /* color:#ff0606; */
+    color:#f8fc1f;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    padding-top:4px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+}
+h4 {
+    color:#00EE00;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    padding-top:6px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+}
+
+h5 {
+    color:#3f3f3f;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    padding-top:6px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+}
+
+h6{
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 100%;
 
 }
 
 .form-control-check {
     font-family: system-ui, sans-serif;
-    font-size: 12rem;
+    font-size: 8rem;
     font-weight: bold;
     line-height: 1.1;
     display: grid;
@@ -53,9 +118,18 @@ input[type="checkbox"]:checked::before {
     transform: scale(1);
   }
 
-.col {
-padding:20px;
-margin:10px;
+
+
+.groupz{
+    border-radius: 114px !important;
+    background-color: #030303;
+    border: 4px solid #00EE00;
+    color: #00EE00;
+    font-weight: 600;
+    font-size: 120%;
+    padding: 2px 18px 3px 18px;
+    text-align:center;
+    overflow: hidden;   
 }
 
 nav{
@@ -65,14 +139,28 @@ nav{
     color: #00EE00;
     font-weight: 600;
     font-size: 120%;
-    padding: 2px 18px 3px 18px;
+    padding: 2px 6px 3px 6px;
     text-align:center;
     overflow: hidden;
+    margin-bottom:18px;
+    margin-left:6px;
+    margin-right:12px;
 
 }
 
+a{
+    color: #00EE00;
+
+}
+
+a:hover{
+    color:#ffffff;
+
+}
 .nav-item a{
     color: #00EE00;
+    padding-left: 4px;
+    margin-left:4px;
 }
 .navbar-dark .navbar-toggler{
     color: #00EE00;
@@ -157,9 +245,7 @@ nav{
 
 /* // `sm` applies to x-small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
-    .col {
-    padding:0px;
-    }
+
     
 }
 
@@ -184,6 +270,7 @@ nav{
 }
 
 
+
 input {
     border-radius: 14px !important;
     background-color: #030303;
@@ -205,11 +292,11 @@ input {
 
 
 input[type="number"] {
-max-width: 200px;
-font-size: 130px;
+max-width: 160px;
+font-size: 80px;
 text-align: center;
-padding:8px;
-margin:8px;
+padding:0px;
+margin:0px;
 -moz-appearance:textfield; /* Firefox */
 }
 
@@ -222,8 +309,11 @@ input::-webkit-inner-spin-button {
 
 input[type="text"] {
     /* color: #00EE00; */
-
-    font-size: 130%;
+    border-radius: 14px !important;
+    background-color: #1d1d1d;
+    border: 0px solid #00EE00;
+    color: #00EE00;
+    font-size: 100%;
     text-align: center;
     padding:4px;
     margin:0px;
@@ -231,36 +321,238 @@ input[type="text"] {
 
 input[type="email"] {
     /* color: #00EE00; */
-    font-size: 130%;
+    border-radius: 14px !important;
+    background-color: #1d1d1d;
+    border: 0px solid #00EE00;
+    color: #00EE00;
+    font-size: 100%;
+    text-align: center;
+    padding:4px;
+    margin:0px;
+}
+input[type="email"]:focus {
+    /* color: #00EE00; */
+    background-color: transparent;
+    font-size: 100%;
     text-align: center;
     padding:4px;
     margin:0px;
 }
 
 input[type="password"] {
+    border-radius: 14px !important;
+    background-color: #1d1d1d;
+    border: 0px solid #00EE00;
+    color: #00EE00;
     /* color: #00EE00; */
-    font-size: 130%;
+    font-size: 100%;
     text-align: center;
 }
 
 input[type="textarea"] {
     /* color: #00EE00; */
-    font-size: 130%;
+    font-size: 100%;
     text-align: center;
+}
+
+.btn-outline-dark{
+    background-color: transparent;
+    border: 0px;
+
+}
+
+.btn-result.focus, .btn-result:focus {
+    outline: 0;
+    box-shadow: none!important;
+}
+.btn-user.focus, .btn-result:focus {
+    background-color: #1d1d1d;
+    border: 2px solid #00EE00;
+    color: #00EE00;
+    /* color: #00EE00; */
+    outline: 0;
+    box-shadow: none!important;
+}
+
+.btn-outline-dark:after{
+    background-color: transparent;
+    border: 0px;
+
 }
 
 
 
+
+.btn-outline-dark:disabled {
+    border: 2px solid #00EE00;
+    background-color: transparent;
+    color:#00EE00;
+ } 
+
+
 .btn {
+    max-width: 260px;
     border-radius: 14px !important;
     background-color: #030303;
     border: 2px solid #00EE00;
     color: #00EE00;
     font-weight: 600;
-    font-size: 80%;
-    padding: 0px 6px 4px 6px;
+    font-size: 100%;
+    padding: 2px 2px 4px 2px;
     margin:2px;
     font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+}
+.btn2 {
+    border-radius: 14px !important;
+    background-color: #420909;
+    border: 2px solid #00EE00;
+    color: #00EE00;
+    font-weight: 600;
+    font-size: 100%;
+    padding: 2px 2px 2px 2px;
+    margin:2px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    cursor: pointer;
+
+}
+
+
+.btn-primary:visited {
+    background-color: #8064A2;
+}
+
+.btn3 {
+    border-radius: 114px !important;
+    background-color: #00EE00;
+    border: 2px solid #00EE00;
+    color: #030303;
+    width:50px;
+    font-weight: 600;
+    font-size: 100%;
+    padding: 3px 6px 3px 6px;
+    margin:2px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    cursor: pointer;
+}
+
+.btn3:hover {
+    background-color: #030303;
+    border: 2px solid #00EE00;
+    color: #00EE00;
+}
+
+
+.btn-user {
+    border-radius: 0px !important;
+    background-color:transparent;
+    border: 0px solid #00EE00;
+    color: #00EE00;
+
+    font-weight: 800;
+    font-size: 60%;
+    padding: 2px 2px 2px 12px;
+    margin:0px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    cursor: pointer;
+}
+
+.btn-user:hover {
+    background-color: transparent;
+    text-decoration: wavy;
+}
+
+
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #00EE00;
+    background: transparent;
+    text-align: center;
+    padding: 4px;
+    margin: 2px;
+    font-size: medium;
+    text-transform: uppercase;
+
+
+}      text-transform: uppercase;
+
+
+.navbar-nav {
+    color: #00EE00;
+    background: transparent;
+    text-align: center;
+
+}
+
+
+.dropdown-menu  {
+    background: transparent;
+    z-index: 999;
+
+}
+
+
+
+.btn-result {
+    max-width: 260px;
+    border-radius: 14px;
+    border: 2px solid #00EE00;
+    color: #00EE00;
+    font-weight: 600;
+    font-size: 100%;
+    padding: 2px 2px 2px 2px;
+    margin:2px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-result span {
+    text-align: center; 
+    font-size: 130%;
+}
+
+.btn-result:hover span {
+    display:none
+}
+
+.btn-result:hover:before {
+    text-align: center; 
+   text-transform: uppercase;
+    font-size: 140%;
+    /* content:"Submit"; */
+    margin: 0px;
+
+}
+
+.btn-result:hover {
+      text-transform: uppercase;
+    background-color: #00EE00;
+    border: 2px solid #00EE00;
+    color: #030303;
+  }
+
+
+
+
+.btn4 {
+    border-radius: 114px !important;
+    background-color: #00EE00;
+    border: 2px solid #00EE00;
+    color: #030303;
+    width:90px;
+    font-weight: 600;
+    font-size: 60%;
+    padding: 6px 14px 8px 11px;
+    margin:2px;
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    cursor: pointer;
+}
+
+.btn4:hover {
+    background-color: #030303;
+    border: 2px solid #00EE00;
+    color: #00EE00;
 
 }
 
@@ -283,14 +575,75 @@ input[type="textarea"] {
     color: #030303;
 
 }
+.btn2:hover {
+    background-color: #00EE00;
+    border: 2px solid #00EE00;
+    color: #030303;
 
-.btn.btn-primary[disabled] {
+}
+
+.btn-outline-dark.disabled, .btn-primary:disabled {
+
+    background-color: transparent;
+    border: 2px solid #00EE00;
+
+    color:#00EE00;
+}
+.btn2 [disabled] {
     border-color:transparent !important;
     box-shadow:none !important;
     outline:none !important;
     background-color: transparent;
     border: 0px solid #00EE00;
     color:#00EE00;
+}
+
+.btn2:disabled:hover {
+    background-color: transparent;
+    color:#00EE00;
+}
+
+
+
+
+.btn .btn-outline-dark[disabled] {
+    border-color:transparent !important;
+    box-shadow:none !important;
+    outline:none !important;
+    background-color: transparent;
+    border: 0px solid #00EE00;
+    color:#00EE00;
+}
+.btn3 .btn-outline-dark[disabled] {
+    border-color:transparent !important;
+    box-shadow:none !important;
+    outline:none !important;
+    background-color: transparent;
+    border: 0px solid #00EE00;
+    color:#00EE00;
+}
+.btn-result .btn-outline-dark[disabled] {
+    border-color:transparent !important;
+    box-shadow:none !important;
+    outline:none !important;
+    background-color: transparent;
+    border: 0px solid #00EE00;
+    color:#00EE00;
+}
+.btn-user .btn-outline-dark[disabled] {
+    border-color:transparent !important;
+    box-shadow:none !important;
+    outline:none !important;
+    background-color: transparent;
+    border: 0px solid #00EE00;
+    color:#00EE00;
+}
+
+
+.btn-block{
+    max-width:100%;
+    margin:4px;
+    padding:4px;
 }
 
 .btn:click,
@@ -325,6 +678,27 @@ input[type="textarea"] {
     padding: 10px;
 }
 
+
+
+.readinglazy{
+    animation: fadeIn 1.5s;
+
+}
+
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+
+
+
+
+
+
+
+
 .alert.success {
     height: 25px;
     padding: 0px;
@@ -347,7 +721,7 @@ input[type="textarea"] {
     text-align: center;
     font-weight: 700;
     margin-top: -6px;
-    color: #00EE00;
+    color: rgb(185, 3, 3);
     font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
 }
@@ -391,22 +765,28 @@ input[type="textarea"] {
 
 .table td {
     text-align: center;
-    width: 30px;
     font-size: 90%;
     background-color: transparent;
     border:0px;
     font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-
+    cursor: pointer;
 }
-.table .rights td {
-    text-align: left;
-    width: 40px;
-    font-size: 130%;
-    background-color: transparent;
-    border:0px;
-    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
+/* .table td:hover {
+
+    color: #030303;
 }
+.table tr:hover {
+    background-color: #00EE00;
+    
+    color: #030303;
+} */
+
+tbody tr:hover {
+    background-color: rgb(24, 24, 24);
+    }
+
+
 
 .filter-green{
     filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
@@ -416,8 +796,7 @@ input[type="textarea"] {
 .table-all td {
     border:0px;
     text-align: left;
-    width: 40px;
-    font-size: 170%;
+    font-size: 100%;
     color:#e5e5e5;
     background-color: transparent;
 }
@@ -425,25 +804,26 @@ input[type="textarea"] {
 .table .druhy td {
     border:0px;
     text-align: left;
-    width: 40px;
     font-size: 170%;
 }
 
 .table th {
-    width: 40px;
     text-align: center;
     background-color: transparent;
-    font-size: 100%;
+    font-size: 90%;
     border-collapse: collapse;
     border: 0px;
+    padding: 2px;
+    margin: 0px;
 
 }
 .table thead th{
-    border-bottom:0.02pt solid #00EE00
+    border-bottom:0.02pt solid #00EE00;
+    padding: 0px;
+    margin: 0px;
 }
 
 .table-all th {
-    width: 40px;
     text-align: center;
     background-color: transparent;
     font-size: 100%;
@@ -451,24 +831,27 @@ input[type="textarea"] {
 }
 
 .table tr {
-    width: 40px;
     text-align: center;
     background-color: transparent;
     /* border-bottom: 2px solid #bfb5ac; */
+    padding: 0px;
+    margin: 0px;
 }
 
 table {
-    border-radius: 30px;
     overflow: hidden;
     border: 0px solid #00EE00;
 
-    padding: 6px 18px 3px 18px;
+    padding: 4px 1px 1px 4px;
     background-color: transparent;
+    margin: auto;
+    padding: 0px;
+   width: 50% !important; 
 }
 
 th,
 td {
-    padding: 0em;
+    padding: 2px;
     border: 0px;
     color: #00EE00;
     font-weight: 600;
@@ -487,11 +870,8 @@ thead {
     clear: both;
 }
 
-body {
-    margin: 1.5em;
-}
 
-nav {
+.nav {
     border-radius: 20px;
     font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     color:#00EE00;
@@ -499,9 +879,19 @@ nav {
 
 }
 
+
+.carousel-control-prev-icon{
+
+    margin-left:-50px
+}
+.carousel-control-next-icon {
+    margin-right:-50px
+
+}
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-  height: 100px;
+ margin-top: 140px;
+  height: 240px;
   width: 100px;
   background-size: 100%, 100%;
   background-image: none;
@@ -513,19 +903,30 @@ nav {
     background-color: transparent;
     content: '';
     font-size: 45px;
-    /* padding-top: 60px; */
+    color:#00EE00;
+
+    padding-top: 60px;
 }
 
 .carousel-control-prev-icon:after {
     background-color: transparent;
   content: '';
   font-size: 45px;
-  /* padding-top: 60px; */
+  color:#00EE00;
+  
+  padding-top: 60px;
 }
 
 .carousel-item {
-    width: 99%;
+    width: 100%;
     overflow-x: hidden;
+    margin:0px;
+    padding:0px;
+  }
+.carousel {
+
+    margin:0px;
+    padding:0px;
   }
   
 ol.carousel-indicators {

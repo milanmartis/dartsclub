@@ -4,19 +4,22 @@ from sqlalchemy.sql import func
 
 
 
+
 user_duel = db.Table('user_duel',
                      db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                      db.Column('duel_id', db.Integer, db.ForeignKey('duel.id')),
                      db.Column('result', db.Integer),
                      db.Column('against', db.Integer),
                      db.Column('points', db.Integer),
-                     db.Column('checked', db.Integer)
-
+                     db.Column('checked', db.Integer),
+                     db.Column('notez', db.Integer),
+                     db.Column('addons', db.Integer, default=100)
                      )
 
 user_group = db.Table('user_group',
                      db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-                     db.Column('groupz_id', db.Integer, db.ForeignKey('groupz.id'))
+                     db.Column('groupz_id', db.Integer, db.ForeignKey('groupz.id')),
+                     db.Column('season_id', db.Integer, db.ForeignKey('season.id'))
                      )
 
 user_season = db.Table('user_season',
@@ -50,6 +53,7 @@ class User(db.Model, UserMixin):
     notes = db.relationship('Note')
     seasony = db.relationship('Season', secondary=user_season, backref='seasons')
     groupy = db.relationship('Groupz', secondary=user_group, backref='groups')
+
     play = db.relationship('Duel', secondary=user_duel, backref='players')
 
 

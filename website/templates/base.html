@@ -2,109 +2,156 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="{{url_for('static', filename='/img/logo.svg')}}" />
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="icon"
-      type="image/x-icon"
-      href="{{url_for('static', filename='/img/favicon.ico')}}"
-    />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
+      href="{{url_for('static', filename='img/favicon.ico')}}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
 
     <link
       rel="stylesheet"
       href="{{url_for('static', filename='css/style.css')}}"
       crossorigin="anonymous"
     />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>{% block title %}Šípkareň{% endblock %}</title>
-
+    <meta name="description" content="DARTS CLUB" />
+    <meta name="googlebot" content="index,follow" />
+    <meta name="author" content="milanmartis" />
+    <meta property="fb:pages" content="115401168589113" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="DARTS CLUB" />
+    <meta property="og:description" content="Play with sparings" />
+    <meta
+      property="og:image"
+      content="{{url_for('static', filename='/img/logo.svg')}}"
+    />
+    <meta
+      property="og:url"
+      content="https://darts-club-g2oik2cmrq-ew.a.run.app"
+    />
+    <meta property="og:locale" content="sk_SK" />
+    <meta property="og:site_name" content="DARTS CLUB" />
   </head>
   <body>
+    <nav class="navbar navbar-expand navbar-dark fixed-bottom">
+      <div class="navbar w-100 order-1 dual-collapse2">
+        <ul class="navbar-nav">
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a href="/home" class="nav-item nav-link" id="home">Standings</a>
+          </li>
+          <li class="nav-item">
+            <a href="/season" class="nav-item nav-link" id="logout">Seasons</a>
+          </li>
+          <li class="nav-item">
+            <a href="/season/1" class="nav-item nav-link" id="logout">Duels</a>
+          </li>
 
-
-    <nav class="navbar navbar-expand-md navbar-dark">
-      <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
-          <ul class="navbar-nav">
-            {% if user.is_authenticated %}
-              <li class="nav-item ">
-                <a href="/" class="nav-item nav-link" id="home">Standings</a>
-              </li>
-              <li class="nav-item">
-                <a href="/season" class="nav-item nav-link" id="logout">Seasons</a>
-              </li>
-              <li class="nav-item">
-                <a href="/season/1" class="nav-item nav-link" id="logout">Duels</a>
-              </li>
-              
-              {% else %}
-         
-
-              {% endif %}
-          </ul>
+          {% else %} {% endif %}
+        </ul>
       </div>
       <div class="navbar-dark brand">
-        <h1 align="center">
+        <!-- <h1 align="center">
           <a href="/">
-            <img src="{{ url_for('static', filename='img/sipka.svg') }}" class="filter-green" width="100%" />
+            <img
+              src="{{ url_for('static', filename='img/sipka.svg') }}"
+              class="filter-green"
+              width="100%"
+            />
           </a>
-        </h1>
-        
+        </h1> -->
       </div>
       <div class="mx-auto order-0">
-          <a class="navbar-brand mx-auto" href="#"></a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
-              <span class="navbar-toggler-icon"></span>
-          </button>
+        <a class="navbar-brand mx-auto" href="#"></a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target=".dual-collapse2"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
       </div>
       <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-          <ul class="navbar-nav ml-auto">
-            {% if user.is_authenticated %}
+        <ul class="navbar-nav ml-auto">
+          {% if user.is_authenticated %}
+
+
+          <li class="nav-item text-center" style="text-align:center;margin-left:-6px;margin:4px;">
+            <a href="/account">
+              <i class="fa fa-user fa-sm"></i>
+            </a>
+
+            <!-- <button class="btn-user btn-outline-dark btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              <i class="fa fa-user"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2" style="background-color: transparent;">
               <li class="nav-item">
-                  <a href="/" class="nav-item nav-link" id="user" >{{ user.first_name | upper}} <i class="bi bi-person"></i></a>
+                <a href="/account" class="nav-item nav-link" id="account">
+                  ACCOUNT
+                </a>
+              </li>
+                <a href="/my-stats" class="nav-item nav-link" id="my-stats">
+                  MY STATS
+                </a>
               </li>
               <li class="nav-item">
                 <a href="/logout" class="nav-item nav-link" id="logout">Logout</a>
               </li>
-              {% else %}
-              <li class="nav-item">
-                <a href="/login" class="nav-item nav-link" id="login">Login</a>
-              </li>
-              <!-- <li class="nav-item">
+            </ul> -->
+          </li>
+          
+          {% else %}
+          <li class="nav-item">
+            <a href="/login" class="nav-item nav-link" id="login">Login</a>
+          </li>
+          <!-- <li class="nav-item">
                 <a href="/register" class="nav-item nav-link" id="sign-up">Sign up</a>
               </li> -->
-              {% endif %}
-              
-
-          </ul>
+          {% endif %}
+        </ul>
       </div>
-  </nav>
-  
+    </nav>
 
     {% with messages = get_flashed_messages(with_categories=true) %} {% if
     messages %} {% for category, message in messages %} {% if category ==
     'error' %}
     <div class="alert alert-danger alter-dismassable fade show" role="alert">
-      <div class="alert {{ category }}"> {{ message|capitalize }} </div>
+      <div class="alert {{ category }}">{{ message|capitalize }}</div>
       <!-- <button type="button" class="close flash" data-dismiss="alert"> -->
-        <!-- <span aria-hidden="true">&times;</span> -->
+      <!-- <span aria-hidden="true">&times;</span> -->
       <!-- </button> -->
     </div>
     {% else %}
     <div class="alert alert-success alter-dismassable fade show" role="alert">
-      <div class="alert {{ category }}"> {{ message|capitalize }} </div>
+      <div class="alert {{ category }}">{{ message|capitalize }}</div>
       <!-- <button type="button" class="close flash" data-dismiss="alert"> -->
-        <!-- <span aria-hidden="true">&times;</span> -->
+      <!-- <span aria-hidden="true">&times;</span> -->
       <!-- </button> -->
     </div>
     {% endif %} {% endfor %} {% endif %} {% endwith %}
 
     <div class="container mt-20">
-      {% block content %} 
-      
-      
-      {% endblock %}
+      {% block content %}
+
+
+
+       {% endblock %}
+
       {% include "footer.html" %}
     </div>
 
@@ -113,13 +160,25 @@
       src="{{ url_for('static', filename='index.js') }}"
     ></script>
     <script
-			src="https://code.jquery.com/jquery-3.6.3.min.js"
-			integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
-			crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    
+      src="https://code.jquery.com/jquery-3.6.3.min.js"
+      integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
