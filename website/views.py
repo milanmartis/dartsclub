@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 import os
-from .models import Note, User, Duel, Season, Groupz
+from .models import Note, User, Duel, Season, Groupz, Round
 from . import db
 import json
-from . import tabz, duels
+from . import tabz, duels, dictionary
 from datetime import datetime
 from itertools import combinations
 from sqlalchemy.inspection import inspect
@@ -16,6 +16,8 @@ from sqlalchemy import select
 from sqlalchemy.orm import lazyload, joinedload, subqueryload
 from collections import defaultdict
 from itertools import groupby
+import random
+from random import shuffle
 
 
 views = Blueprint('views', __name__)
@@ -23,45 +25,50 @@ views = Blueprint('views', __name__)
 adminz = [21, 22]
 season = [1]
 
+
 @views.route('/', methods=['GET', 'POST'])
 def main():
-    print('kuk')
 
 
-    return render_template("main.html", user=current_user, adminz=adminz)
+    dic = dictionary.dic
+
+    return render_template("main.html", dic=dic, user=current_user, adminz=adminz)
 
 
 @views.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
 
- 
-
-
-    myduels_user = db.session.query(Groupz.id).join(User.groupy).filter(Season.id.like(season[0])).filter(User.id.in_([current_user.id])).all()
-
     # print(myduels_user[0][0])
 
-    groups = db.session.query(Groupz).join(Season).filter(Season.id.like(season[0])).all()
-    user_group = db.session.query(User).join(User.groupy).filter(User.id.like(current_user.id)).filter(Season.id.like(season[0])).first()
-    
+    groups = db.session.query(Groupz).join(
+        Season).filter(Season.id.like(season[0])).all()
+
     # print(user_group)
-    
+    user_group = db.session.query(Groupz).join(User.groupy).filter(
+        User.id.like(current_user.id)).filter(Season.id.like(season[0])).filter(Groupz.round_id == 2).first()
+    myduels_user = db.session.query(Groupz.id).join(User.groupy).filter(
+        Season.id.like(season[0])).filter(User.id.in_([current_user.id])).filter(Groupz.round_id.like(2)).all()
+
+
+    print(myduels_user)
     if current_user.id in adminz:
-        new_ret = duels.create_duels_list(season[0], 'adminz')
+        # user_group = 7
+        new_ret = duels.create_duels_list(season[0], 'visitor')
         shearch_table = 111
     else:
         new_ret = duels.create_duels_list(season[0], myduels_user[0][0])
         shearch_table = myduels_user[0][0]
-  
+
+
     players = User.query.all()
-    data123 = tabz.show_table(season, shearch_table)
+    data_show_table = tabz.show_table(season, shearch_table)
     # dataAll = tabz.show_table_all()
-    # data_all = tabz.show_table_all()
+    data_all = tabz.show_table_all()
     data_name_tabz = tabz.show_name_table(season)
-    fooor = make_tab_list()
-    
-    
+    # print(data_name_tabz)
+    # fooor = make_tab_list()
+
     if request.method == "POST" and request.form.get("duelz"):
 
         duelz_players = []
@@ -75,15 +82,14 @@ def home():
         #          .filter(Duel.id.like(duelz))\
         #          .first()
 
-        return redirect(url_for('views.duel_id', duelz=duelz, duelz_players=duelz_players))
+        return redirect(url_for('views.duel_id', season=season, duelz=duelz, duelz_players=duelz_players))
+
+    return render_template("home.html", user_group=user_group, groups=groups, dataAll=data_all, duels=new_ret, players=players, data_name_tabz=data_name_tabz, data_show_table=data_show_table, user=current_user, adminz=adminz)
 
 
-    return render_template("home.html", user_group=user_group, groups=groups, dataAll='', duels=new_ret, fooor=fooor, players=players, data_name_tabz=data_name_tabz, data123=data123, user=current_user, adminz=adminz)
-
-
-def make_tab_list():
-    length_tab_list = len(tabz.show_name_table(season))
-    return list(range(0, int(length_tab_list)))
+# def make_tab_list():
+#     length_tab_list = len(tabz.show_name_table(season, 2))
+#     return list(range(0, int(length_tab_list)))
 
 
 @views.route('/delete-note', methods=['POST'])
@@ -100,6 +106,7 @@ def delete_note():
 
 
 @views.route('/delete-duel', methods=['POST'])
+@login_required
 def delete_duel():
     duel = json.loads(request.data)
     duelId = duel['duelId']
@@ -112,12 +119,13 @@ def delete_duel():
 
 
 @views.route('/update-duel', methods=['POST'])
+@login_required
 def update_duel():
     duelCheck = json.loads(request.data)
     data = duelCheck["duelCheck"]
     data = data.split(",")
     data = (data[0], data[1], data[2])
-    print(data)
+    # print(data)
     conn = sqlite3.connect('instance/database.db')
     cur = conn.cursor()
     cur.execute(
@@ -133,6 +141,7 @@ def update_duel():
 
 
 @views.route('/update-duel2', methods=['POST'])
+@login_required
 def update_duel2():
     try:
         duelResult = json.loads(request.data)
@@ -150,6 +159,8 @@ def update_duel2():
             points = 0
         elif int(data[0]) == 4 and int(data[3]) == 0:
             points = 2
+        elif int(data[0]) == 0 and int(data[3]) == 0:
+            points = 0
         else:
             points = 0
 
@@ -163,13 +174,17 @@ def update_duel2():
             points2 = 0
         elif int(data[3]) == 4 and int(data[0]) == 0:
             points2 = 2
+        elif int(data[3]) == 0 and int(data[0]) == 0:
+            points2 = 0
         else:
             points2 = 0
 
-        dataz = (int(data[0]), int(data[3]), int(points), int(data[1]), int(data[2]))
-        dataz2 = (int(data[3]), int(data[0]), int(points2), int(data[4]), int(data[5]))
-        print(dataz)
-        print(dataz2)
+        dataz = (int(data[0]), int(data[3]), int(
+            points), int(data[1]), int(data[2]))
+        dataz2 = (int(data[3]), int(data[0]), int(
+            points2), int(data[4]), int(data[5]))
+        # print(dataz)
+        # print(dataz2)
 
         if data:
 
@@ -190,15 +205,12 @@ def update_duel2():
         # flash('Duel was not updated!', category='error')
 
 
-
-
-
-
-@views.route('/season/duel/<duelz>', methods=['GET', 'POST'])  # /landingpage/A
-def duel_id(duelz):
+# /landingpage/A
+@views.route('/season/<season>/duel/<duelz>', methods=['GET', 'POST'])
+@login_required
+def duel_id(season, duelz):
 
     season = 1
-
 
     # duel = Duel.query.join(User.play).filter(User.id == current_user.id).filter(Duel.id == duelz).first()
     # if request.method == 'POST':
@@ -226,30 +238,41 @@ def duel_id(duelz):
         f'''
         SELECT user.id, user.first_name, user_duel.result, duel.date_duel, user.id, user_duel.checked, user_duel.duel_id, user_group.groupz_id  
         FROM user 
-        JOIN Duel ON duel.id = user_duel.duel_id 
-        JOIN user_duel ON user.id = user_duel.user_id AND user_duel.duel_id = {duelz}
-        LEFT JOIN user_group ON user_group.user_id = user_duel.user_id 
+        JOIN user_duel ON user.id = user_duel.user_id
+        JOIN duel ON duel.id = user_duel.duel_id 
+        JOIN user_group ON user_group.user_id = user_duel.user_id 
+        WHERE user_duel.duel_id = {duelz}
+        GROUP BY user_duel.duel_id, user.id
+  
         '''
-        )
+    )
     duel = cursor.fetchall()
     connection.commit()
     connection.close()
-    groups = db.session.query(Groupz).join(Season).filter(Season.id.like(season)).all()
+
+    print(duel)
+
+
+    groups = db.session.query(Groupz).join(
+        Season).filter(Season.id.like(season)).filter(Groupz.round_id.like(2)).all()
 
     return render_template("duel.html", groups=groups, duel=duel, players=duelz, user=current_user, adminz=adminz)
 
 
-
-
-
-@views.route('/season/<season>/group/<group>', methods=['GET', 'POST'])  # /landingpage/A
+# /landingpage/A
+@views.route('/season/<season>/group/<group>', methods=['GET', 'POST'])
+@login_required
 def duel_view(season, group):
 
-    new_ret = duels.create_duels_list(season, group)
-            
 
-    groups = db.session.query(Groupz).join(Season).filter(Season.id.like(season)).all()
-    
+    new_ret = duels.create_duels_list(season, group)
+    # print(new_ret)
+
+    group = db.session.query(Groupz).join(Season).filter(
+        Season.id.like(season)).filter(Groupz.id.like(group)).first()
+    groups = db.session.query(Groupz).join(
+        Season).filter(Season.id.like(season)).filter(Groupz.round_id.like(2)).all()
+
     if request.method == 'POST' and request.form.get('grno'):
         grno = request.form.get('grno')
         grname = request.form.get('grname')
@@ -258,9 +281,6 @@ def duel_view(season, group):
 
         return redirect(url_for('views.duel_view', groups=groups, group=grno, grno=grno, grname=grname, season=seasons, user=current_user, adminz=adminz))
 
-    
-    
-    
     if request.method == "POST" and request.form.get("duelz"):
 
         duelz_players = []
@@ -274,30 +294,29 @@ def duel_view(season, group):
         #          .filter(Duel.id.like(duelz))\
         #          .first()
 
-        return redirect(url_for('views.duel_id', duelz=duelz, duelz_players=duelz_players))
+        return redirect(url_for('views.duel_id', season=season, duelz=duelz, duelz_players=duelz_players))
 
-
-
-    return render_template("duels_filter.html", groups=groups, season=season, duels=new_ret, user=current_user, adminz=adminz)
-
+    return render_template("duels_filter.html", group=group, groups=groups, season=season, duels=new_ret, user=current_user, adminz=adminz)
 
 
 @views.route('/season/<season>', methods=['GET', 'POST'])
 @login_required
 def duel_manager(season):
 
-    groups = db.session.query(Groupz).join(Season).filter(Season.id.like(season)).all()
-    group = db.session.query(Groupz.id).join(Season).filter(Season.id.like(season)).first()
-    
-    print("-------------------------------")
-    print(group)
-    print("-------------------------------")
+    groups = db.session.query(Groupz).join(
+        Season).filter(Season.id.like(season)).all()
+    group = db.session.query(Groupz.id).join(
+        Season).filter(Season.id.like(season)).first()
+
+    # print("-------------------------------")
+    # print(group)
+    # print("-------------------------------")
 
     def dict_factory(cursor, row):
-            d = {}
-            for idx, col in enumerate(cursor.description):
-                d[col[0]] = row[idx]
-            return d
+        d = {}
+        for idx, col in enumerate(cursor.description):
+            d[col[0]] = row[idx]
+        return d
 
     connection = sqlite3.connect('instance/database.db')
     connection.row_factory = dict_factory
@@ -311,7 +330,7 @@ def duel_manager(season):
     JOIN groupz ON groupz.id=user_group.groupz_id 
     WHERE duel.season_id=? AND groupz.id=?
     GROUP BY duel.id, user.id
-    ''', (season,group[0]))
+    ''', (season, group[0]))
 
     duels = cursor.fetchall()
 
@@ -333,7 +352,7 @@ def duel_manager(season):
     newdata = duels.copy()
     # create new_ret as result
     new_ret = [{field_to_be_check: i, **{i: [] for i in merge_name}}
-            for i in set([i[field_to_be_check] for i in duels])]
+               for i in set([i[field_to_be_check] for i in duels])]
     # print(new_ret, "this is new_ret")
     for val in new_ret:
         for k in newdata:
@@ -357,8 +376,8 @@ def duel_manager(season):
         # duel_view(seasons, grno)
 
         return redirect(url_for('views.duel_view', groups=groups, group=grno, grno=grno, grname=grname, season=seasons, user=current_user, adminz=adminz))
+        # return render_template("duels_filter.html", duels=new_ret, season=season, groups=groups, user=current_user, adminz=adminz)
 
-    
     if request.method == "POST" and request.form.get("duelz"):
 
         duelz_players = []
@@ -373,9 +392,8 @@ def duel_manager(season):
         #          .first()
 
         return redirect(url_for('views.duel_id', group=group, season=season, duelz=duelz, duelz_players=duelz_players))
-        
-    # CHOOS DUEL
 
+    # CHOOS DUEL
 
     return render_template("duels_filter.html", duels=new_ret, season=season, groups=groups, user=current_user, adminz=adminz)
 
@@ -385,41 +403,77 @@ def duel_manager(season):
 def season_manager():
 
     seasons = Season.query.all()
+    dic = dictionary.dic
 
     # pokus = db.session.query(Duel).join(User).all()
 
-    if request.method == 'POST':
+    if request.method == 'POST' and request.form.get('ide_season'):
         season = int(request.form.get('ide_season'))
 
         if season < 1:
             flash('There is a problem!', category='error')
         else:
             # create_new_season(season)
-            # flash('Season was created!!!', category='success')
-            return redirect(url_for('views.duel_manager', season=season))
+            flash('Season was not created!!!', category='success')
+            # return redirect(url_for('views.duel_manager', season=season))
 
-    return render_template("season.html", seasons=seasons, user=current_user)
+    if request.method == 'POST' and request.form.get('season'):
+        season = int(request.form.get('season'))
+
+        if season < 1:
+            flash('There is a problem!', category='error')
+        else:
+            return redirect(url_for('views.duel_view', group=8, season=season))
+
+    return render_template("season.html", dic=dic, seasons=seasons, user=current_user, adminz=adminz)
 
 
 def create_new_season(season):
 
-    my_list_of_ids = [16, 17, 18, 19, 20]
-    players = User.query.filter(User.id.in_(my_list_of_ids)).all()
+    # my_list_of_ids = [16, 17, 18, 19, 20]
+    # players = User.query.filter(User.id.in_(my_list_of_ids)).all()
+
+    # players = db.session.query(User)\
+    #     .join(User.seasony)\
+    #     .filter(Season.id.like(season))\
+    #     .order_by(User.groupy.order.asc())\
+    #     .all()
+
+    # connection = sqlite3.connect('instance/database.db')
+    # cursor = connection.cursor()
+    # cursor.execute('''
+    # SELECT user.id FROM user
+    # JOIN user_season ON user.id = user_season.user_id
+    # WHERE user_season.season_id = '1' ORDER BY user_season.orderz ASC
+    # ''')
+    # players = cursor.fetchall()
+    # connection.commit()
+    # connection.close()
+
+    list_p = [2, 3, 1, 8, 14, 4, 7, 15, 18, 9, 5, 6, 12, 16, 13, 11, 19, 23, 24, 20, 10, 17, 25, 26, 27]
 
     players = db.session.query(User)\
-        .join(User.seasony)\
-        .filter(Season.id.like(season))\
-        .order_by(User.id.asc())\
+        .filter(User.id.in_(list_p))\
+        .order_by(User.orderz.asc())\
+        .group_by(User.id)\
         .all()
+
+    # print(players)
+    # players = tabz.show_table_all()
 
     def divide_to_groups(l, n):
         for i in range(0, len(l), n):
             yield l[i:i + n]
+
     n = 5
     groups = list(divide_to_groups(players, n))
+    # print(groups)
+
+    list_groups_shorts = ['A', 'B1', 'B2', 'C1', 'C2', 'C3', 'C4']
 
     for i, group in enumerate(groups):
-        gr = Groupz(name=f'Group {i+1}', season_id=season)
+        gr = Groupz(
+            name=f'Group {i+1}', shorts=list_groups_shorts[i], season_id=season, round_id=2)
         db.session.add(gr)
         db.session.commit()
 
@@ -427,6 +481,8 @@ def create_new_season(season):
             player = User.query.get(player.id)
             group_new = Groupz.query.get(gr.id)
             player.groupy.append(group_new)
+
+        group = random.sample(group, len(group))
 
         to_duels = list(combinations(group, 2))
         couples2 = []
@@ -451,9 +507,6 @@ def create_new_season(season):
                 # player2.play.append(duel2)
 
     db.session.commit()
-
-
-
 
 
 # from website import db

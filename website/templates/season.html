@@ -1,36 +1,54 @@
-{% extends "base.html" %} {% block title %}Duel{% endblock %} {% block content
-  %}
-  <h1 align="center">
-    <img src="{{ url_for('static', filename='img/seasons.svg') }}" class="filter-green" width="290" />
-  </h1>
+{% extends "base.html" %} {% block title %}DartsClub - Season{% endblock %} {%
+block content %}
+<h1 align="center">
+  <img
+    src="{{ url_for('static', filename='img/seasons.svg') }}"
+    class="filter-green"
+    width="290"
+  />
+</h1>
 
-  <div class="container">
-    <div class="row">
-      {% for season in seasons %}
-      <div class="col">
+<div class="container">
+  <div class="row" style="margin: 0px; padding: 0px;">
+    {% for season in seasons %}
+    <div class="col-12" style="margin: 0px; padding: 0px;">
+      <form action="javascript:;" method="POST">
+        <input type="hidden" id="season" name="season" value="{{season.id}}" />
+        <button
+          id="location_href_/{{}}"
+          type="submit"
+          class="btn btn-outline-dark btn-block shadow-none"
+        >
+          <font style="font-size: 140%;">{{season.name}}</font>
+        </button>
+      </form>
+    </div>
+
+    {% if user.id in [adminz[0], adminz[1]] %}
+    <div class="col-12">
+      <div class="container">
         <form method="POST">
-          <input type="hidden" id="ide_season" name="ide_season" value="{{season.id}}"> 
-          <button type="submit" class="btn btn-outline-dark mt-4 btn-block shadow-none" >
-            <font style="font-size:140%">{{season.name}}</font> 
-          </button>
+          <div align="center">
+            <input
+              type="hidden"
+              id="ide_season"
+              name="ide_season"
+              value="{{season.id}}"
+            />
+            <button
+              type="submit"
+              class="btn4 btn-outline-dark btn-block shadow-none"
+            >
+              <!-- <i class="fa fa-circle-o-notch fa-spin"></i> -->
+              <font style="font-size: 140%;">{{'New Round'}}</font>
+            </button>
+          </div>
         </form>
       </div>
-
-      {% endfor %}
     </div>
+    {% endif %}
+    {% endfor %}
   </div>
-  <!-- <div class="container">
-    <form method="POST">
-      <div align="center">
-        <input type="hidden" id="ide_season" name="ide_season" value="1">
-        <button type="submit" class="btn btn-outline-dark mt-4 btn-block">
-          <i class="fa fa-circle-o-notch fa-spin"></i>
-          Create Season
-        </button>
-      </div>
-    </form>
-    
-    </div> -->
+</div>
 
-  {% endblock %}
-  
+{% endblock %}

@@ -28,7 +28,8 @@ def create_duels_list(season, group):
     JOIN user ON user.id = user_duel.user_id 
     JOIN user_group ON user.id = user_group.user_id 
     JOIN groupz ON groupz.id=user_group.groupz_id 
-    WHERE duel.season_id=? AND groupz.id=?
+    JOIN round ON round.id = groupz.round_id
+    WHERE duel.season_id=? AND groupz.id=? AND duel.id > 100
     GROUP BY duel.id, user.id
     ''', (season,group))
 

@@ -8,11 +8,84 @@ content %}
   />
 </h1>
 
-<div class="container readinglazy">
-  <div class="row">
-    <div class="col">
+{% set lang = 0 %}
 
-        kukukuku
+<div class="container h-100">
+  <div class="row align-items-center h-100">
+    <div class="col-12 mx-auto">
+      <form action="javascript:;" method="POST">
+        <input type="hidden" id="season" name="season" value="" />
+        <input type="hidden" id="user" name="user" value="{{user.id}}" />
+        <button
+          type="submit"
+          id="location_href_login"
+          name="location_href_login"
+          class="btn-demo btn-outline-dark btn-block shadow-none"
+          onclick="locationHref('login')"
+        >
+          <font style="font-size: 140%;">
+            {{dic.button_free_demo_text[lang]}}
+          </font>
+        </button>
+      </form>
+
+
+    </div>
+  </div>
+</div>
+<br />
+<br />
+<br />
+
+<center>
+  <h4>{{dic.register_text[lang]}}</h4>
+</center>
+
+<div class="container h-100">
+  <div class="row align-items-center h-100">
+    <div class="col-12 mx-auto">
+      <form method="POST">
+        <input type="hidden" id="season" name="season" value="" />
+        <button
+          type="submit"
+          class="btn-main btn-outline-dark btn-block shadow-none"
+        >
+          <font style="font-size: 140%;">
+            {{dic.buton_register_business[lang]}}
+          </font>
+        </button>
+      </form>
+    </div>
+
+    <div class="col-12 mx-auto">
+      <form method="POST">
+        <input type="hidden" id="season" name="season" value="" />
+        <button
+          type="submit"
+          class="btn-main btn-outline-dark btn-block shadow-none"
+        >
+          <font style="font-size: 140%;">
+            {{dic.buton_register_admin[lang]}}
+          </font>
+        </button>
+      </form>
+    </div>
+    <!-- onclick="locationHref('register')" -->
+
+    <div class="col-12 mx-auto">
+      <form action="javascript:;" method="POST">
+        <input type="hidden" id="season" name="season" value="" />
+        <button
+          type="submit"
+          id="location_href_register"
+          name="location_href_register"
+          class="btn-main btn-outline-dark btn-block shadow-none"
+        >
+          <font style="font-size: 140%;">
+            {{dic.buton_register_player[lang]}}
+          </font>
+        </button>
+      </form>
     </div>
   </div>
 </div>

@@ -39,6 +39,49 @@ async function updateDuel(looopindex) {
   })
 }
 
+
+async function viewGroup(group) {
+  // var location_href = document.getElementById('view_group_'+group+'')
+  // location_href.innerHTML =
+  //   '<i class="fa fa-circle-o-notch fa-spin" style="margin-left:15px;padding:9px;"></i>'
+
+  await fetch('/login', {
+    method: 'POST',
+    // body: JSON.stringify({ noteId: noteId }),
+  }).then((_res) => {
+    setTimeout(function(){
+      // location_href.innerHTML = 'Free Demo'
+      window.location.href = "/season/1/group/"+group+"";
+    },500)
+  })
+}
+
+
+
+async function locationHref(url) {
+  var location_href = document.getElementById('location_href_'+url+'')
+  var user = document.getElementById('user')
+  // alert(user.value);
+  location_href.innerHTML =
+  '<i class="fa fa-circle-o-notch fa-spin" style="margin-left:15px;padding:9px;"></i>'
+  
+  await fetch('/login', {
+    method: 'POST',
+    // body: JSON.stringify({ noteId: noteId }),
+  }).then((_res) => {
+    setTimeout(function(){
+      // location_href.innerHTML = 'Free Demo'
+      if(user){
+        window.location.href = "/home";
+        location_href.innerHTML = '<i class="fa fa-circle-o-notch fa-spin" style="transition-duration: 3s;opacity:0;margin-left:15px;padding:9px;"></i>'
+      }else{
+        window.location.href = "/"+url+"";
+        location_href.innerHTML = '<i class="fa fa-circle-o-notch fa-spin" style="transition-duration: 3s;opacity:0;margin-left:15px;padding:9px;"></i>'
+      }
+    },500)
+  })
+}
+
 async function updateDuel2(looopindex) {
   const body = document.body
   var result = document.getElementById('user_duel_result[' + looopindex + ']')
@@ -56,8 +99,13 @@ async function updateDuel2(looopindex) {
 
   var spin = document.getElementById('updateDuelButton[' + looopindex + ']')
 
-  if (result.value >= 0 && result.value <= 6 && result.value != result_oponent.value) {
-    spin.innerHTML = '<i class="fa fa-circle-o-notch fa-spin" style="margin-left:15px;"></i>'
+  if (
+    result.value >= 0 &&
+    result.value <= 6 &&
+    (result.value != result_oponent.value || result.value == 0)
+  ) {
+    spin.innerHTML =
+      '<i class="fa fa-circle-o-notch fa-spin" style="margin-left:15px;"></i>'
     time = 500
   } else {
     spin.innerHTML = 'OUT OF RANGE'
@@ -67,8 +115,13 @@ async function updateDuel2(looopindex) {
     return false
   }
 
-  if (result_oponent.value >= 0 && result_oponent.value <= 6 && result.value != result_oponent.value) {
-    spin.innerHTML = '<i class="fa fa-circle-o-notch fa-spin" style="margin-left:15px;"></i>'
+  if (
+    result_oponent.value >= 0 &&
+    result_oponent.value <= 6 &&
+    (result.value != result_oponent.value || result.value == 0)
+  ) {
+    spin.innerHTML =
+      '<i class="fa fa-circle-o-notch fa-spin" style="margin-left:15px;"></i>'
     var time = 500
   } else {
     spin.innerHTML = 'OUT OF RANGE'
@@ -77,8 +130,6 @@ async function updateDuel2(looopindex) {
     }, 2600)
     return false
   }
-
-
 
   // alert(result_oponent.value)
   // alert(player_oponent.value)

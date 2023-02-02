@@ -1,5 +1,5 @@
-{% extends "base.html" %} {% block title %}Duel{% endblock %} {% block content
-%}
+{% extends "base.html" %} {% block title %}DartsClub - Duel{% endblock %} {%
+block content %}
 <h1 align="center">
   <div class="container-fluid pl-0 pr-0">
     <div class="row justify-content-center mb-6">
@@ -18,7 +18,7 @@
     width="220"
   />
 </h1>
-<div class="container-fluid pl-0 pr-0 readinglazy">
+<div class="container-fluid pl-2 pr-8 readinglazy">
   <div class="row justify-content-center text-center">
     {% for player in duel %}
     <div valign="middle" align="center" class="col">
@@ -40,10 +40,22 @@
           value="{{player[4]}}"
         />
         {% if not user.id in [player[4], adminz[0], adminz[1]] %} {% set
-        disabled= "disabled" %}{% set conf= "btn" %}{% else %}{% set conf=
+        disabled= "disabled" %}{% set conf= "btn-result" %}{% else %}{% set conf=
         "btn-result" %} {% endif %}
-        <input
-          {{disabled}}
+        <select
+          class="custom-select"
+          id="user_duel_result[{{loop.index}}]"
+          id="user_duel_result[{{loop.index}}]"
+          name="user_duel_result[{{loop.index}}]"
+          style="height: 140px;"
+        >
+          {% for o in range(7) %} {% if player[2] == o %}
+          <option value="{{o}}" selected>{{o}}</option>
+          {% else %}
+          <option value="{{o}}">{{o}}</option>
+          {% endif %} {% endfor %}
+        </select>
+        <!-- <input
           class="form-control form-control-lg resultscore"
           type="number"
           id="user_duel_result[{{loop.index}}]"
@@ -51,7 +63,7 @@
           autocomplete="off"
           value="{{player[2]}}"
           style="height: 140px;"
-        />
+        /> -->
         <h1 id="player-name-result[{{loop.index}}]">
           {{player[1] | upper | replace("_"," ")}}
         </h1>

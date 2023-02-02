@@ -3,17 +3,20 @@
 
 <div class="container">
   <div class="row mt-30">
-    <div valign="middle" class="col-sm-12 col-md-12 col-lg-7 col-xl-7 ">
+    <div valign="middle" class="col-sm-12 col-md-12 col-lg-7 col-xl-7">
+      <h1 align="center">
+
       <img
         src="{{ url_for('static', filename='img/logo.svg') }}"
-        width="100%" class="filter-green"
+        width="260"
+        class="filter-green"
       />
+      </h1>
+
     </div>
-    <div class="col-sm-12 col-md-12 col-lg-5 col-xl-5 mt-34 ">
+    <div class="col-sm-12 col-md-12 col-lg-5 col-xl-5 mt-34">
       <form method="POST">
-        <h3 align="center" class="pt-4">
-         
-        </h3>
+        <h3 align="center" class="pt-4"></h3>
         <div class="form-group">
           <!-- <label for="email">Email Address</label> -->
           <input
@@ -39,8 +42,15 @@
         </div>
 
         <br />
-        <button type="submit" class="btn btn-outline-dark btn-block shadow-none">
-          <i class="fa fa-circle-o-notch fa-spin" id="spin-login"  style="opacity:0.0"></i>
+        <button
+          type="submit"
+          class="btn btn-outline-dark btn-block shadow-none"
+        >
+          <i
+            class="fa fa-circle-o-notch fa-spin"
+            id="spin-login"
+            style="opacity: 0;"
+          ></i>
           Login
         </button>
       </form>
