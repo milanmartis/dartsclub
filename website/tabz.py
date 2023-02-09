@@ -43,12 +43,13 @@ def show_table(season, groupz):
     JOIN user ON user_duel.user_id = user.id 
     JOIN user_group ON user_group.user_id = user.id 
     JOIN season ON season.id = duel.season_id 
-    WHERE season.id = ? AND user_group.groupz_ihod > 7 AND duel.id > 100
+    WHERE season.id = ? AND user_group.groupz_id > 7 AND duel.id > 100
     GROUP BY user_duel.user_id, user_group.groupz_id, user_group.round_id
     ''', (season))
     groups = cursor.fetchall()
     connection.commit()
     connection.close()
+
 
     # print(groups)
     result = {k: [*map(lambda v: v, values)]

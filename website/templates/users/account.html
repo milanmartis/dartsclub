@@ -14,11 +14,15 @@ content %}
       <form method="POST">
         <h3 align="center"></h3>
         <div class="form-group">
-          <label>Email Address</label>
+  
+            <h5>
+            User Id
+          </h5>
+ 
 
-          <h3>
+          <h1 style="margin-top:-20px;">
             {{user.email }}
-          </h3>
+          </h1>
         </div>
         <div class="form-group">
           <input
@@ -27,52 +31,52 @@ content %}
             name="useride"
             value="{{user.id}}"
           />
-          <label for="first_name">Nick Name</label>
+          <!-- <label for="first_name">Nick Name</label> -->
           <input
             type="text"
             class="form-control"
             autocomplete="off"
             id="first_name_update"
             name="first_name_update"
-            placeholder="Enter first name"
+            placeholder="Nick Name"
             value="{{ user.first_name }}"
           />
         </div>
         <div class="form-group">
-          <label for="password_old">Old Password</label>
+          <!-- <label for="password_old">Old Password</label> -->
           <input
             type="password"
             class="form-control"
             id="password_old"
             name="password_old"
-            placeholder="Enter password"
+            placeholder="Old Password"
             value=""
           />
         </div>
         <div class="form-group">
-          <label for="password1">New Password</label>
+          <!-- <label for="password1">New Password</label> -->
           <input
             type="password"
             class="form-control"
             id="password1"
             name="password1"
-            placeholder="Enter password"
+            placeholder="New Password"
             value=""
           />
         </div>
         <div class="form-group">
-          <label for="password2">New Password (Confirm)</label>
+          <!-- <label for="password2">New Password (Confirm)</label> -->
           <input
             type="password"
             class="form-control"
             id="password2"
             name="password2"
-            placeholder="Confirm password"
+            placeholder="New Password (Confirm)"
             value=""
           />
         </div>
         <br />
-        <button type="submit" class="btn btn-outline-dark btn-block">
+        <button type="submit" class="btn-demo btn-outline-dark btn-block">
           SUBMIT
         </button>
       </form>

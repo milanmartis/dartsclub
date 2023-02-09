@@ -5,6 +5,8 @@ from flask_login import LoginManager
 import os
 
 db = SQLAlchemy()
+
+
 DB_NAME = "../instance/"
 
 
@@ -13,6 +15,8 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'secret'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(DB_NAME, 'database.db')
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
     db.init_app(app)
     # app.app_context().push()
 
@@ -25,7 +29,7 @@ def create_app():
     from .models import User, Note, Groupz, Duel
 
     app.app_context().push()
-    db.create_all()
+    # db.create_all()
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'

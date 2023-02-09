@@ -13,7 +13,20 @@ html {
 }
 
 
-
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid green;
+  -webkit-text-fill-color: green;
+  -webkit-box-shadow: 0 0 0px 1000px #000 inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
 
 label {
     color: #ffffff;
@@ -369,8 +382,8 @@ input::-webkit-inner-spin-button {
 input[type="text"] {
     /* color: #00EE00; */
     border-radius: 14px !important;
-    background-color: #1d1d1d;
-    border: 0px solid #00EE00;
+    background-color: transparent;
+    border: 1px solid #00EE00;
     color: #00EE00;
     font-size: 100%;
     text-align: center;
@@ -381,8 +394,8 @@ input[type="text"] {
 input[type="email"] {
     /* color: #00EE00; */
     border-radius: 14px !important;
-    background-color: #1d1d1d;
-    border: 0px solid #00EE00;
+    background-color: transparent;
+    border: 1px solid #00EE00;
     color: #00EE00;
     font-size: 100%;
     text-align: center;
@@ -393,15 +406,12 @@ input[type="email"] {
 input[type="email"]:focus {
     /* color: #00EE00; */
     background-color: #1d1d1d;
-    font-size: 100%;
-    text-align: center;
-    padding: 4px;
-    margin: 0px;
+
+ 
 }
 
 input[type="email"]::before {
     /* color: #00EE00; */
-    background-color: red;
     font-size: 100%;
     text-align: center;
     padding: 4px;
@@ -410,8 +420,8 @@ input[type="email"]::before {
 
 input[type="password"] {
     border-radius: 14px !important;
-    background-color: #1d1d1d;
-    border: 0px solid #00EE00;
+    background-color: transparent;
+    border: 1px solid #00EE00;
     color: #00EE00;
     /* color: #00EE00; */
     font-size: 100%;

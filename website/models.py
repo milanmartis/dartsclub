@@ -20,7 +20,7 @@ user_group = db.Table('user_group',
                      db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                      db.Column('groupz_id', db.Integer, db.ForeignKey('groupz.id')),
                      db.Column('season_id', db.Integer, db.ForeignKey('season.id')),
-                    #  db.Column('round_id', db.Integer, db.ForeignKey('round.id'))
+                     db.Column('round_id', db.Integer, db.ForeignKey('round.id'))
                      )
 
 user_season = db.Table('user_season',
@@ -85,12 +85,12 @@ class Season(db.Model):
     name = db.Column(db.String(300))
     season_from = db.Column(db.DateTime(timezone=True), default=func.now())
     season_to = db.Column(db.DateTime(timezone=True), default=func.now())
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class Duel(db.Model):
     __tablename__ = 'duel'
     id = db.Column(db.Integer, primary_key=True)
-    # notice = db.Column(db.String(10000))
+    notice = db.Column(db.String(10000))
 
     date_duel = db.Column(db.DateTime(timezone=True), default=func.now())
     openhour = db.relationship('OpenHour', backref='duel', uselist=False)

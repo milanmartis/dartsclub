@@ -1,6 +1,4 @@
-{% extends "base.html" %} 
-{% block content  %}
-{% block duels_filter %}
+{% extends "base.html" %} {% block content %} {% block duels_filter %}
 
 <h1 align="center">
   <img
@@ -10,31 +8,46 @@
   />
 </h1>
 
+{% if groups %}
 <div class="container">
   <div class="row">
     {% for g in groups %}
-    <div class="col center-block text-center" style="padding:0px; margin:0px;">
+    <div
+      class="col center-block text-center"
+      style="padding: 0px; margin: 0px;"
+    >
       <!-- action="javascript:;" onclick="chooseGroup('{{loop.index}}')" -->
       <form action="javascript:;" method="POST">
         <input type="hidden" id="grno" name="grno" value="{{g.id}}" />
         <input type="hidden" id="grname" name="grname" value="{{g.name}}" />
         <input type="hidden" id="seasons" name="seasons" value="{{season}}" />
-        {% if group.id==g.id %} {% set btn = "btn3" %} {% else %} {% set btn = "btn32" %} {% endif %}
-        <button id="view_group_{{g.id}}" onclick="viewGroup({{g.id}})" type="submit" class="{{btn}} btn-outline-dark shadow-none"
+        {% if group.id==g.id %} {% set btn = "btn3" %} {% else %} {% set btn =
+        "btn32" %} {% endif %}
+        <button
+          id="view_group_{{g.id}}"
+          onclick="viewGroup({{g.id}})"
+          type="submit"
+          class="{{btn}} btn-outline-dark shadow-none"
         >
- 
-        {% if loop.index == 1 %}A{% endif %}
-        {% if loop.index == 2 %}B1{% endif %}
-        {% if loop.index == 3 %}B2{% endif %}
-  {% if loop.index == 4 %}C1{% endif %}
-  {% if loop.index == 5 %}C2{% endif %}
-    
-</button>
-</form>
+          {% if loop.index == 1 %}A{% endif %} {% if loop.index == 2 %}B1{%
+          endif %} {% if loop.index == 3 %}B2{% endif %} {% if loop.index == 4
+          %}C1{% endif %} {% if loop.index == 5 %}C2{% endif %}
+        </button>
+      </form>
+    </div>
+    {% endfor %}
+  </div>
 </div>
-{% endfor %}
+{% else %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>NO GROUPS YET</h1>
+    </div>
+  </div>
 </div>
-</div>     
+{% endif %}
+
 <!-- <h3>
   GROUP {{group.shorts}}
 </h3> -->
@@ -55,45 +68,45 @@
     </div>
   </div>
 </div> -->
+{% if duels %}
 <div class="container readinglazy">
-    <div class="row">
-      {% for duel in duels %} 
+  <div class="row">
+    {% for duel in duels %} {% if not user.id in [duel.useride[0].user_id,
+    duel.useride[1].user_id, adminz[0], adminz[1]] %} {% set disabled =
+    "disabled" %} {% else %} {% set disabled = "" %} {% endif %} {% if 'true' ==
+    duel.checking[0].checked and 'true' == duel.checking[1].checked %} {% set
+    checked = "btn btn-outline-dark btn-block shadow-none" %} {% else %} {% set
+    checked = "btn2 btn-outline-dark btn-block shadow-none" %} {% endif %}
 
-           {% if not user.id in [duel.useride[0].user_id,
-      duel.useride[1].user_id, adminz[0], adminz[1]] %} {% set disabled =
-      "disabled" %} {% else %} {% set disabled = "" %} {% endif %} {% if 'true' == duel.checking[0].checked and 'true' == duel.checking[1].checked %} {% set checked =
-      "btn btn-outline-dark btn-block shadow-none" %} {% else %} {% set checked =
-      "btn2 btn-outline-dark btn-block shadow-none" %} {% endif %}
-  
-      <div class="col-12">
-        <form method="POST">
-          <input type="hidden" id="duelz" name="duelz" value="{{duel.duel_id}}" />
-          <button type="submit" {{disabled}} class="{{checked}}">
-            <div class="row">
-              <div class="col-1" style="text-align:center;">
-              </div>
-              <div class="col-10"style="text-align:center;">
-                {{duel.player[0].first_name | upper }}
-  
-                {% if 'true' == duel.checking[0].checked and 'true' == duel.checking[1].checked %}
-  
-                {{duel.result_[0].result}} : {{duel.result_[1].result}}
-                {% else %}
-                -
-                {% endif %}
-                {{duel.player[1].first_name | upper}}
-              </div>
-              <div class="col-1" style="text-align:center;">
-              </div>
+    <div class="col-12">
+      <form method="POST">
+        <input type="hidden" id="duelz" name="duelz" value="{{duel.duel_id}}" />
+        <button type="submit" {{disabled}} class="{{checked}}">
+          <div class="row">
+            <div class="col-1" style="text-align: center;"></div>
+            <div class="col-10" style="text-align: center;">
+              {{duel.player[0].first_name | upper }} {% if 'true' ==
+              duel.checking[0].checked and 'true' == duel.checking[1].checked %}
+              {{duel.result_[0].result}} : {{duel.result_[1].result}} {% else %}
+              - {% endif %} {{duel.player[1].first_name | upper}}
             </div>
-          </button>
-        </form>
-      </div>
-      
+            <div class="col-1" style="text-align: center;"></div>
+          </div>
+        </button>
+      </form>
+    </div>
 
-      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+{% else %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>NO DUELS YET</h1>
     </div>
   </div>
+</div>
+{% endif %}
 
-{% endblock %}
-{% endblock %}
+{% endblock %} {% endblock %}

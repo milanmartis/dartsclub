@@ -1,176 +1,186 @@
 {% extends "base.html" %} {% block title %}DartsClub - Standings{% endblock %} {% block
-content %}
-<h1 align="center">
-  <img
-    src="{{ url_for('static', filename='img/standings.svg') }}"
-    class="filter-green"
-    width="260"
-  />
-</h1>
-
-<div class="container readinglazy">
-  <div class="row">
-    <div class="col">
-      <div
-        id="carouselExampleControls"
-        class="carousel slide carousel-dark"
-        data-interval="false"
-        data-ride="carousel"
-      >
-        <div class="carousel-inner text-center" role="listbox">
-          {% for data12 in data_show_table %}
-          {% set de = data_name_tabz %}
-          {% if not user.id in [adminz[0], adminz[1]] %}
-          {% set user_groupz = user_group.id %} 
-           {% else %} 
-           {% set user_groupz = 8 %} {% endif %}
-
-          {% set list1 = de %}
-          {% set list1len =  loop.index0 %}  
-          
-          <div class="carousel-item {% if list1[list1len].id == user_groupz %}active{% endif %}">
-            <h1>
-              GROUP {% if loop.index0 == 0 %}A{% endif %} {% if loop.index0 == 1
-              %}B1{% endif %} {% if loop.index0 == 2 %}B2{% endif %} {% if
-              loop.index0 == 3 %}C1{% endif %} {% if loop.index0 == 4 %}C2{%
-              endif %} {% if loop.index0 == 5 %}C3{% endif %} {% if loop.index0
-              == 6 %}C4{% endif %}
-            </h1>
-
-            <table class="table" id="datas">
-              <thead>
+  content %}
+  <h1 align="center">
+    <img
+      src="{{ url_for('static', filename='img/standings.svg') }}"
+      class="filter-green"
+      width="260"
+    />
+  </h1>
+  
+  {% if data_show_table %}
+  <div class="container readinglazy">
+    <div class="row">
+      <div class="col">
+        <div
+          id="carouselExampleControls"
+          class="carousel slide carousel-dark"
+          data-interval="false"
+          data-ride="carousel"
+        >
+          <div class="carousel-inner text-center" role="listbox">
+            {% for data12 in data_show_table %}
+            {% set de = data_name_tabz %}
+            {% if not user.id in [adminz[0], adminz[1]] %}
+            {% set user_groupz = user_group.id %} 
+             {% else %} 
+             {% set user_groupz = 8 %} {% endif %}
+  
+            {% set list1 = de %}
+            {% set list1len =  loop.index0 %}  
+            
+            <div class="carousel-item {% if list1[list1len].id == user_groupz %}active{% endif %}">
+              <h1>
+                GROUP {% if loop.index0 == 0 %}A{% endif %} {% if loop.index0 == 1
+                %}B1{% endif %} {% if loop.index0 == 2 %}B2{% endif %} {% if
+                loop.index0 == 3 %}C1{% endif %} {% if loop.index0 == 4 %}C2{%
+                endif %} {% if loop.index0 == 5 %}C3{% endif %} {% if loop.index0
+                == 6 %}C4{% endif %}
+              </h1>
+  
+              <table class="table" id="datas">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"  title="Game Played">
+                      G
+                    </th>
+                    <th scope="col" >W</th>
+                    <th scope="col" >L</th>
+                    <th scope="col" >Legs</th>
+                    <th scope="col" >
+                      +/-
+                    </th>
+                    <th scope="col" style="width: 30px;">P</th>
+                  </tr>
+                </thead>
+  
+                {% for i in data12 %} {% for j in i %}
+  
                 <tr>
-                  <th scope="col"></th>
-                  <th scope="col"></th>
-                  <th scope="col"  title="Game Played">
-                    G
-                  </th>
-                  <th scope="col" >W</th>
-                  <th scope="col" >L</th>
-                  <th scope="col" >Legs</th>
-                  <th scope="col" >
-                    +/-
-                  </th>
-                  <th scope="col" style="width: 30px;">P</th>
+                  <!-- <tr onclick="javascript:location.href='myduels.html'"> -->
+                  <td class="tab-others">
+                    {{ loop.index }}
+                  </td>
+                  
+                  {% for k in j %}
+                  {% if loop.index == 1 %}
+                  <td class="tab-name">{{ k | upper }}</td>
+                  {% else %}
+                  {% if not loop.index == 7 %}
+                  <td class="tab-others">{{ k | upper }}</td>
+                  {% else %}
+                  <td class="tab-points">{{ k | upper }}</td>
+                  {% endif %}{% endif %} {% endfor %}
+  
+                  {% if (list1[list1len].shorts == 'A' or list1[list1len].shorts == 'B1' or list1[list1len].shorts == 'B2') and (loop.index0 == 3 or loop.index0 == 4) %} <td class="tab-others2"><i class="fa fa-arrow-down" style="color:#0ca00c"></i></td> {% endif %}
+                  {% if loop.index0 == 0 and (list1[list1len].shorts == 'B1' or list1[list1len].shorts == 'B2') %} <td class="tab-others2"><i class="fa fa-arrow-up" style="color:#0ca00c"></i></td> {% endif %}
+                  {% if (loop.index0 == 0 or loop.index0 == 1) and (list1[list1len].shorts == 'C1') %} <td class="tab-others2"><i class="fa fa-arrow-up" style="color:#0ca00c"></i></td> {% endif %}
+                  {% if (loop.index0 == 0 or loop.index0 == 1) and (list1[list1len].shorts == 'C2') %} <td class="tab-others2"><i class="fa fa-arrow-up" style="color:#0ca00c"></i></td> {% endif %}
+                  <!-- {% if loop.index0 == 0 or loop.index0 == 1 and (list1[list1len].shorts == 'C1') %} <td class="tab-others"><i class="fa fa-arrow-up" style="color:blue"></i></td> {% endif %} -->
+                  
                 </tr>
-              </thead>
-
-              {% for i in data12 %} {% for j in i %}
-
-              <tr>
-                <!-- <tr onclick="javascript:location.href='myduels.html'"> -->
-                <td class="tab-others">
-                  {{ loop.index }}
-                </td>
-                
-                {% for k in j %}
-                {% if loop.index == 1 %}
-                <td class="tab-name">{{ k | upper }}</td>
-                {% else %}
-                {% if not loop.index == 7 %}
-                <td class="tab-others">{{ k | upper }}</td>
-                {% else %}
-                <td class="tab-points">{{ k | upper }}</td>
-                {% endif %}{% endif %} {% endfor %}
-
-                {% if (list1[list1len].shorts == 'A' or list1[list1len].shorts == 'B1' or list1[list1len].shorts == 'B2') and (loop.index0 == 3 or loop.index0 == 4) %} <td class="tab-others2"><i class="fa fa-arrow-down" style="color:#0ca00c"></i></td> {% endif %}
-                {% if loop.index0 == 0 and (list1[list1len].shorts == 'B1' or list1[list1len].shorts == 'B2') %} <td class="tab-others2"><i class="fa fa-arrow-up" style="color:#0ca00c"></i></td> {% endif %}
-                {% if (loop.index0 == 0 or loop.index0 == 1) and (list1[list1len].shorts == 'C1') %} <td class="tab-others2"><i class="fa fa-arrow-up" style="color:#0ca00c"></i></td> {% endif %}
-                {% if (loop.index0 == 0 or loop.index0 == 1) and (list1[list1len].shorts == 'C2') %} <td class="tab-others2"><i class="fa fa-arrow-up" style="color:#0ca00c"></i></td> {% endif %}
-                <!-- {% if loop.index0 == 0 or loop.index0 == 1 and (list1[list1len].shorts == 'C1') %} <td class="tab-others"><i class="fa fa-arrow-up" style="color:blue"></i></td> {% endif %} -->
-                
-              </tr>
-              {% endfor %} {% endfor %}
-            </table>
+                {% endfor %} {% endfor %}
+              </table>
+            </div>
+            {% endfor %}
           </div>
-          {% endfor %}
+          <a
+            class="carousel-control-prev"
+            href="#carouselExampleControls"
+            role="button"
+            data-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only"></span>
+          </a>
+          <a
+            class="carousel-control-next"
+            href="#carouselExampleControls"
+            role="button"
+            data-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only"></span>
+          </a>
         </div>
-        <a
-          class="carousel-control-prev"
-          href="#carouselExampleControls"
-          role="button"
-          data-slide="prev"
-        >
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="sr-only"></span>
-        </a>
-        <a
-          class="carousel-control-next"
-          href="#carouselExampleControls"
-          role="button"
-          data-slide="next"
-        >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only"></span>
-        </a>
       </div>
+  
+      <!-- <div class="col">
+          <h1>{{ 'complete list' }}</h1>
+          <table class="table table-striped table-dark table-borderless" id="datas">
+            <thead>
+              <tr>
+                <th style="width:22px;">#</th>
+                <th scope="col">Player</th>
+                <th scope="col">P</th>
+                <th scope="col">L</th>
+                <th scope="col">+/-</th>
+                <th scope="col">G/#</th>
+              </tr>
+            </thead>
+            
+            {% for uu in data_all|sort(attribute=2, reverse = True)|sort(attribute=4*1.001, reverse = True) %} 
+            <tr>
+            {% for u in uu %}
+            <td>{{ u | replace("group-", "") | replace(" ", "") }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+          </table>
+  
+        </div> -->
     </div>
-
-    <!-- <div class="col">
-        <h1>{{ 'complete list' }}</h1>
-        <table class="table table-striped table-dark table-borderless" id="datas">
+  
+    <div class="row">
+      <div class="col">
+        <h1>ALL</h1>
+        <table class="table" id="datas">
           <thead>
             <tr>
-              <th style="width:22px;">#</th>
-              <th scope="col">Player</th>
-              <th scope="col">P</th>
-              <th scope="col">L</th>
-              <th scope="col">+/-</th>
-              <th scope="col">G/#</th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+              <th scope="col" style="width: 30px;" title="Game Played">G</th>
+              <th scope="col" style="width: 30px;">W</th>
+              <th scope="col" style="width: 30px;">L</th>
+              <th scope="col" style="width: 50px;">Legs</th>
+              <th scope="col" style="width: 30px; text-align: center;">+/-</th>
+              <th scope="col" style="width: 30px;">P</th>
             </tr>
           </thead>
-          
-          {% for uu in data_all|sort(attribute=2, reverse = True)|sort(attribute=4*1.001, reverse = True) %} 
+          {% for dall in dataAll %} {% for e in dall %} {% for d in e %} {% if
+          loop.index % 4 == 0 or loop.index % 5 == 0%} {% set fallingout =
+          "#2d2d2d" %} {% else %} {% set fallingout = "transparent" %} {% endif %}
           <tr>
-          {% for u in uu %}
-          <td>{{ u | replace("group-", "") | replace(" ", "") }}</td>
-          {% endfor %}
-        </tr>
-        {% endfor %}
-        </table>
-
-      </div> -->
-  </div>
-
-  <div class="row">
-    <div class="col">
-      <h1>ALL</h1>
-      <table class="table" id="datas">
-        <thead>
-          <tr>
-            <th scope="col"></th>
-            <th scope="col"></th>
-            <th scope="col" style="width: 30px;" title="Game Played">G</th>
-            <th scope="col" style="width: 30px;">W</th>
-            <th scope="col" style="width: 30px;">L</th>
-            <th scope="col" style="width: 50px;">Legs</th>
-            <th scope="col" style="width: 30px; text-align: center;">+/-</th>
-            <th scope="col" style="width: 30px;">P</th>
+            <td class="tab-others">{{ loop.index }}</td>
+  
+            {% for a in d %} 
+            {% if loop.index == 1 %}
+            <td class="tab-name">{{ a | upper }}</td>
+            {% else %}
+            {% if not loop.index == 7 %}
+            <td class="tab-others">{{ a | upper }}</td>
+            {% else %}
+            <td class="tab-points">{{ a | upper }}</td>
+            {% endif %}{% endif %} {% endfor %}
           </tr>
-        </thead>
-        {% for dall in dataAll %} {% for e in dall %} {% for d in e %} {% if
-        loop.index % 4 == 0 or loop.index % 5 == 0%} {% set fallingout =
-        "#2d2d2d" %} {% else %} {% set fallingout = "transparent" %} {% endif %}
-        <tr>
-          <td class="tab-others">{{ loop.index }}</td>
-
-          {% for a in d %} 
-          {% if loop.index == 1 %}
-          <td class="tab-name">{{ a | upper }}</td>
-          {% else %}
-          {% if not loop.index == 7 %}
-          <td class="tab-others">{{ a | upper }}</td>
-          {% else %}
-          <td class="tab-points">{{ a | upper }}</td>
-          {% endif %}{% endif %} {% endfor %}
-        </tr>
-        {% endfor %} {% endfor %} {% endfor %}
-      </table>
+          {% endfor %} {% endfor %} {% endfor %}
+        </table>
+      </div>
+    </div>
+  
+    <!-- {% include 'duels.html' %} -->
+  </div>
+  {% else %}
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1>NO DATA YET</h1>
+      </div>
     </div>
   </div>
-
-  {% include 'duels_filter2.html' %}
-  <!-- {% include 'duels.html' %} -->
-</div>
-
-{% endblock %}
+  {% endif %}
+  
+  {% endblock %}
+  

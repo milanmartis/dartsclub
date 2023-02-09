@@ -72,7 +72,7 @@ async function locationHref(url) {
     setTimeout(function(){
       // location_href.innerHTML = 'Free Demo'
       if(user){
-        window.location.href = "/home";
+        window.location.href = "/"+url+"";
         location_href.innerHTML = '<i class="fa fa-circle-o-notch fa-spin" style="transition-duration: 3s;opacity:0;margin-left:15px;padding:9px;"></i>'
       }else{
         window.location.href = "/"+url+"";

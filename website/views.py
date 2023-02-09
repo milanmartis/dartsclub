@@ -4,7 +4,7 @@ import os
 from .models import Note, User, Duel, Season, Groupz, Round
 from . import db
 import json
-from . import tabz, duels, dictionary
+from . import tabz, duels, dictionary, mysql
 from datetime import datetime
 from itertools import combinations
 from sqlalchemy.inspection import inspect
@@ -18,6 +18,7 @@ from collections import defaultdict
 from itertools import groupby
 import random
 from random import shuffle
+import mysql.connector
 
 
 views = Blueprint('views', __name__)
@@ -399,8 +400,20 @@ def duel_manager(season):
 
 
 @views.route('/season', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def season_manager():
+
+
+    # mdb = mysql.connect_tcp_socket()
+
+    # database=mysql.connector.connect(host='35.240.52.3',user='root',passwd='Babkapesko.1',database='darts', )
+    # cursor=database.cursor()
+    # query="select * from posts"
+    # cursor.execute(query)
+    # database.commit()
+    
+
+    # print(mdb_results)
 
     seasons = Season.query.all()
     dic = dictionary.dic
@@ -413,7 +426,7 @@ def season_manager():
         if season < 1:
             flash('There is a problem!', category='error')
         else:
-            # create_new_season(season)
+            create_new_season(season)
             flash('Season was not created!!!', category='success')
             # return redirect(url_for('views.duel_manager', season=season))
 

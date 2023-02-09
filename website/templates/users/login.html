@@ -1,60 +1,65 @@
 {% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
 %}
 
-<div class="container">
-  <div class="row mt-30">
-    <div valign="middle" class="col-sm-12 col-md-12 col-lg-7 col-xl-7">
-      <h1 align="center">
-
-      <img
-        src="{{ url_for('static', filename='img/logo.svg') }}"
-        width="260"
-        class="filter-green"
-      />
-      </h1>
-
-    </div>
-    <div class="col-sm-12 col-md-12 col-lg-5 col-xl-5 mt-34">
-      <form method="POST">
-        <h3 align="center" class="pt-4"></h3>
-        <div class="form-group">
-          <!-- <label for="email">Email Address</label> -->
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            name="email"
-            placeholder="Enter email"
-            value="{{ request.form['email'] }}"
+<div
+  style="background: transparent !important;"
+  class="jumbotron vertical-center"
+>
+  <div class="container">
+    <div class="row row align-items-center text-light">
+      <div valign="middle" class="col-sm-12 col-md-12 col-lg-7 col-xl-7">
+        <h1 align="center">
+          <img
+            src="{{ url_for('static', filename='img/login.svg') }}"
+            width="260"
+            class="filter-green"
           />
-        </div>
+        </h1>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-5 col-xl-5 mt-34">
+        <form method="POST">
+          <h3 align="center" class="pt-4"></h3>
+          <div class="form-group">
+            <!-- <label for="email">Email Address</label> -->
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              required
+              name="email"
+              placeholder="Enter email"
+              value="{{ request.form['email'] }}"
+            />
+          </div>
 
-        <div class="form-group">
-          <!-- <label for="password">Password</label> -->
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            name="password"
-            placeholder="Enter password"
-            value="{{ request.form['password'] }}"
-          />
-        </div>
+          <div class="form-group">
+            <!-- <label for="password">Password</label> -->
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              required
+              name="password"
+              placeholder="Enter password"
+              value="{{ request.form['password'] }}"
+            />
+          </div>
 
-        <br />
-        <button
-          type="submit"
-          class="btn btn-outline-dark btn-block shadow-none"
-        >
-          <i
-            class="fa fa-circle-o-notch fa-spin"
-            id="spin-login"
-            style="opacity: 0;"
-          ></i>
-          Login
-        </button>
-      </form>
+          <br />
+          <button
+            type="submit"
+            class="btn-demo btn-outline-dark btn-block shadow-none"
+          >
+            Login
+          </button>
+        </form>
+
+        <div class="col-12 mt-10">
+          <h4><a href="register">Sign up</a></h4>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
 {% endblock %}
