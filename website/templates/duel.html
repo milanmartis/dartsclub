@@ -41,7 +41,7 @@ block content %}
       name="user_duel_id[{{loop.index}}]"
       value="{{player[4]}}"
         />
-        {{duel[0][0]}}
+       
         {% if not user.id in [player[4], adminz[0], adminz[1]] %} {% set
           disabled= "disabled" %}{% set conf= "btn-result" %}{% else %}{% set
             disabled= "" %} {% set conf= "btn-result" %} {% endif %}
