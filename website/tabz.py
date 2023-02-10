@@ -3,11 +3,10 @@ import pandas as pd
 import numpy as np
 from openpyxl import Workbook, load_workbook
 import itertools
-import psycopg2
+import sqlite3
 from itertools import groupby
 from .models import Groupz, Season, User
 from . import db
-from . import conn
 
 def show_name_table(season):
     
@@ -25,31 +24,31 @@ def show_table(season, groupz):
     # print(season)
     # print(groupz)
     valz = []
-    
-    cursor = conn.connection.cursor()
-    cursor.execute(f'''
-    SELECT user_group.groupz_id groupz_id, user.first_name first_name, user_duel.result, user_duel.against, 
+    connection = sqlite3.connect('instance/database.db')
+    cursor = connection.cursor()
+    cursor.execute('''
+    SELECT user_group.groupz_id, user.first_name, user_duel.result, user_duel.against, 
     user_duel.points, user_duel.checked, user.id,
 
-    SUM(CASE WHEN user_duel.checked = 'true' THEN user_duel.addons ELSE 0 END) AS c_duel,
-    SUM(CASE WHEN user_duel.checked = 'true' THEN user_duel.points ELSE 0 END) AS s_points,
-    SUM(CASE WHEN user_duel.checked = 'true' THEN user_duel.result ELSE 0 END) AS s_result,
-    SUM(CASE WHEN user_duel.checked = 'true' THEN user_duel.against ELSE 0 END) AS s_against,
-    SUM(CASE WHEN user_duel.checked = 'true' AND user_duel.points = 2 THEN 1 ELSE 0 END) AS c_wins,
-    SUM(CASE WHEN user_duel.checked = 'true' AND (user_duel.points = 0 OR user_duel.points = 1) THEN 1 ELSE 0 END) AS c_loses
+    SUM(CASE WHEN user_duel.checked = "true" THEN user_duel.addons ELSE 0 END) AS c_duel,
+    SUM(CASE WHEN user_duel.checked = "true" THEN user_duel.points ELSE 0 END) AS s_points,
+    SUM(CASE WHEN user_duel.checked = "true" THEN user_duel.result ELSE 0 END) AS s_result,
+    SUM(CASE WHEN user_duel.checked = "true" THEN user_duel.against ELSE 0 END) AS s_against,
+    SUM(CASE WHEN user_duel.checked = "true" AND user_duel.points = 2 THEN 1 ELSE 0 END) AS c_wins,
+    SUM(CASE WHEN user_duel.checked = "true" AND (user_duel.points = 0 OR user_duel.points = 1) THEN 1 ELSE 0 END) AS c_loses
 
     FROM duel
-    INNER JOIN user_duel ON duel.id = user_duel.duel_id 
-    INNER JOIN round ON round.id = duel.round_id AND duel.round_id = 2
-    INNER JOIN user ON user_duel.user_id = user.id 
-    INNER JOIN user_group ON user_group.user_id = user.id 
-    INNER JOIN season ON season.id = duel.season_id 
-    WHERE season.id = 1 AND user_group.groupz_id > 7 AND duel.id > 100
+    JOIN user_duel ON duel.id = user_duel.duel_id 
+    JOIN round ON round.id = duel.round_id AND duel.round_id = 2
+    JOIN user ON user_duel.user_id = user.id 
+    JOIN user_group ON user_group.user_id = user.id 
+    JOIN season ON season.id = duel.season_id 
+    WHERE season.id = ? AND user_group.groupz_id > 7 AND duel.id > 100
     GROUP BY user_duel.user_id, user_group.groupz_id, user_group.round_id
-    ''')
+    ''', (season))
     groups = cursor.fetchall()
-    conn.connection.commit()
-    conn.connection.close()
+    connection.commit()
+    connection.close()
 
 
     # print(groups)
@@ -89,10 +88,11 @@ def show_table_all():
     valz2 = []
     season = [1]
     # group = 1
-    cursor = conn.connection.cursor()
+    connection = sqlite3.connect('instance/database.db')
+    cursor = connection.cursor()
     cursor.execute('''
-    SELECT public.user.first_name, user_duel.result, user_duel.against, 
-    user_duel.points, user_duel.checked, public.user.id, 
+    SELECT user.first_name, user_duel.result, user_duel.against, 
+    user_duel.points, user_duel.checked, user.id, 
 
     SUM(CASE WHEN user_duel.checked = "true" THEN user_duel.addons ELSE 0 END) AS c_duel,
     SUM(CASE WHEN user_duel.checked = "true" THEN user_duel.points ELSE 0 END) AS s_points,
@@ -105,13 +105,13 @@ def show_table_all():
     LEFT JOIN duel ON duel.id = user_duel.duel_id 
     LEFT JOIN user ON user_duel.user_id = user.id 
     LEFT JOIN season ON season.id = duel.season_id 
-    WHERE season.id = 1  AND user.first_name NOT LIKE 'H1' AND  user.first_name NOT LIKE 'H2' AND user.first_name NOT LIKE 'H3' AND user.first_name NOT LIKE 'H4'
-    GROUP BY public.user.id
+    WHERE season.id = ?  AND user.first_name NOT LIKE 'H1' AND  user.first_name NOT LIKE 'H2' AND user.first_name NOT LIKE 'H3' AND user.first_name NOT LIKE 'H4'
+    GROUP BY user.id
 
     ''', (season))
     groups = cursor.fetchall()
-    conn.connection.commit()
-    conn.connection.close()
+    connection.commit()
+    connection.close()
     # print(groups)
     # result = {k: [*map(lambda v: v, values)]
     #           for k, values in groupby(sorted(groups, key=lambda x: x[0]), lambda x: x[0])
