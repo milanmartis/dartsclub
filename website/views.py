@@ -27,6 +27,24 @@ adminz = [21, 22]
 season = [1]
 
 
+@views.route('/returnjson', methods = ['GET'])
+def ReturnJSON():
+    if(request.method == 'GET'):
+        with sqlite3.connect('./instance/database.db') as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM user;")
+            data = cursor.fetchall()
+            json.dumps(data)
+    
+        with open('./data.json','w+') as file:
+          # First we load existing data into a dict.
+            new_data = json.load(file)
+            # convert back to json.
+            json.dump(new_data, file, indent = 4)
+            # return jsonify(data)
+
+
+
 @views.route('/', methods=['GET', 'POST'])
 def main():
 
@@ -43,13 +61,13 @@ def home():
     # print(myduels_user[0][0])
 
     groups = db.session.query(Groupz).join(
-        Season).filter(Season.id.like(season[0])).all()
+        Season).filter(Season.id == season[0]).all()
 
     # print(user_group)
     user_group = db.session.query(Groupz).join(User.groupy).filter(
-        User.id.like(current_user.id)).filter(Season.id.like(season[0])).filter(Groupz.round_id == 2).first()
+        User.id == current_user.id).filter(Season.id == season[0]).filter(Groupz.round_id == 2).first()
     myduels_user = db.session.query(Groupz.id).join(User.groupy).filter(
-        Season.id.like(season[0])).filter(User.id.in_([current_user.id])).filter(Groupz.round_id.like(2)).all()
+        Season.id == season[0]).filter(User.id.in_([current_user.id])).filter(Groupz.round_id == 2).all()
 
 
     print(myduels_user)
@@ -256,7 +274,7 @@ def duel_id(season, duelz):
 
 
     groups = db.session.query(Groupz).join(
-        Season).filter(Season.id.like(season)).filter(Groupz.round_id.like(2)).all()
+        Season).filter(Season.id == season).filter(Groupz.round_id == 2).all()
 
     return render_template("duel.html", groups=groups, duel=duel, players=duelz, user=current_user, adminz=adminz)
 
@@ -271,9 +289,9 @@ def duel_view(season, group):
     # print(new_ret)
 
     group = db.session.query(Groupz).join(Season).filter(
-        Season.id.like(season)).filter(Groupz.id.like(group)).first()
+        Season.id == season).filter(Groupz.id == group).first()
     groups = db.session.query(Groupz).join(
-        Season).filter(Season.id.like(season)).filter(Groupz.round_id.like(2)).all()
+        Season).filter(Season.id==season).filter(Groupz.round_id==2).all()
 
     if request.method == 'POST' and request.form.get('grno'):
         grno = request.form.get('grno')
@@ -306,9 +324,9 @@ def duel_view(season, group):
 def duel_manager(season):
 
     groups = db.session.query(Groupz).join(
-        Season).filter(Season.id.like(season)).all()
+        Season).filter(Season.id == season).all()
     group = db.session.query(Groupz.id).join(
-        Season).filter(Season.id.like(season)).first()
+        Season).filter(Season.id == season).first()
 
     # print("-------------------------------")
     # print(group)

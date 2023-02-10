@@ -10,7 +10,7 @@ from . import db
 
 def show_name_table(season):
     
-    groups = db.session.query(Groupz).filter(Season.id.like(1)).filter(Groupz.round_id == 2).all()
+    groups = db.session.query(Groupz).filter(Season.id == 1).filter(Groupz.round_id == 2).all()
 
     # groups = ['A', 'B1', 'B2', 'C1', 'C2']
     print(groups)

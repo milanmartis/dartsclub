@@ -9,7 +9,7 @@ from .models import Groupz, Season
 def create_duels_list(season, group):
 
     # print(group)
-    groups = db.session.query(Groupz).join(Season).filter(Season.id.like(season)).all()
+    groups = db.session.query(Groupz).join(Season).filter(Season.id == season).all()
 
     
     def dict_factory(cursor, row):
