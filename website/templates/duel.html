@@ -20,28 +20,32 @@ block content %}
 </h1>
 <div class="container-fluid pl-2 pr-8 readinglazy">
   <div class="row justify-content-center text-center">
+
+    
     {% for player in duel %}
     <div valign="middle" align="center" class="col">
       <form
-        method="POST"
-        id="updateResult[{{loop.index}}]"
-        action="javascript:;"
+      method="POST"
+      id="updateResult[{{loop.index}}]"
+      action="javascript:;"
       >
-        <input
-          type="hidden"
-          id="duel_id[{{loop.index}}]"
-          name="duel_id[{{loop.index}}]"
-          value="{{player[6]}}"
+      <input
+      type="hidden"
+      id="duel_id[{{loop.index}}]"
+      name="duel_id[{{loop.index}}]"
+      value="{{player[6]}}"
+      />
+      <input
+      type="hidden"
+      id="user_duel_id[{{loop.index}}]"
+      name="user_duel_id[{{loop.index}}]"
+      value="{{player[4]}}"
         />
-        <input
-          type="hidden"
-          id="user_duel_id[{{loop.index}}]"
-          name="user_duel_id[{{loop.index}}]"
-          value="{{player[4]}}"
-        />
+        {{duel[0][0]}}
         {% if not user.id in [player[4], adminz[0], adminz[1]] %} {% set
-        disabled= "disabled" %}{% set conf= "btn-result" %}{% else %}{% set conf=
-        "btn-result" %} {% endif %}
+          disabled= "disabled" %}{% set conf= "btn-result" %}{% else %}{% set
+            disabled= "" %} {% set conf= "btn-result" %} {% endif %}
+            {% if user.id in [duel[0][0], duel[1][0], adminz[0], adminz[1]] %} {% set disable1 = "" %}{% else %}{% set disable1 = "disabled'" %} {% endif %} 
         <select
           class="custom-select"
           id="user_duel_result[{{loop.index}}]"
@@ -70,6 +74,7 @@ block content %}
         <button
           type="submit"
           {{disabled}}
+          style="display:{{hidden}}"
           class="{{conf}} btn-outline-dark mt-4 btn-block shadow-none text-center"
           onClick="updateDuel2({{loop.index}})"
           id="updateDuelButton[{{loop.index}}]"

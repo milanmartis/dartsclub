@@ -35,9 +35,9 @@ def create_duels_list(season, group):
 
     duels = cursor.fetchall()
 
-    print('------------------------------')
-    print(duels)
-    print('------------------------------')
+    # print('------------------------------')
+    # print(duels)
+    # print('------------------------------')
 
 
     connection.commit()

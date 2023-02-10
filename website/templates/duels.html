@@ -1,0 +1,84 @@
+{% extends "base.html" %} {% block title %}Duel{% endblock %} {% block content
+    %}
+    <br />
+    <h1 align="center">
+      <img src="{{ url_for('static', filename='img/duels.svg') }}" class="filter-green" width="290" />
+    </h1>
+    
+    <div class="container">
+      <div class="row">
+        {% for duelz in duels %} 
+        {% if not user.id in [duelz.players[0].id, duelz.players[1].id, adminz] %}
+        {% set disabled = "disabled" %}
+    
+        {% else %}
+        {% set disabled = "" %}
+    
+    
+        {% endif %}
+    
+        <div class="col-12">
+          <form method="POST">
+            <input type="hidden" id="duelz" name="duelz" value="{{duelz.id}}" />
+            <!-- <input type="hidden" id="duelz_players" name="duelz_players" value="">  -->
+    
+            {% set x = (duel | list)  %}
+            {% set rowloop = loop %}
+            {{ x[rowloop.index0] }}
+    
+    
+           {% if loop.index == 0 and duel[loop.index][4] == 'true ' %} 
+           {% set classButton = "btn red_green btn-primary mt-4 btn-block shadow-none" %}
+           {% else %}
+           {% set classButton = "btn red_green btn-primary mt-4 btn-block shadow-none" %}
+           {% endif %}
+            <button
+              type="submit"
+              {{green}}
+              {{disabled}}
+    
+              class="{{classButton}}"
+            >
+              <!-- {{loop.index}} | {{ duelz.result }} | {{ duelz.date_duel }} |  -->
+    
+              {% for player in duelz.players %}
+              <font style="font-size: 180%;">
+                {{player.first_name  | upper | replace("_"," ")}}
+              </font>
+              {% if loop.index == 1 %} vs. {% endif%} {% endfor %}
+    
+    
+                <!-- {% for b in duel %} 
+                {% if b[0] == duelz.id %}
+                {% if b[4] == 'true' %}
+                <font style="opacity:0.6;margin-top:-4px;margin-left:6px; font-size: 180%;">
+                   {{ b[2] }}
+                </font>
+                
+                {% else %}
+                <font style="color:red;margin-top:-4px;margin-left:6px; font-size: 180%;">
+                  NOT PLAYED
+               </font>
+                {% endif %}
+                {% endif %}
+                {% endfor %} -->
+    
+            </button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    
+    <!-- <div class="container">
+    <form method="POST">
+      <div align="center">
+        <input type="hidden" id="ide_season" name="ide_season" value="1">
+        <button type="submit" class="btn btn-primary mt-4 btn-block">
+          <i class="fa fa-circle-o-notch fa-spin"></i>
+          Create Season
+        </button>
+      </div>
+    </form>
+    </div> -->
+    {% endblock %}

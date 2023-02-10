@@ -63,6 +63,7 @@ def home():
 
 
     players = User.query.all()
+    # print(players)
     data_show_table = tabz.show_table(season, shearch_table)
     # dataAll = tabz.show_table_all()
     data_all = tabz.show_table_all()
