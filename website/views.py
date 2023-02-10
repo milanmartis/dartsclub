@@ -19,6 +19,7 @@ from itertools import groupby
 import random
 from random import shuffle
 import mysql.connector
+from . import conn
 
 
 views = Blueprint('views', __name__)
@@ -27,27 +28,25 @@ adminz = [21, 22]
 season = [1]
 
 
-@views.route('/returnjson', methods = ['GET'])
+@views.route('/returnjson', methods=['GET'])
 def ReturnJSON():
-    if(request.method == 'GET'):
+    if (request.method == 'GET'):
         with sqlite3.connect('./instance/database.db') as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM user;")
             data = cursor.fetchall()
             json.dumps(data)
-    
-        with open('./data.json','w+') as file:
+
+        with open('./data.json', 'w+') as file:
           # First we load existing data into a dict.
             new_data = json.load(file)
             # convert back to json.
-            json.dump(new_data, file, indent = 4)
+            json.dump(new_data, file, indent=4)
             # return jsonify(data)
-
 
 
 @views.route('/', methods=['GET', 'POST'])
 def main():
-
 
     dic = dictionary.dic
 
@@ -69,7 +68,6 @@ def home():
     myduels_user = db.session.query(Groupz.id).join(User.groupy).filter(
         Season.id == season[0]).filter(User.id.in_([current_user.id])).filter(Groupz.round_id == 2).all()
 
-
     print(myduels_user)
     if current_user.id in adminz:
         # user_group = 7
@@ -78,7 +76,6 @@ def home():
     else:
         new_ret = duels.create_duels_list(season[0], myduels_user[0][0])
         shearch_table = myduels_user[0][0]
-
 
     players = User.query.all()
     # print(players)
@@ -203,20 +200,20 @@ def update_duel2():
             points), int(data[1]), int(data[2]))
         dataz2 = (int(data[3]), int(data[0]), int(
             points2), int(data[4]), int(data[5]))
-        # print(dataz)
-        # print(dataz2)
+        print(dataz)
+        print(dataz2)
 
         if data:
 
-            conn = sqlite3.connect('instance/database.db')
-            cur1 = conn.cursor()
-            cur1.execute(
-                "UPDATE user_duel SET result = ?, against = ?, points = ? WHERE duel_id = ? AND user_id = ?", (dataz))
-            cur2 = conn.cursor()
-            cur2.execute(
-                "UPDATE user_duel SET result = ?, against = ?, points = ? WHERE duel_id = ? AND user_id = ?", (dataz2))
-            conn.commit()
-            conn.close()
+            cur1 = conn.connection.cursor()
+            sql_select_query = "UPDATE public.user_duel SET result = 9 WHERE duel_id = 111 AND user_id = 4"
+            cur1.execute(sql_select_query)
+            conn.connection.commit()
+
+            # cur2 = conn.cursor()
+            # cur2.execute(
+            #     "UPDATE public.user_duel SET result = 6, against = 5, points = 2 WHERE duel_id = 111 AND user_id = 18")
+            conn.connection.close()
             return jsonify({})
             # fetch the user, perform the updates and commit
         # return jsonify(success=1)
@@ -272,7 +269,6 @@ def duel_id(season, duelz):
 
     print(duel)
 
-
     groups = db.session.query(Groupz).join(
         Season).filter(Season.id == season).filter(Groupz.round_id == 2).all()
 
@@ -284,14 +280,13 @@ def duel_id(season, duelz):
 @login_required
 def duel_view(season, group):
 
-
     new_ret = duels.create_duels_list(season, group)
     # print(new_ret)
 
     group = db.session.query(Groupz).join(Season).filter(
         Season.id == season).filter(Groupz.id == group).first()
     groups = db.session.query(Groupz).join(
-        Season).filter(Season.id==season).filter(Groupz.round_id==2).all()
+        Season).filter(Season.id == season).filter(Groupz.round_id == 2).all()
 
     if request.method == 'POST' and request.form.get('grno'):
         grno = request.form.get('grno')
@@ -422,7 +417,6 @@ def duel_manager(season):
 # @login_required
 def season_manager():
 
-
     # mdb = mysql.connect_tcp_socket()
 
     # database=mysql.connector.connect(host='35.240.52.3',user='root',passwd='Babkapesko.1',database='darts', )
@@ -430,7 +424,6 @@ def season_manager():
     # query="select * from posts"
     # cursor.execute(query)
     # database.commit()
-    
 
     # print(mdb_results)
 
@@ -482,7 +475,8 @@ def create_new_season(season):
     # connection.commit()
     # connection.close()
 
-    list_p = [2, 3, 1, 8, 14, 4, 7, 15, 18, 9, 5, 6, 12, 16, 13, 11, 19, 23, 24, 20, 10, 17, 25, 26, 27]
+    list_p = [2, 3, 1, 8, 14, 4, 7, 15, 18, 9, 5, 6, 12,
+              16, 13, 11, 19, 23, 24, 20, 10, 17, 25, 26, 27]
 
     players = db.session.query(User)\
         .filter(User.id.in_(list_p))\
