@@ -15,7 +15,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://sfljcgpqzpdtgy:e7cf417bcda516a158e6573deeef539aa5a8c641024736ae0dcad733e4116a82@ec2-54-173-77-184.compute-1.amazonaws.com:5432/d7lne9amqh2iri'
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(DB_NAME, 'database.db')
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config['SECRET_KEY'] = 'secret'
 
     db.init_app(app)
@@ -30,7 +30,7 @@ def create_app():
     from .models import User, Note, Groupz, Duel
 
     app.app_context().push()
-    # db.create_all()
+    db.create_all()
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
