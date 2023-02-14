@@ -190,14 +190,20 @@ a:hover {
 
 .navbar-dark .navbar-toggler {
     color: #00EE00;
-    background-color: transparent;
+    background-color: rgba(91, 240, 23, 0.643);
     opacity: 1.0;
     border: 0px solid #00EE00;
     margin: 2px;
     padding: 5px;
-    ;
 }
 
+.navbar-dark {
+        background-color: rgba(23, 26, 22, 0.743);
+
+  margin-bottom:30px;
+  margin-left:20px;
+  margin-right:20px;
+}
 .navbar-dark .brand {
     position: absolute;
     left: 50%;

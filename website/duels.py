@@ -49,6 +49,7 @@ def create_duels_list(season, group):
         .filter(Season.id == season)\
         .filter(Groupz.id == group)\
         .filter(Round.id == 2)\
+        .order_by(User.id.desc())
         
     
     duels = []
