@@ -3,14 +3,19 @@ import pandas as pd
 import numpy as np
 from openpyxl import Workbook, load_workbook
 import itertools
-import sqlite3
+import psycopg2
 from itertools import groupby
-from .models import Groupz, Season, User
+from .models import Groupz, Season, User, Duel, Round, user_duel, user_group
 from . import db
+from . import conn
+import sqlite3
+from sqlalchemy import func, case, and_, or_
+
+virtualplayers = ('h1', 'h2', 'h3', 'h4')
 
 def show_name_table(season):
     
-    groups = db.session.query(Groupz).filter(Season.id == 1).filter(Groupz.round_id == 2).all()
+    groups = db.session.query(Groupz).filter(Groupz.season_id == Season.id).filter(Season.id == season).filter(Groupz.round_id == 2).all()
 
     # groups = ['A', 'B1', 'B2', 'C1', 'C2']
     print(groups)
@@ -18,40 +23,108 @@ def show_name_table(season):
 
 
 ########################## SHOW TABLE IN GROUPS
-
+# [('hery', 3, 6, 0, 'true', 1, 5, 4, 17, 17, 2, 3), ('andy', 6, 3, 2, 'true', 2, 5, 10, 30, 11, 5, 0), ('imre', 6, 2, 2, 'true', 3, 4, 6, 22, 9, 3, 1), ('juso', 1, 6, 0, 'true', 4, 8, 8, 28, 38, 4, 4),
 def show_table(season, groupz):
     
     # print(season)
     # print(groupz)
     valz = []
-    connection = sqlite3.connect('instance/database.db')
-    cursor = connection.cursor()
-    cursor.execute('''
-    SELECT user_group.groupz_id, user.first_name, user_duel.result, user_duel.against, 
-    user_duel.points, user_duel.checked, user.id,
 
-    SUM(CASE WHEN user_duel.checked = "true" THEN user_duel.addons ELSE 0 END) AS c_duel,
-    SUM(CASE WHEN user_duel.checked = "true" THEN user_duel.points ELSE 0 END) AS s_points,
-    SUM(CASE WHEN user_duel.checked = "true" THEN user_duel.result ELSE 0 END) AS s_result,
-    SUM(CASE WHEN user_duel.checked = "true" THEN user_duel.against ELSE 0 END) AS s_against,
-    SUM(CASE WHEN user_duel.checked = "true" AND user_duel.points = 2 THEN 1 ELSE 0 END) AS c_wins,
-    SUM(CASE WHEN user_duel.checked = "true" AND (user_duel.points = 0 OR user_duel.points = 1) THEN 1 ELSE 0 END) AS c_loses
+    # total_games = func.sum(case(value=user_duel.c.checked = 'true', whens=user_duel.c.checked, else_= 0)).label("user_duel.addons")
+    c_duel = func.sum(case((user_duel.c.checked == 'true', user_duel.c.addons), else_= 0)).label("c_duel")
+    s_points = func.sum(case((user_duel.c.checked == 'true', user_duel.c.points), else_= 0)).label("s_points")
+    s_result = func.sum(case((user_duel.c.checked == 'true', user_duel.c.result), else_= 0)).label("s_result")
+    s_against = func.sum(case((user_duel.c.checked == 'true', user_duel.c.against), else_= 0)).label("s_against")
+    # c_wins = func.sum(case((user_duel.c.points == 2, 1), else_= 0)).label("c_wins")
+    # c_loses = func.sum(case((user_duel.c.points == 0, 1),(user_duel.c.points == 1, 1), else_=0)).label("c_loses")
+    
+    c_wins = func.sum(case(
+        
+            (and_(
+                (user_duel.c.checked == 'true'),
+                or_(
+                    (user_duel.c.points == 2),
+                )
+            ), 1)
+        ,
+        else_ = 0
+    ))
 
-    FROM duel
-    JOIN user_duel ON duel.id = user_duel.duel_id 
-    JOIN round ON round.id = duel.round_id AND duel.round_id = 2
-    JOIN user ON user_duel.user_id = user.id 
-    JOIN user_group ON user_group.user_id = user.id 
-    JOIN season ON season.id = duel.season_id 
-    WHERE season.id = ? AND user_group.groupz_id > 7 AND duel.id > 100
-    GROUP BY user_duel.user_id, user_group.groupz_id, user_group.round_id
-    ''', (season))
-    groups = cursor.fetchall()
-    connection.commit()
-    connection.close()
+    c_loses = func.sum(case(
+        
+            (and_(
+                (user_duel.c.checked == 'true'),
+                or_(
+                    (user_duel.c.points == 0),
+                    (user_duel.c.points == 1)
+                )
+            ), 1)
+        ,
+        else_ = 0
+    ))
+    
+    groups = db.session.query(
+        user_group.c.groupz_id,
+        User.first_name,
+        user_duel.c.user_id,
+        c_duel,
+        s_points,
+        s_result,
+        s_against,
+        c_wins,
+        c_loses
+        )\
+        .join(Duel)\
+        .join(Round)\
+        .filter(user_duel.c.user_id == User.id)\
+        .filter(user_duel.c.duel_id == Duel.id)\
+        .filter(user_group.c.user_id == User.id)\
+        .filter(user_group.c.groupz_id == Groupz.id)\
+        .filter(Season.id == Duel.season_id)\
+        .filter(Groupz.round_id == Round.id)\
+        .filter(Season.id == season)\
+        .filter(Round.id == 2)\
+        .group_by(user_duel.c.user_id, user_group.c.groupz_id, User.first_name)\
+        .all()
+
+
+        
+        # .filter(Groupz.id == groupz)\
+
+    # print('-----------------------------------')
+    # print(groups)
+    # print('-----------------------------------')
+
+    # connection = psycopg2.connect('postgresql://ynqryzyuztgqts:122f26414b20598848fc10a2703fd6da06650c06918c1a69e5e7249d59597271@ec2-34-194-40-194.compute-1.amazonaws.com:5432/d8jkicn6gvjnuh')
+    # cursor = connection.cursor()
+    # cursor.execute('''
+    # SELECT user_group.groupz_id, user.first_name, user_duel.result, user_duel.against, 
+    # user_duel.points, user_duel.checked, user.id,
+
+    # SUM(CASE WHEN user_duel.checked = 'true' THEN user_duel.addons ELSE 0 END) AS c_duel,
+    # SUM(CASE WHEN user_duel.checked = 'true' THEN user_duel.points ELSE 0 END) AS s_points,
+    # SUM(CASE WHEN user_duel.checked = 'true' THEN user_duel.result ELSE 0 END) AS s_result,
+    # SUM(CASE WHEN user_duel.checked = 'true' THEN user_duel.against ELSE 0 END) AS s_against,
+    # SUM(CASE WHEN user_duel.checked = 'true' AND user_duel.points = 2 THEN 1 ELSE 0 END) AS c_wins,
+    # SUM(CASE WHEN user_duel.checked = 'true' AND (user_duel.points = 0 OR user_duel.points = 1) THEN 1 ELSE 0 END) AS c_loses
+
+    # FROM duel
+    # INNER JOIN user ON user.id = user_duel.user_id
+    # INNER JOIN user_duel ON duel.id = user_duel.duel_id 
+    # INNER JOIN round ON round.id = duel.round_id AND duel.round_id = 2
+    # INNER JOIN user_group ON user_group.user_id = user.id
+    # INNER JOIN season ON season.id = duel.season_id 
+    # WHERE season.id = 1 AND user_group.groupz_id > 7 AND duel.id > 100
+    # GROUP BY user_duel.user_id, user_group.groupz_id, user_group.round_id
+    # ''')
+    # groups = cursor.fetchall()
+    # connection.commit()
+    # connection.close()
 
 
     # print(groups)
+
+
     result = {k: [*map(lambda v: v, values)]
               for k, values in groupby(sorted(groups, key=lambda x: x[0]), lambda x: x[0])
               }
@@ -61,7 +134,7 @@ def show_table(season, groupz):
 
     for group in result.values():
 
-        df = pd.DataFrame(group, columns=['duel_id', 'player', 'plus', 'minus', 'points', 'check', 'user_id','c_duel','s_points','s_result','s_against','c_wins','c_loses'])
+        df = pd.DataFrame(group, columns=['duel_id', 'player', 'user_id','c_duel','s_points','s_result','s_against','c_wins','c_loses'])
         # df = df.replace('?', np.NaN)
         df['plusminus'] = df['s_result'] - df['s_against']
         df = df.groupby(by="player", as_index=False)[["c_duel", "c_wins", "c_loses", "s_points", "s_result","s_against","plusminus"]].sum()
@@ -86,40 +159,62 @@ def show_table(season, groupz):
 
 def show_table_all():
     valz2 = []
-    season = [1]
+    season = 1
     # group = 1
-    connection = sqlite3.connect('instance/database.db')
-    cursor = connection.cursor()
-    cursor.execute('''
-    SELECT user.first_name, user_duel.result, user_duel.against, 
-    user_duel.points, user_duel.checked, user.id, 
+    c_duel = func.sum(case((user_duel.c.checked == 'true', user_duel.c.addons), else_= 0)).label("c_duel")
+    s_points = func.sum(case((user_duel.c.checked == 'true', user_duel.c.points), else_= 0)).label("s_points")
+    s_result = func.sum(case((user_duel.c.checked == 'true', user_duel.c.result), else_= 0)).label("s_result")
+    s_against = func.sum(case((user_duel.c.checked == 'true', user_duel.c.against), else_= 0)).label("s_against")
+    # c_wins = func.sum(case((user_duel.c.points == 2, 1), else_= 0)).label("c_wins")
+    # c_loses = func.sum(case((user_duel.c.points == 0, 1),(user_duel.c.points == 1, 1), else_=0)).label("c_loses")
+    
+    c_wins = func.sum(case(
+        
+            (and_(
+                (user_duel.c.checked == 'true'),
+                or_(
+                    (user_duel.c.points == 2),
+                )
+            ), 1)
+        ,
+        else_ = 0
+    ))
 
-    SUM(CASE WHEN user_duel.checked = "true" THEN user_duel.addons ELSE 0 END) AS c_duel,
-    SUM(CASE WHEN user_duel.checked = "true" THEN user_duel.points ELSE 0 END) AS s_points,
-    SUM(CASE WHEN user_duel.checked = "true" THEN user_duel.result ELSE 0 END) AS s_result,
-    SUM(CASE WHEN user_duel.checked = "true" THEN user_duel.against ELSE 0 END) AS s_against,
-    SUM(CASE WHEN user_duel.checked = "true" AND user_duel.points = 2 THEN 1 ELSE 0 END) AS c_wins,
-    SUM(CASE WHEN user_duel.checked = "true" AND (user_duel.points = 0 OR user_duel.points = 1) THEN 1 ELSE 0 END) AS c_loses
+    c_loses = func.sum(case(
+        
+            (and_(
+                (user_duel.c.checked == 'true'),
+                or_(
+                    (user_duel.c.points == 0),
+                    (user_duel.c.points == 1)
+                )
+            ), 1)
+        ,
+        else_ = 0
+    ))
+    
+    
+    groups = db.session.query(
+        User.first_name,
+        user_duel.c.user_id,
+        c_duel,
+        s_points,
+        s_result,
+        s_against,
+        c_wins,
+        c_loses
+        )\
+        .join(Duel)\
+        .join(Round)\
+        .filter(user_duel.c.user_id == User.id)\
+        .filter(user_duel.c.duel_id == Duel.id)\
+        .filter(User.first_name.not_in(virtualplayers))\
+        .filter(Season.id == Duel.season_id)\
+        .filter(Season.id == season)\
+        .group_by(user_duel.c.user_id, User.first_name)\
+        .all()
 
-    FROM user_duel 
-    LEFT JOIN duel ON duel.id = user_duel.duel_id 
-    LEFT JOIN user ON user_duel.user_id = user.id 
-    LEFT JOIN season ON season.id = duel.season_id 
-    WHERE season.id = ?  AND user.first_name NOT LIKE 'H1' AND  user.first_name NOT LIKE 'H2' AND user.first_name NOT LIKE 'H3' AND user.first_name NOT LIKE 'H4'
-    GROUP BY user.id
-
-    ''', (season))
-    groups = cursor.fetchall()
-    connection.commit()
-    connection.close()
-    # print(groups)
-    # result = {k: [*map(lambda v: v, values)]
-    #           for k, values in groupby(sorted(groups, key=lambda x: x[0]), lambda x: x[0])
-    #           }
-    # print(result)
-    # for group in groups:
-
-    df2 = pd.DataFrame(groups, columns=['player', 'plus', 'minus', 'points', 'check', 'user_id','c_duel','s_points','s_result','s_against','c_wins','c_loses'])
+    df2 = pd.DataFrame(groups, columns=['player', 'user_id','c_duel','s_points','s_result','s_against','c_wins','c_loses'])
     # print(df2['shorts'])
     df2 = df2.replace('?', np.NaN)
     df2['plusminus'] = df2['s_result'] - df2['s_against']

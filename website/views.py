@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 import os
-from .models import Note, User, Duel, Season, Groupz, Round
+from .models import Note, User, Duel, Season, Groupz, Round, user_duel
 from . import db
 import json
 from . import tabz, duels, dictionary, mysql
@@ -12,43 +12,42 @@ import sqlite3
 from flask import jsonify
 import numbers
 from sqlalchemy.inspection import inspect
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import lazyload, joinedload, subqueryload
 from collections import defaultdict
 from itertools import groupby
 import random
 from random import shuffle
 import mysql.connector
-
+from . import conn
+import psycopg2
 
 
 views = Blueprint('views', __name__)
 
 adminz = [21, 22]
-season = [1]
+season = 1
 
 
-@views.route('/returnjson', methods = ['GET'])
+@views.route('/returnjson', methods=['GET'])
 def ReturnJSON():
-    if(request.method == 'GET'):
+    if (request.method == 'GET'):
         with sqlite3.connect('./instance/database.db') as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM user;")
             data = cursor.fetchall()
             json.dumps(data)
-    
-        with open('./data.json','w+') as file:
+
+        with open('./data.json', 'w+') as file:
           # First we load existing data into a dict.
             new_data = json.load(file)
             # convert back to json.
-            json.dump(new_data, file, indent = 4)
+            json.dump(new_data, file, indent=4)
             # return jsonify(data)
-
 
 
 @views.route('/', methods=['GET', 'POST'])
 def main():
-
 
     dic = dictionary.dic
 
@@ -62,24 +61,22 @@ def home():
     # print(myduels_user[0][0])
 
     groups = db.session.query(Groupz).join(
-        Season).filter(Season.id == season[0]).all()
+        Season).filter(Season.id == season).all()
 
     # print(user_group)
     user_group = db.session.query(Groupz).join(User.groupy).filter(
-        User.id == current_user.id).filter(Season.id == season[0]).filter(Groupz.round_id == 2).first()
-    myduels_user = db.session.query(Groupz.id).join(User.groupy).filter(
-        Season.id == season[0]).filter(User.id.in_([current_user.id])).filter(Groupz.round_id == 2).all()
+        User.id == current_user.id).filter(Groupz.season_id == Season.id).filter(Season.id == season).filter(Groupz.round_id == 2).first()
+    myduels_user = db.session.query(Groupz.id).join(User.groupy).filter(Groupz.season_id == Season.id).filter(
+        Season.id == season).filter(User.id.in_([current_user.id])).filter(Groupz.round_id == 2).all()
 
-
-    print(myduels_user)
+    # print(myduels_user)
     if current_user.id in adminz:
         # user_group = 7
-        new_ret = duels.create_duels_list(season[0], 'visitor')
+        new_ret = duels.create_duels_list(season, 'visitor')
         shearch_table = 111
     else:
-        new_ret = duels.create_duels_list(season[0], myduels_user[0][0])
+        new_ret = duels.create_duels_list(season, myduels_user[0][0])
         shearch_table = myduels_user[0][0]
-
 
     players = User.query.all()
     # print(players)
@@ -87,7 +84,7 @@ def home():
     # dataAll = tabz.show_table_all()
     data_all = tabz.show_table_all()
     data_name_tabz = tabz.show_name_table(season)
-    # print(data_name_tabz)
+    # print(data_show_table)
     # fooor = make_tab_list()
 
     if request.method == "POST" and request.form.get("duelz"):
@@ -105,7 +102,7 @@ def home():
 
         return redirect(url_for('views.duel_id', season=season, duelz=duelz, duelz_players=duelz_players))
 
-    return render_template("home.html", user_group=user_group, groups=groups, dataAll=data_all, duels=new_ret, players=players, data_name_tabz=data_name_tabz, data_show_table=data_show_table, user=current_user, adminz=adminz)
+    return render_template("home.html", user_group=user_group, groups=groups,  dataAll=data_all, duels=new_ret, players=players, data_name_tabz=data_name_tabz, data_show_table=data_show_table, user=current_user, adminz=adminz)
 
 
 # def make_tab_list():
@@ -139,36 +136,33 @@ def delete_duel():
     return jsonify({})
 
 
-@views.route('/update-duel', methods=['POST'])
+@views.route('/update-duel', methods=['POST', 'GET'])
 @login_required
 def update_duel():
     duelCheck = json.loads(request.data)
     data = duelCheck["duelCheck"]
     data = data.split(",")
     data = (data[0], data[1], data[2])
-    # print(data)
-    conn = sqlite3.connect('instance/database.db')
-    cur = conn.cursor()
-    cur.execute(
-        "UPDATE user_duel SET checked = ? WHERE duel_id = ? AND user_id = ?", data)
-    conn.commit()
-    conn.close()
-    # if data[0] == 'true':
-    #     flash('Duel checked!', category='success')
-    # else:
-    #     flash('Duel unchecked!', category='success')
+    print(data)
 
+    u = update(user_duel)
+    u = u.values({"checked": data[0]})
+    u = u.where(user_duel.c.duel_id == int(data[1]))
+    u = u.where(user_duel.c.user_id == int(data[2]))
+
+    db.session.execute(u)
+    db.session.commit()
     return jsonify({})
 
 
-@views.route('/update-duel2', methods=['POST'])
+@views.route('/update-duel2', methods=['POST', 'GET'])
 @login_required
 def update_duel2():
     try:
         duelResult = json.loads(request.data)
         data = duelResult["duelResult"]
         data = data.split(",")
-
+        # print(data)
         # calculating points
         if int(data[0]) == 6 and int(data[3]) <= 4:
             points = 2
@@ -200,33 +194,37 @@ def update_duel2():
         else:
             points2 = 0
 
-        dataz = (int(data[0]), int(data[3]), int(
-            points), int(data[1]), int(data[2]))
-        dataz2 = (int(data[3]), int(data[0]), int(
-            points2), int(data[4]), int(data[5]))
-        # print(dataz)
-        # print(dataz2)
+        # dataz = (int(data[0]), int(data[3]), int(points), int(data[1]), int(data[2]))
+        # dataz2 = (int(data[3]), int(data[0]), int(points2), int(data[4]), int(data[5]))
 
         if data:
+            # user1 = db.session.query(user_duel).filter(user_duel.c.duel_id == int(
+            #     data[1])).filter(user_duel.c.user_id == int(data[2])).first()
+            # user2 = db.session.query(user_duel).filter(user_duel.c.duel_id == int(
+            #     data[4])).filter(user_duel.c.user_id == int(data[5])).first()
+            # print(user1)
+            # print(user2)
 
-            conn = sqlite3.connect('instance/database.db')
-            cur1 = conn.cursor()
-            cur1.execute(
-                "UPDATE user_duel SET result = ?, against = ?, points = ? WHERE duel_id = ? AND user_id = ?", (dataz))
-            cur2 = conn.cursor()
-            cur2.execute(
-                "UPDATE user_duel SET result = ?, against = ?, points = ? WHERE duel_id = ? AND user_id = ?", (dataz2))
-            conn.commit()
-            conn.close()
+            u = update(user_duel)
+            u = u.values({"result": int(data[0]), "against": int(data[3]), "points": int(points)})
+            u = u.where(user_duel.c.duel_id == int(data[1]))
+            u = u.where(user_duel.c.user_id == int(data[2]))
+            u2 = update(user_duel)
+            u2 = u2.values({"result": int(data[3]), "against": int(data[0]), "points": int(points2)})
+            u2 = u2.where(user_duel.c.duel_id == int(data[4]))
+            u2 = u2.where(user_duel.c.user_id == int(data[5]))
+
+            db.session.execute(u)
+            db.session.execute(u2)
+            db.session.commit()
+
             return jsonify({})
-            # fetch the user, perform the updates and commit
-        # return jsonify(success=1)
+
     except:
         print('error')
-        # flash('Duel was not updated!', category='error')
 
 
-# /landingpage/A
+
 @views.route('/season/<season>/duel/<duelz>', methods=['GET', 'POST'])
 @login_required
 def duel_id(season, duelz):
@@ -253,26 +251,40 @@ def duel_id(season, duelz):
 
     # flash('Duel updated!!!', category='success')
 
-    connection = sqlite3.connect('instance/database.db')
-    cursor = connection.cursor()
-    cursor.execute(
-        f'''
-        SELECT user.id, user.first_name, user_duel.result, duel.date_duel, user.id, user_duel.checked, user_duel.duel_id, user_group.groupz_id  
-        FROM user 
-        JOIN user_duel ON user.id = user_duel.user_id
-        JOIN duel ON duel.id = user_duel.duel_id 
-        JOIN user_group ON user_group.user_id = user_duel.user_id 
-        WHERE user_duel.duel_id = {duelz}
-        GROUP BY user_duel.duel_id, user.id
-  
-        '''
-    )
-    duel = cursor.fetchall()
-    connection.commit()
-    connection.close()
+    # cursor = conn.connection.cursor()
+    # cursor.execute(
+    #     f"""
+    #     SELECT user.id, user.first_name, user_duel.result, duel.date_duel, user_duel.checked, user_duel.duel_id, user_group.groupz_id
+    #     FROM user
+    #     INNER JOIN user_duel ON user.id = user_duel.user_id
+    #     INNER JOIN duel ON duel.id = user_duel.duel_id
+    #     INNER JOIN user_group ON user_group.user_id = user_duel.user_id
+    #     WHERE user_duel.duel_id = {duelz}
+    #     GROUP BY user_duel.duel_id, user.id
 
-    print(duel)
+    #     """, (duelz)
+    # )
+    # duel = cursor.fetchall()
+    # conn.connection.commit()
+    # conn.connection.close()
 
+    # duel = db.session.query(User).join(User.play).filter(Duel.id == duelz).all()
+
+    # duel = db.session.query(user_duel).join(User.play).filter(Duel.id == duelz).first()
+    duel = db.session.query(User.first_name, user_duel).filter(
+        user_duel.c.user_id == User.id).filter(user_duel.c.duel_id == Duel.id).filter(Duel.id == duelz).all()
+
+    # print(duel)
+
+# user_duel = db.Table('user_duel',
+#                      db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+#                      db.Column('duel_id', db.Integer, db.ForeignKey('duel.id')),
+#                      db.Column('result', db.Integer, default=0),
+#                      db.Column('against', db.Integer, default=0),
+#                      db.Column('points', db.Integer, default=0),
+#                      db.Column('checked', db.Integer, default="false"),
+#                      db.Column('notez', db.Integer),
+#                      db.Column('addons', db.Integer, default=1)
 
     groups = db.session.query(Groupz).join(
         Season).filter(Season.id == season).filter(Groupz.round_id == 2).all()
@@ -285,14 +297,11 @@ def duel_id(season, duelz):
 @login_required
 def duel_view(season, group):
 
-
     new_ret = duels.create_duels_list(season, group)
     # print(new_ret)
 
-    group = db.session.query(Groupz).join(Season).filter(
-        Season.id == season).filter(Groupz.id == group).first()
-    groups = db.session.query(Groupz).join(
-        Season).filter(Season.id==season).filter(Groupz.round_id==2).all()
+    group = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.id == group).first()
+    groups = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.round_id == 2).all()
 
     if request.method == 'POST' and request.form.get('grno'):
         grno = request.form.get('grno')
@@ -423,7 +432,6 @@ def duel_manager(season):
 # @login_required
 def season_manager():
 
-
     # mdb = mysql.connect_tcp_socket()
 
     # database=mysql.connector.connect(host='35.240.52.3',user='root',passwd='Babkapesko.1',database='darts', )
@@ -431,7 +439,6 @@ def season_manager():
     # query="select * from posts"
     # cursor.execute(query)
     # database.commit()
-    
 
     # print(mdb_results)
 
@@ -483,7 +490,8 @@ def create_new_season(season):
     # connection.commit()
     # connection.close()
 
-    list_p = [2, 3, 1, 8, 14, 4, 7, 15, 18, 9, 5, 6, 12, 16, 13, 11, 19, 23, 24, 20, 10, 17, 25, 26, 27]
+    list_p = [2, 3, 1, 8, 14, 4, 7, 15, 18, 9, 5, 6, 12,
+              16, 13, 11, 19, 23, 24, 20, 10, 17, 25, 26, 27]
 
     players = db.session.query(User)\
         .filter(User.id.in_(list_p))\

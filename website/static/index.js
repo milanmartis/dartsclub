@@ -96,6 +96,7 @@ async function updateDuel2(looopindex) {
     var player_oponent = document.getElementById('user_duel_id[1]')
     var duel_oponent = document.getElementById('duel_id[1]')
   }
+  // alert(result.value)
 
   var spin = document.getElementById('updateDuelButton[' + looopindex + ']')
 

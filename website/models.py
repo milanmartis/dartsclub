@@ -1,17 +1,30 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
+from sqlalchemy import PrimaryKeyConstraint
 
-
+# class UserDuel(db.Model):
+#         __tablename__ = 'user_duel'
+#         PrimaryKeyConstraint('user_id', 'duel_id', name='user_duel'),
+    
+#         db.Column('id', db.Integer(), primary_key=True),
+#         db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+#         db.Column('duel_id', db.Integer, db.ForeignKey('duel.id')),
+#         db.Column('result', db.Integer, default=0),
+#         db.Column('against', db.Integer, default=0),
+#         db.Column('points', db.Integer, default=0),
+#         db.Column('checked', db.Integer, default="false"),
+#         db.Column('notez', db.Integer),
+#         db.Column('addons', db.Integer, default=1)
 
 
 user_duel = db.Table('user_duel',
-                     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-                     db.Column('duel_id', db.Integer, db.ForeignKey('duel.id')),
+                     db.Column('user_id', db.Integer, db.ForeignKey('user.id', onupdate="CASCADE", ondelete="CASCADE")),
+                     db.Column('duel_id', db.Integer, db.ForeignKey('duel.id', onupdate="CASCADE", ondelete="CASCADE")),
                      db.Column('result', db.Integer, default=0),
                      db.Column('against', db.Integer, default=0),
                      db.Column('points', db.Integer, default=0),
-                     db.Column('checked', db.Integer, default="false"),
+                     db.Column('checked', db.String(10), default="false"),
                      db.Column('notez', db.Integer),
                      db.Column('addons', db.Integer, default=1)
                      )
