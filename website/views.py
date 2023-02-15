@@ -285,7 +285,7 @@ def duel_view(season, group):
 
 
 @views.route('/season', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def season_manager():
 
 
