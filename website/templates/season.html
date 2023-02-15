@@ -12,13 +12,17 @@ block content %}
   <div class="row" style="margin: 0px; padding: 0px;">
     {% for season in seasons %}
     <div class="col-12" style="margin: 0px; padding: 0px;">
-      <form method="POST">
+      <form method="POST" action="javascript:;">
         <input type="hidden" id="season" name="season" value="{{season.id}}" />
         <button
+          id="location_href_season/{{season.id}}/group/9"
+          name="location_href_season/{{season.id}}/group/9"
+          onclick="locationHref('season/{{season.id}}/group/9')"
           type="submit"
           class="btn btn-outline-dark btn-block shadow-none"
         >
-          <font style="font-size: 140%;">{{season.name}}</font>
+            {{season.name}}
+ 
         </button>
       </form>
     </div>
@@ -66,8 +70,8 @@ block content %}
             id="ide_season"
             name="ide_season"
             value="{{seasons.id}}"
-          />
-          <button
+            />
+            <button
             type="submit"
             class="btn-demo btn-outline-dark btn-block shadow-none"
           >

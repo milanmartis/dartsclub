@@ -79,9 +79,9 @@
     checked = "btn2 btn-outline-dark btn-block shadow-none" %} {% endif %}
 
     <div class="col-12">
-      <form method="POST">
+      <form method="POST" action="javascript:;">
         <input type="hidden" id="duelz" name="duelz" value="{{duel.duel_id}}" />
-        <button type="submit" {{disabled}} class="{{checked}}">
+        <button id="location_href_season/1/duel/{{duel.duel_id}}" name="location_href_season/1/duel/{{duel.duel_id}}" onclick="locationHref('season/1/duel/{{duel.duel_id}}')" type="submit" {{disabled}} class="{{checked}}">
           <div class="row">
             <div class="col-1" style="text-align: center;"></div>
             <div class="col-10" style="text-align: center;">

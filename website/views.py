@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 import os
-from .models import Note, User, Duel, Season, Groupz, Round, user_duel
+from .models import Note, User, Duel, Season, Groupz, Round, user_duel, user_group
 from . import db
 import json
 from . import tabz, duels, dictionary, mysql
@@ -281,120 +281,16 @@ def duel_view(season, group):
     return render_template("duels_filter.html", group=group, groups=groups, season=season, duels=new_ret, user=current_user, adminz=adminz)
 
 
-@views.route('/season/<season>', methods=['GET', 'POST'])
-@login_required
-def duel_manager(season):
-
-    groups = db.session.query(Groupz).join(
-        Season).filter(Season.id == season).all()
-    group = db.session.query(Groupz.id).join(
-        Season).filter(Season.id == season).first()
-
-    # print("-------------------------------")
-    # print(group)
-    # print("-------------------------------")
-
-    def dict_factory(cursor, row):
-        d = {}
-        for idx, col in enumerate(cursor.description):
-            d[col[0]] = row[idx]
-        return d
-
-    connection = sqlite3.connect('instance/database.db')
-    connection.row_factory = dict_factory
-    cursor = connection.cursor()
-    cursor.execute('''
-    SELECT user_duel.duel_id, user_duel.result, user_duel.user_id, user_duel.checked, user.first_name, user_group.groupz_id 
-    FROM duel 
-    JOIN user_duel ON duel.id = user_duel.duel_id 
-    JOIN user ON user.id = user_duel.user_id 
-    JOIN user_group ON user.id = user_group.user_id 
-    JOIN groupz ON groupz.id=user_group.groupz_id 
-    WHERE duel.season_id=? AND groupz.id=?
-    GROUP BY duel.id, user.id
-    ''', (season, group[0]))
-
-    duels = cursor.fetchall()
-
-    # print(duels)
-
-    connection.commit()
-    connection.close()
-
-    # duels = {key:np.hstack([d1[key],d2[key]]) for key in d1.keys()}
-    # dd = defaultdict(list)
-
-    field_to_be_check = "duel_id"
-    merger = ["first_name", "result", "groupz_id", "checked", "user_id"]
-    merge_name = ["player", "result_", "groupy", "checking", "useride"]
-
-    # merger and merge_name must be one to one.
-    the_dict = {m: mn for m, mn in zip(merger, merge_name)}
-    # {"city":"cities", "ads":"my_ads"}  merge_name
-    newdata = duels.copy()
-    # create new_ret as result
-    new_ret = [{field_to_be_check: i, **{i: [] for i in merge_name}}
-               for i in set([i[field_to_be_check] for i in duels])]
-    # print(new_ret, "this is new_ret")
-    for val in new_ret:
-        for k in newdata:
-            if val[field_to_be_check] != k[field_to_be_check]:
-                continue
-            tmp = {i: k[i] for i in merger}
-            for single in tmp:
-                # if {single:tmp[single]} not in val[the_dict[single]]:
-                val[the_dict[single]].append({single: tmp[single]})
-    # duel_view(season,group)
-
-    # CHOOSE GROUP
-    # if request.data:
-    #     groupList = json.loads(request.data)
-    #     data = groupList["groupList"]
-    #     data = data.split(",")
-    if request.method == 'POST' and request.form.get('grno'):
-        grno = request.form.get('grno')
-        grname = request.form.get('grname')
-        seasons = request.form.get('seasons')
-        # duel_view(seasons, grno)
-
-        return redirect(url_for('views.duel_view', groups=groups, group=grno, grno=grno, grname=grname, season=seasons, user=current_user, adminz=adminz))
-        # return render_template("duels_filter.html", duels=new_ret, season=season, groups=groups, user=current_user, adminz=adminz)
-
-    if request.method == "POST" and request.form.get("duelz"):
-
-        duelz_players = []
-        # flash('Lets play!!!', category='success')
-
-        duelz = request.form.get("duelz")
-        duelz_players = request.form.get("duelz_players")
-
-        # duel_players = db.session.query(User)\
-        #          .join(User.seasony)\
-        #          .filter(Duel.id.like(duelz))\
-        #          .first()
-
-        return redirect(url_for('views.duel_id', group=group, season=season, duelz=duelz, duelz_players=duelz_players))
-
-    # CHOOS DUEL
-
-    return render_template("duels_filter.html", duels=new_ret, season=season, groups=groups, user=current_user, adminz=adminz)
 
 
 @views.route('/season', methods=['GET', 'POST'])
 # @login_required
 def season_manager():
 
-    # mdb = mysql.connect_tcp_socket()
 
-    # database=mysql.connector.connect(host='35.240.52.3',user='root',passwd='Babkapesko.1',database='darts', )
-    # cursor=database.cursor()
-    # query="select * from posts"
-    # cursor.execute(query)
-    # database.commit()
-
-    # print(mdb_results)
-
-    seasons = Season.query.all()
+    seasons = Season.query.filter(Groupz.season_id==Season.id).filter(Groupz.round_id==Round.id).filter(User.id==user_group.c.user_id).filter(user_group.c.groupz_id==Groupz.id).all()
+    print(seasons)
+    
     dic = dictionary.dic
 
     # pokus = db.session.query(Duel).join(User).all()
@@ -409,13 +305,13 @@ def season_manager():
             flash('Season was not created!!!', category='success')
             # return redirect(url_for('views.duel_manager', season=season))
 
-    if request.method == 'POST' and request.form.get('season'):
-        season = int(request.form.get('season'))
+    # if request.method == 'POST' and request.form.get('season'):
+    #     season = int(request.form.get('season'))
 
-        if season < 1:
-            flash('There is a problem!', category='error')
-        else:
-            return redirect(url_for('views.duel_view', group=8, season=season))
+    #     if season < 1:
+    #         flash('There is a problem!', category='error')
+    #     else:
+    #         return redirect(url_for('views.duel_view', group=8, season=season))
 
     return render_template("season.html", dic=dic, seasons=seasons, user=current_user, adminz=adminz)
 
