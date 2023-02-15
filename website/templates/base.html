@@ -58,15 +58,15 @@
   </head>
   <body>
    <h1>
-     {{user.first_name}}
+     {{user.is_active}}
    </h1>
-    {% if user.is_authenticated %}
+    {% if user.is_active  %}
 
     <div class="container w-200">
       <nav class="navbar navbar-expand navbar-dark fixed-bottom">
         <div class="navbar w-100 order-1 dual-collapse2">
           <ul class="navbar-nav">
-            {% if user.is_authenticated %}
+
             <li class="nav-item">
               <a href="/home" class="nav-item nav-link" id="home">Standings</a>
             </li>
@@ -87,7 +87,6 @@
               </a>
             </li>
 
-            {% else %} {% endif %}
           </ul>
         </div>
         <div class="navbar-dark brand"></div>
