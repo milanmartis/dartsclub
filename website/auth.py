@@ -18,7 +18,8 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in successfuly!', category='success')
-                login_user(user, remember=True)
+                login_user(user)
+                # login_user(user, remember=True)
                 return redirect(url_for('views.season_manager'))
             else:
                 flash('Incorrect password, try again.', category='error')
