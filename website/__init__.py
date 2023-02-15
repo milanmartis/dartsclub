@@ -16,7 +16,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ynqryzyuztgqts:122f26414b20598848fc10a2703fd6da06650c06918c1a69e5e7249d59597271@ec2-34-194-40-194.compute-1.amazonaws.com:5432/d8jkicn6gvjnuh'
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(DB_NAME, 'database.db')
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config['SECRET_KEY'] = 'secret'
+    app.config['SECRET_KEY'] = os.urandom(12)
 
     db.init_app(app)
     # app.app_context().push()
@@ -35,7 +35,6 @@ def create_app():
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
-        # blueprint for auth routes in our app
 
     @login_manager.user_loader
     def load_user(id):

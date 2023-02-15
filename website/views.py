@@ -29,21 +29,21 @@ adminz = [21, 22]
 season = 1
 
 
-@views.route('/returnjson', methods=['GET'])
-def ReturnJSON():
-    if (request.method == 'GET'):
-        with sqlite3.connect('./instance/database.db') as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT * FROM user;")
-            data = cursor.fetchall()
-            json.dumps(data)
+# @views.route('/returnjson', methods=['GET'])
+# def ReturnJSON():
+#     if (request.method == 'GET'):
+#         with sqlite3.connect('./instance/database.db') as conn:
+#             cursor = conn.cursor()
+#             cursor.execute("SELECT * FROM user;")
+#             data = cursor.fetchall()
+#             json.dumps(data)
 
-        with open('./data.json', 'w+') as file:
-          # First we load existing data into a dict.
-            new_data = json.load(file)
-            # convert back to json.
-            json.dump(new_data, file, indent=4)
-            # return jsonify(data)
+#         with open('./data.json', 'w+') as file:
+#           # First we load existing data into a dict.
+#             new_data = json.load(file)
+#             # convert back to json.
+#             json.dump(new_data, file, indent=4)
+#             # return jsonify(data)
 
 
 @views.route('/', methods=['GET', 'POST'])
@@ -111,6 +111,7 @@ def home():
 
 
 @views.route('/delete-note', methods=['POST'])
+@login_required
 def delete_note():
     note = json.loads(request.data)
     noteId = note['noteId']

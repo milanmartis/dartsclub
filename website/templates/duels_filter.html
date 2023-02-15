@@ -85,10 +85,7 @@
           <div class="row">
             <div class="col-1" style="text-align: center;"></div>
             <div class="col-10" style="text-align: center;">
-              {{duel.player[0].first_name | upper }} {% if 'true' ==
-              duel.checking[0].checked and 'true' == duel.checking[1].checked %}
-              {{duel.result_[0].result}} : {{duel.result_[1].result}} {% else %}
-              - {% endif %} {{duel.player[1].first_name | upper}}
+              {{duel.player[0].first_name | upper }} {{duel.result_[0].result}} : {{duel.result_[1].result}} {{duel.player[1].first_name | upper}}
             </div>
             <div class="col-1" style="text-align: center;"></div>
           </div>
