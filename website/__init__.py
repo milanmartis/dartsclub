@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
@@ -45,7 +45,10 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(id):
-        return User.query.get(int(id))
+        app.logger.debug(f"session {session}")
+        if session:
+            return User.query.filter_by(id=session['_user_id']).first() 
+        # return User.query.get(int(id))
 
 
    
