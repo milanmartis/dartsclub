@@ -4,23 +4,26 @@ from os import path
 from flask_login import LoginManager
 import os
 from dotenv import load_dotenv
-# import string
-# import random
-# letters = string.ascii_lowercase
-# my_secret_key = ( ''.join(random.choice(letters) for i in range(10)) )
+import string
+import random
+letters = string.ascii_lowercase
+my_secret_key = ( ''.join(random.choice(letters) for i in range(10)) )
 load_dotenv()
 
+
 db = SQLAlchemy()
+
+
 DB_NAME = "../instance/"
 
 
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = os.getenv("my_secret_key")
+    app.config['SECRET_KEY'] = my_secret_key
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("sql_url")
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(DB_NAME, 'database.db')
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
 
     db.init_app(app)
     # app.app_context().push()
@@ -42,7 +45,7 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(id):
-        return User.query.get(int(id))
+        return User.query.filter_by(email=id).first()
 
 
    

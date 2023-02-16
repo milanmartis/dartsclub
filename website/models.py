@@ -80,11 +80,26 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
+
     orderz = db.Column(db.Integer)
     notes = db.relationship('Note')
     seasony = db.relationship('Season', secondary=user_season, backref='seasons')
     groupy = db.relationship('Groupz', secondary=user_group, backref='groups')
     play = db.relationship('Duel', secondary=user_duel, backref='players')
+
+    authenticated = db.Column(db.Boolean, default=False)
+
+    def is_active(self):
+        return True
+
+    def get_id(self):
+        return self.email
+
+    def is_authenticated(self):
+        return self.authenticated
+
+    def is_anonymous(self):
+        return False
 
 
 class Round(db.Model):

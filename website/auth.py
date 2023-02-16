@@ -4,6 +4,7 @@ from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 auth = Blueprint('auth', __name__)
+import bcrypt
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -17,9 +18,14 @@ def login():
 
         if user:
             if check_password_hash(user.password, password):
+                # session["user_email"] = user.email
+                # session["user_id"] = user.id
+                # session["user_name"] = user.first_name
+                login_user(user, remember=True)
+                user.authenticated = True
+                db.session.add(user)
+                db.session.commit()
                 flash('Logged in successfuly!', category='success')
-                session["user_email"] = user.email
-                login_user(user)
                 return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
@@ -32,7 +38,14 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
-    session.clear()
+    # session["user_email"] = None
+    # session["user_id"] = None
+    # session["user_name"] = None
+    user = current_user
+    user.authenticated = False
+    db.session.add(user)
+    db.session.commit()
+    # session.clear()
     logout_user()
     return redirect(url_for('auth.login'))
 
@@ -40,10 +53,10 @@ def logout():
 @auth.route('/register',  methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        email = request.form.get('email')
-        first_name = request.form.get('first_name')
-        password1 = request.form.get('password1')
-        password2 = request.form.get('password2')
+        email = request.form.get('email', None)
+        first_name = request.form.get('first_name', None)
+        password1 = request.form.get('password1', None)
+        password2 = request.form.get('password2', None)
         user = User.query.filter_by(email=email).first()
 
         if user:
@@ -58,15 +71,14 @@ def register():
             flash("Passwords must be at least 7 chars", category="error")
         else:
             new_user = User(email=email, first_name=first_name,
-                            password=generate_password_hash(password1, method='sha256'))
+                            password=bcrypt.generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
             # login_user(new_user, remember=True)
 
             flash("Account created", category="success")
-            return redirect(url_for('views.home'))
+            return redirect(url_for('auth.login'))
             # add user to database
-    # request.form = ""
     return render_template("users/sign_up.html", user=current_user)
 
 
@@ -74,7 +86,15 @@ def register():
 @login_required
 def user_details():
         
-    user_email = session.get('user_email')
+    # user_email = session.get('user_email')
+    # user_id = session.get('user_id')
+    # user_name = session.get('user_name')
+
+    # dict_log = {
+    #     'id': user_id, 
+    #     'first_name': user_name, 
+    #     'email': user_email,
+    # }
     
     if request.method == 'POST':
 
@@ -121,7 +141,7 @@ def user_details():
 
 
         
-    return render_template("users/account.html", user_email=user_email, user=current_user)
+    return render_template("users/account.html", user=current_user)
 
 
 

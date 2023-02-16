@@ -57,7 +57,6 @@ def main():
 @views.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
-    user_email = session.get('user_email')
 
     # print(myduels_user[0][0])
 
@@ -103,7 +102,7 @@ def home():
 
         return redirect(url_for('views.duel_id', season=season, duelz=duelz, duelz_players=duelz_players))
 
-    return render_template("home.html", user_email=user_email, user_group=user_group, groups=groups,  dataAll=data_all, duels=new_ret, players=players, data_name_tabz=data_name_tabz, data_show_table=data_show_table, user=current_user, adminz=adminz)
+    return render_template("home.html", user_group=user_group, groups=groups,  dataAll=data_all, duels=new_ret, players=players, data_name_tabz=data_name_tabz, data_show_table=data_show_table, user=current_user, adminz=adminz)
 
 
 # def make_tab_list():
