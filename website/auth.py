@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, Flask, jsonify, make_response
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
@@ -18,8 +18,8 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in successfuly!', category='success')
-                login_user(user)
-                return redirect(url_for('views.season_manager'))
+                login_user(user, remember=True)
+                return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
         else:
@@ -32,7 +32,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('views.main'))
+    return redirect(url_for('auth.login'))
 
 
 @auth.route('/register',  methods=['GET', 'POST'])
@@ -62,11 +62,10 @@ def register():
             # login_user(new_user, remember=True)
 
             flash("Account created", category="success")
-            return redirect(url_for('views.main'))
+            return redirect(url_for('views.home'))
             # add user to database
     # request.form = ""
     return render_template("users/sign_up.html", user=current_user)
-
 
 
 @auth.route('/account', methods=['GET', 'POST'])
@@ -130,5 +129,3 @@ def user_stats():
 
 
         return render_template("users/my-stats.html", user=current_user)
-
-    

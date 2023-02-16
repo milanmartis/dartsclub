@@ -1,4 +1,4 @@
-from flask import Flask, session
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
@@ -10,10 +10,7 @@ from dotenv import load_dotenv
 # my_secret_key = ( ''.join(random.choice(letters) for i in range(10)) )
 load_dotenv()
 
-
 db = SQLAlchemy()
-
-
 DB_NAME = "../instance/"
 
 
@@ -22,6 +19,8 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.getenv("my_secret_key")
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("sql_url")
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 
     db.init_app(app)
     # app.app_context().push()
@@ -35,7 +34,7 @@ def create_app():
     from .models import User, Note, Groupz, Duel
 
     app.app_context().push()
-    db.create_all()
+    # db.create_all()
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
@@ -43,10 +42,7 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(id):
-        app.logger.debug(f"session {session}")
-        if session:
-            return User.query.filter_by(id=session['_user_id']).first() 
-        # return User.query.get(int(id))
+        return User.query.get(int(id))
 
 
    
