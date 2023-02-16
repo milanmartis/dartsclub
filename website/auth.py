@@ -18,7 +18,7 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in successfuly!', category='success')
-                session["user"] = user.email
+                session["user_email"] = user.email
                 login_user(user)
                 return redirect(url_for('views.home'))
             else:
@@ -32,6 +32,7 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
+    session.clear()
     logout_user()
     return redirect(url_for('auth.login'))
 
@@ -73,7 +74,8 @@ def register():
 @login_required
 def user_details():
         
-            
+    user_email = session.get('user_email')
+    
     if request.method == 'POST':
 
         useride = request.form.get('useride')
@@ -119,7 +121,7 @@ def user_details():
 
 
         
-    return render_template("users/account.html", user=current_user)
+    return render_template("users/account.html", user_email=user_email, user=current_user)
 
 
 
