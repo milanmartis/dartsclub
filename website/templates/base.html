@@ -57,6 +57,9 @@
     <meta property="og:site_name" content="DARTS CLUB" />
   </head>
   <body>
+    <h1>
+      {{user.is_authenticated}}
+    </h1>
     {% if user.is_authenticated %}
 
     <div class="container w-200">
