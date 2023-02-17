@@ -7,12 +7,15 @@ auth = Blueprint('auth', __name__)
 import bcrypt
 
 
+
+
+@auth.after_request
+def add_header(response):
+    response.headers["Cache-Control"] = "no-store, max-age=0"
+    return response
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-
-    if current_user.is_authenticated:
-        flash("Už si prihlásený!", 'success')
-        return redirect('/')
 
     
     # user_email = session.get('user_email')
@@ -43,9 +46,6 @@ def login():
                 db.session.add(user)
                 db.session.commit()
                 flash('Logged in successfuly!', category='success')
-
-        
-
                 return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
