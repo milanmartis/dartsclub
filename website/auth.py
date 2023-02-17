@@ -9,9 +9,17 @@ import bcrypt
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+
     
-    v = session.get('user_email')
-    print(v)
+    user_email = session.get('user_email')
+    user_id = session.get('user_id')
+    user_name = session.get('user_name')
+
+    dict_log = {
+        'id': user_id, 
+        'first_name': user_name, 
+        'email': user_email,
+    }
 
     
     if request.method == 'POST':
@@ -37,7 +45,7 @@ def login():
         else:
             flash('Email does not exist.', category='error')
 
-    return render_template("users/login.html", user=current_user)
+    return render_template("users/login.html", user=dict_log)
 
 
 @auth.route('/logout')
