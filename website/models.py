@@ -90,7 +90,7 @@ class User(db.Model, UserMixin):
     authenticated = db.Column(db.Boolean, default=False)
 
     def is_active(self):
-        return True
+        return self.authenticated
 
     def get_id(self):
         return self.email
