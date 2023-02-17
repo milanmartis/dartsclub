@@ -34,7 +34,7 @@ def login():
                 session["user_id"] = user.id
                 session["user_name"] = user.first_name
 
-                login_user(user, remember=False)
+                login_user(user, remember=True)
                 user.authenticated = True
                 db.session.add(user)
                 db.session.commit()
