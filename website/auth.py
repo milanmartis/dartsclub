@@ -58,6 +58,7 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
+    current_user.is_anonymous()
     session["user_email"] = None
     session["user_id"] = None
     session["user_name"] = None
@@ -106,7 +107,7 @@ def register():
 @login_required
 def user_details():
 
-   
+    print(current_user)
     
     if request.method == 'POST':
 
