@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
@@ -43,6 +43,9 @@ def create_app():
     login_manager.session_protection = "strong"
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
+    
+    #SESSION
+    # user_email = session.get('user_email')
 
     @login_manager.user_loader
     def load_user(email):

@@ -10,16 +10,20 @@ import bcrypt
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
 
-    
-    user_email = session.get('user_email')
-    user_id = session.get('user_id')
-    user_name = session.get('user_name')
+    if current_user.is_authenticated:
+        flash("Už si prihlásený!", 'success')
+        return redirect('/')
 
-    dict_log = {
-        'id': user_id, 
-        'first_name': user_name, 
-        'email': user_email,
-    }
+    
+    # user_email = session.get('user_email')
+    # user_id = session.get('user_id')
+    # user_name = session.get('user_name')
+
+    # dict_log = {
+    #     'id': user_id, 
+    #     'first_name': user_name, 
+    #     'email': user_email,
+    # }
 
     
     if request.method == 'POST':
@@ -39,13 +43,16 @@ def login():
                 db.session.add(user)
                 db.session.commit()
                 flash('Logged in successfuly!', category='success')
+
+        
+
                 return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
         else:
             flash('Email does not exist.', category='error')
 
-    return render_template("users/login.html", user=dict_log)
+    return render_template("users/login.html", user=current_user)
 
 
 @auth.route('/logout')
@@ -145,17 +152,17 @@ def user_details():
                 flash("Account updated!", category="success")
                 return redirect(url_for('auth.user_details'))
 
-    user_email = session.get('user_email')
-    user_id = session.get('user_id')
-    user_name = session.get('user_name')
+    # user_email = session.get('user_email')
+    # user_id = session.get('user_id')
+    # user_name = session.get('user_name')
 
-    dict_log = {
-        'id': user_id, 
-        'first_name': user_name, 
-        'email': user_email,
-    }
+    # dict_log = {
+    #     'id': user_id, 
+    #     'first_name': user_name, 
+    #     'email': user_email,
+    # }
         
-    return render_template("users/account.html", user=dict_log)
+    return render_template("users/account.html", user=current_user)
 
 
 
