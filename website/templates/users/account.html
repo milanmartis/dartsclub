@@ -14,7 +14,7 @@ content %}
       />
       <br />
 
-      <form method="POST">
+      <form method="POST" action="{{ url_for('auth.user_details', next=request.endpoint) }}">
         <h3 align="center"></h3>
         <div class="form-group">
   
@@ -89,7 +89,7 @@ content %}
 
       <br>
       <h6>
-        <a class="btn2 nav-item nav-link" href="logout">LOGOUT</a>
+        <a class="btn2 nav-item nav-link" href="{{ url_for('auth.logout') }}">LOGOUT</a>
       </h6>
     </div>
 
