@@ -45,8 +45,9 @@ def create_app():
     login_manager.login_view = 'auth.login'
 
     @login_manager.user_loader
-    def user_loader(id):
-        return User.query.get(id)
+    def load_user(email):
+        # print(email)
+        return User.query.filter_by(email=email).first()
         
 
 

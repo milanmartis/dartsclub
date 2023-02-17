@@ -93,7 +93,7 @@ class User(db.Model, UserMixin):
         return self.authenticated
 
     def get_id(self):
-        return self.id
+        return self.email
 
     def is_authenticated(self):
         return self.authenticated
