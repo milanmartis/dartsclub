@@ -46,6 +46,7 @@ season = 1
 #             # return jsonify(data)
 
 
+
 @views.route('/', methods=['GET', 'POST'])
 def main():
 

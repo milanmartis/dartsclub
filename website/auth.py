@@ -21,7 +21,7 @@ def login():
                 # session["user_email"] = user.email
                 # session["user_id"] = user.id
                 # session["user_name"] = user.first_name
-                login_user(user, remember=True)
+                login_user(user, remember=False)
                 user.authenticated = True
                 db.session.add(user)
                 db.session.commit()
