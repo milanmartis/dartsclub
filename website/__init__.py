@@ -45,7 +45,7 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(email):
-        print(email)
+        # print(email)
         return User.query.filter_by(email=email).first()
         
 

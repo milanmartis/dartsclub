@@ -10,6 +10,10 @@ import bcrypt
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     
+    v = session.get('user_email')
+    print(v)
+
+    
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -18,9 +22,10 @@ def login():
 
         if user:
             if check_password_hash(user.password, password):
-                # session["user_email"] = user.email
-                # session["user_id"] = user.id
-                # session["user_name"] = user.first_name
+                session["user_email"] = user.email
+                session["user_id"] = user.id
+                session["user_name"] = user.first_name
+
                 login_user(user, remember=False)
                 user.authenticated = True
                 db.session.add(user)
@@ -38,14 +43,14 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
-    # session["user_email"] = None
-    # session["user_id"] = None
-    # session["user_name"] = None
+    session["user_email"] = None
+    session["user_id"] = None
+    session["user_name"] = None
     user = current_user
     user.authenticated = False
     db.session.add(user)
     db.session.commit()
-    # session.clear()
+    session.clear()
     logout_user()
     return redirect(url_for('auth.login'))
 
@@ -85,16 +90,8 @@ def register():
 @auth.route('/account', methods=['GET', 'POST'])
 @login_required
 def user_details():
-        
-    # user_email = session.get('user_email')
-    # user_id = session.get('user_id')
-    # user_name = session.get('user_name')
 
-    # dict_log = {
-    #     'id': user_id, 
-    #     'first_name': user_name, 
-    #     'email': user_email,
-    # }
+   
     
     if request.method == 'POST':
 
@@ -124,6 +121,7 @@ def user_details():
                 else:
                     user.password = generate_password_hash(password1, method='sha256')
                     user.first_name = first_name
+                    session["user_name"] = first_name
 
                     db.session.commit()
                     login_user(user, remember=True)
@@ -132,16 +130,24 @@ def user_details():
                     return redirect(url_for('auth.user_details'))
             else:
                 user.first_name = first_name
-
+                session["user_name"] = first_name
                 db.session.commit()
                 login_user(user, remember=True)
 
                 flash("Account updated!", category="success")
                 return redirect(url_for('auth.user_details'))
 
+    user_email = session.get('user_email')
+    user_id = session.get('user_id')
+    user_name = session.get('user_name')
 
+    dict_log = {
+        'id': user_id, 
+        'first_name': user_name, 
+        'email': user_email,
+    }
         
-    return render_template("users/account.html", user=current_user)
+    return render_template("users/account.html", user=dict_log)
 
 
 
