@@ -70,7 +70,7 @@ def logout():
     session["user_id"] = None
     session["user_name"] = None
     user = current_user
-    user.authenticated = False
+    user.is_authenticated = False
     db.session.add(user)
     db.session.commit()
     session.clear()
