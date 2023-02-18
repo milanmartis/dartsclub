@@ -55,7 +55,8 @@ def login():
             return redirect_dest(fallback=url_for('views.home'))
         else:
             flash("Sorry, but you could not log in.")
-            return render_template("auth.login")
+            return redirect_dest(fallback=url_for('auth.login'))
+            # return render_template("auth.login")
 
 
     return render_template("users/login.html", user=current_user)
