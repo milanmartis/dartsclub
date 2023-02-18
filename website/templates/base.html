@@ -80,7 +80,7 @@
               |
             </li>
             <li class="nav-item">
-              <a href="{{ url_for('views.duel_view', season=1, group=8) }}" class="nav-item nav-link">
+              <a href="{{ url_for('views.duel_view', season=1, group=12) }}" class="nav-item nav-link">
                 Duels
               </a>
             </li>
@@ -106,7 +106,7 @@
               class="nav-item text-center"
               style="text-align: center; padding-right:4px;margin-left: -16px;"
             >
-              <a href="{{ url_for('auth.user_details', next=request.endpoint) }}">
+              <a href="{{ url_for('auth.user_details') }}">
                 <i class="fa fa-user fa-sm" style="font-size:116%;padding:8px;"></i>
               </a>
             </li>
