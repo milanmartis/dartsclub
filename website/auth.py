@@ -52,8 +52,7 @@ def login():
             db.session.add(user)
             db.session.commit()
             flash('Logged in successfuly!', category='success')
-            return redirect(url_for('views.home', next=request.endpoint))
-        
+            return redirect_dest(fallback=url_for('views.home'))
         else:
             flash("Sorry, but you could not log in.")
             return redirect_dest(fallback=url_for('auth.login'))
@@ -100,7 +99,7 @@ def register():
             flash("Passwords must be at least 7 chars", category="error")
         else:
             new_user = User(email=email, first_name=first_name,
-                            password=bcrypt.generate_password_hash(password1, method='sha256'))
+                            password=generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
             # login_user(new_user, remember=True)
