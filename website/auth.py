@@ -52,7 +52,8 @@ def login():
             db.session.add(user)
             db.session.commit()
             flash('Logged in successfuly!', category='success')
-            return redirect_dest(fallback=url_for('views.home'))
+            return redirect(url_for('views.home', next=request.endpoint))
+        
         else:
             flash("Sorry, but you could not log in.")
             return redirect_dest(fallback=url_for('auth.login'))
