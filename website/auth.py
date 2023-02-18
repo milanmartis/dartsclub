@@ -7,6 +7,13 @@ auth = Blueprint('auth', __name__)
 import bcrypt
 
 
+def redirect_dest(fallback):
+    dest = request.args.get('next')
+    try:
+        dest_url = url_for(dest)
+    except:
+        return redirect(fallback)
+    return redirect(dest_url)
 
 
 @auth.after_request
@@ -35,22 +42,21 @@ def login():
 
         user = User.query.filter_by(email=email).first()
 
-        if user:
-            if check_password_hash(user.password, password):
-                session["user_email"] = user.email
-                session["user_id"] = user.id
-                session["user_name"] = user.first_name
+        if check_password_hash(user.password, password):
+            session["user_email"] = user.email
+            session["user_id"] = user.id
+            session["user_name"] = user.first_name
 
-                login_user(user, remember=True)
-                user.authenticated = True
-                db.session.add(user)
-                db.session.commit()
-                flash('Logged in successfuly!', category='success')
-                return redirect(url_for('views.home'))
-            else:
-                flash('Incorrect password, try again.', category='error')
+            login_user(user, remember=True)
+            user.authenticated = True
+            db.session.add(user)
+            db.session.commit()
+            flash('Logged in successfuly!', category='success')
+            return redirect_dest(fallback=url_for('views.home'))
         else:
-            flash('Email does not exist.', category='error')
+            flash("Sorry, but you could not log in.")
+            return render_template("auth.login")
+
 
     return render_template("users/login.html", user=current_user)
 

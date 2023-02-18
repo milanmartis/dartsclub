@@ -47,6 +47,12 @@ def create_app():
     #SESSION
     # user_email = session.get('user_email')
 
+    
+    # @login_manager.unauthorized_handler
+    # def handle_needs_login():
+    #     flash("You have to be logged in to access this page.")
+    #     return redirect(url_for('account.login', next=request.endpoint))
+
     @login_manager.user_loader
     def load_user(email):
         # print(email)
