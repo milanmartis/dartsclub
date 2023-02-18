@@ -43,29 +43,36 @@ def login():
         user = User.query.filter_by(email=email).first()
 
         if check_password_hash(user.password, password):
-            session["user_email"] = user.email
-            session["user_id"] = user.id
-            session["user_name"] = user.first_name
+            # session["user_email"] = user.email
+            # session["user_id"] = user.id
+            # session["user_name"] = user.first_name
 
             login_user(user, remember=True)
-            user.authenticated = True
-            db.session.add(user)
-            db.session.commit()
             flash('Logged in successfuly!', category='success')
-            return redirect_dest(fallback=url_for('views.home'))
-        else:
-            flash("Sorry, but you could not log in.")
-            return redirect_dest(fallback=url_for('auth.login'))
-            # return render_template("auth.login")
+
+            next = request.args.get('next')
+            return redirect(next) if next else redirect(url_for('views.home'))
+
+    return render_template('users/login.html', user=current_user)
+
+    #         user.authenticated = True
+    #         db.session.add(user)
+    #         db.session.commit()
+    #         flash('Logged in successfuly!', category='success')
+    #         return redirect_dest(fallback=url_for('views.home'))
+    #     else:
+    #         flash("Sorry, but you could not log in.")
+    #         return redirect_dest(fallback=url_for('auth.login'))
+    #         # return render_template("auth.login")
 
 
-    return render_template("users/login.html", user=current_user)
+    # return render_template("users/login.html", user=current_user)
 
 
 @auth.route('/logout')
 @login_required
 def logout():
-    current_user.is_anonymous()
+    current_user.is_anonymous=True
     session["user_email"] = None
     session["user_id"] = None
     session["user_name"] = None

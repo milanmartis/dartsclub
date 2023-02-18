@@ -40,18 +40,12 @@ def create_app():
     db.create_all()
 
     login_manager = LoginManager()
-    login_manager.session_protection = "strong"
+    # login_manager.session_protection = "strong"
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
     
-    #SESSION
-    # user_email = session.get('user_email')
-
     
-    # @login_manager.unauthorized_handler
-    # def handle_needs_login():
-    #     flash("You have to be logged in to access this page.")
-    #     return redirect(url_for('account.login', next=request.endpoint))
+    # user_email = session.get('user_email')
 
     @login_manager.user_loader
     def load_user(email):
