@@ -52,9 +52,6 @@ def create_app():
         # print(email)
         return User.query.filter_by(email=email).first()
         
-
-
-   
     return app
 
 # def create_database(app):

@@ -1,10 +1,11 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session, app
 from .models import User
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 auth = Blueprint('auth', __name__)
 import bcrypt
+import datetime
 
 
 def redirect_dest(fallback):
@@ -16,10 +17,19 @@ def redirect_dest(fallback):
     return redirect(dest_url)
 
 
+@auth.before_request
+def before_request():
+    session.permanent = True
+    app.permanent_session_lifetime = datetime.timedelta(minutes=20)
+    session.modified = True
+
+
+
 @auth.after_request
 def add_header(response):
     response.headers["Cache-Control"] = "no-store, max-age=0"
     return response
+   
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -51,6 +61,7 @@ def login():
             flash('Logged in successfuly!', category='success')
 
             next = request.args.get('next')
+            print(next)
             return redirect(next) if next else redirect(url_for('views.home'))
 
     return render_template('users/login.html', user=current_user)
