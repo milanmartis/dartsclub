@@ -41,16 +41,15 @@ def create_app():
 
     login_manager = LoginManager()
     # login_manager.session_protection = "strong"
-    login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
     
     
     # user_email = session.get('user_email')
 
     @login_manager.user_loader
-    def load_user(email):
-        # print(email)
-        return User.query.filter_by(email=email).first()
+    def load_user(id):
+        return User.query.get(int(id))
         
     return app
 
