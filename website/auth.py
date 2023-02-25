@@ -93,6 +93,7 @@ def logout():
     db.session.commit()
     session.clear()
     logout_user()
+    print(user)
     return redirect(url_for('auth.login'))
 
 
