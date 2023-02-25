@@ -61,7 +61,6 @@ def login():
             flash('Logged in successfuly!', category='success')
 
             next = request.args.get('next')
-            print(next)
             return redirect(next) if next else redirect(url_for('views.home'))
 
     return render_template('users/login.html', user=current_user)
@@ -94,7 +93,9 @@ def logout():
     session.clear()
     logout_user()
     print(user)
-    return redirect(url_for('auth.login'))
+    # return redirect(url_for('auth.login'))
+    next = request.args.get('next')
+    return redirect(next) if next else redirect(url_for('auth.login'))
 
 
 @auth.route('/register',  methods=['GET', 'POST'])
