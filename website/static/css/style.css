@@ -986,7 +986,7 @@ tbody tr:hover {
     filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
 }
 .filter-foot {
-    opacity:0.60;
+    opacity:0.90;
     filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(170deg) brightness(105%) contrast(101%);
 }
 

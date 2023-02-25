@@ -83,12 +83,12 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
-    current_user.is_anonymous=True
+    # current_user.is_anonymous=True
     session["user_email"] = None
     session["user_id"] = None
     session["user_name"] = None
     user = current_user
-    user.is_authenticated = False
+    # user.is_authenticated = False
     db.session.add(user)
     db.session.commit()
     session.clear()
