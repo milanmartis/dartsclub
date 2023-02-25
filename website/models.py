@@ -89,17 +89,17 @@ class User(db.Model, UserMixin):
 
     authenticated = db.Column(db.Boolean, default=False)
 
-    def is_active(self):
-        return self.authenticated
+    # def is_active(self):
+    #     return self.authenticated
 
-    def get_id(self):
-        return self.id
+    # def get_id(self):
+    #     return self.id
 
-    def is_authenticated(self):
-        return self.authenticated
+    # def is_authenticated(self):
+    #     return self.authenticated
 
-    def is_anonymous(self):
-        return False
+    # def is_anonymous(self):
+    #     return False
 
 
 class Round(db.Model):
