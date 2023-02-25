@@ -56,6 +56,9 @@ def login():
             # session["user_email"] = user.email
             # session["user_id"] = user.id
             # session["user_name"] = user.first_name
+            user.authenticated = True
+            db.session.add(user)
+            db.session.commit()
 
             login_user(user, remember=True)
             flash('Logged in successfuly!', category='success')
@@ -65,9 +68,6 @@ def login():
 
     return render_template('users/login.html', user=current_user)
 
-    #         user.authenticated = True
-    #         db.session.add(user)
-    #         db.session.commit()
     #         flash('Logged in successfuly!', category='success')
     #         return redirect_dest(fallback=url_for('views.home'))
     #     else:
@@ -83,16 +83,18 @@ def login():
 @login_required
 def logout():
     # current_user.is_anonymous=True
-    session["user_email"] = None
-    session["user_id"] = None
-    session["user_name"] = None
+    # session["user_email"] = None
+    # session["user_id"] = None
+    # session["user_name"] = None
     user = current_user
-    # user.is_authenticated = False
+    user.authenticated = False
     db.session.add(user)
     db.session.commit()
     session.clear()
     logout_user()
     print(user)
+    if session.get('was_once_logged_in'):
+        del session['was_once_logged_in']
     # return redirect(url_for('auth.login'))
     next = request.args.get('next')
     return redirect(next) if next else redirect(url_for('auth.login'))
