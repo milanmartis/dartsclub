@@ -63,20 +63,19 @@ def login():
             login_user(user, remember=True)
             flash('Logged in successfuly!', category='success')
 
-            next = request.args.get('next')
-            return redirect(next) if next else redirect(url_for('views.home'))
+            # next = request.args.get('next')
+            # return redirect(next) if next else redirect(url_for('views.home'))
 
-    return render_template('users/login.html', user=current_user)
+    # return render_template('users/login.html', user=current_user)
 
-    #         flash('Logged in successfuly!', category='success')
-    #         return redirect_dest(fallback=url_for('views.home'))
-    #     else:
-    #         flash("Sorry, but you could not log in.")
-    #         return redirect_dest(fallback=url_for('auth.login'))
-    #         # return render_template("auth.login")
+            return redirect_dest(fallback=url_for('views.home'))
+        else:
+            flash("Sorry, but you could not log in.")
+            return redirect_dest(fallback=url_for('auth.login'))
+            # return render_template("auth.login")
 
 
-    # return render_template("users/login.html", user=current_user)
+    return render_template("users/login.html")
 
 
 @auth.route('/logout')
