@@ -33,7 +33,6 @@ def add_header(response):
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-
     
     # user_email = session.get('user_email')
     # user_id = session.get('user_id')
@@ -135,7 +134,9 @@ def register():
 @login_required
 def user_details():
 
-    print(current_user)
+    print('-----------------------------------')
+    print(session['_user_id'])
+    print('-----------------------------------')
     
     if request.method == 'POST':
 

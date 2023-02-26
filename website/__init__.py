@@ -47,9 +47,10 @@ def create_app():
     
     # user_email = session.get('user_email')
 
+
     @login_manager.user_loader
     def load_user(id):
-        return User.query.get(int(id))
+        return User.query.filter_by(id=session['_user_id']).first() 
         
     return app
 
