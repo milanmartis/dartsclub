@@ -59,7 +59,7 @@ def login():
             db.session.add(user)
             db.session.commit()
 
-            login_user(user, remember=True)
+            login_user(user)
             flash('Logged in successfuly!', category='success')
 
             # next = request.args.get('next')
