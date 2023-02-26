@@ -96,7 +96,7 @@ def logout():
     #     del session['was_once_logged_in']
     # # return redirect(url_for('auth.login'))
     # next = request.args.get('next')
-    return redirect('/login')
+    return redirect(url_for('auth.login'))
 
 
 @auth.route('/register',  methods=['GET', 'POST'])

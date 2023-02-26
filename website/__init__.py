@@ -40,9 +40,9 @@ def create_app():
     db.create_all()
 
     login_manager = LoginManager()
-    # login_manager.session_protection = "strong"
+    login_manager.session_protection = "strong"
     login_manager.init_app(app)
-    login_manager.login_view = 'auth.login'
+    login_manager.login_view = '/login'
     
     
     # user_email = session.get('user_email')
