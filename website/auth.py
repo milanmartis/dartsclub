@@ -33,6 +33,13 @@ def add_header(response):
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+
+    print('-----------------------------------')
+    print(session['_user_id'])
+    print('-----------------------------------')
+    print('-----------------------------------')
+    print(current_user)
+    print('-----------------------------------')
     
     # user_email = session.get('user_email')
     # user_id = session.get('user_id')
