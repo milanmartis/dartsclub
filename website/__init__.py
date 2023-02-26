@@ -50,7 +50,10 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(id):
-        return User.query.filter_by(id=session['_user_id']).first() 
+        try:
+            return User.query.get(id)
+        except:
+            return None
         
     return app
 
