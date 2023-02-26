@@ -1,1 +1,1 @@
-web: gunicorn app:app --hand
+web: gunicorn app:app
