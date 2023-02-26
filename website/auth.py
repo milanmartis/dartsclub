@@ -8,13 +8,13 @@ import bcrypt
 import datetime
 
 
-def redirect_dest(fallback):
-    dest = request.args.get('next')
-    try:
-        dest_url = url_for(dest)
-    except:
-        return redirect(fallback)
-    return redirect(dest_url)
+# def redirect_dest(fallback):
+#     dest = request.args.get('next')
+#     try:
+#         dest_url = url_for(dest)
+#     except:
+#         return redirect(fallback)
+#     return redirect(dest_url)
 
 
 @auth.before_request
@@ -68,10 +68,10 @@ def login():
 
     # return render_template('users/login.html', user=current_user)
 
-            return redirect_dest(fallback=url_for('views.home'))
+            return redirect('/home')
         else:
             flash("Sorry, but you could not log in.")
-            return redirect_dest(fallback=url_for('auth.login'))
+            return redirect('/login')
             # return render_template("auth.login")
 
 
@@ -91,12 +91,12 @@ def logout():
     db.session.commit()
     session.clear()
     logout_user()
-    print(user)
-    if session.get('was_once_logged_in'):
-        del session['was_once_logged_in']
-    # return redirect(url_for('auth.login'))
-    next = request.args.get('next')
-    return redirect(next) if next else redirect(url_for('auth.login'))
+    # print(user)
+    # if session.get('was_once_logged_in'):
+    #     del session['was_once_logged_in']
+    # # return redirect(url_for('auth.login'))
+    # next = request.args.get('next')
+    return redirect('/login')
 
 
 @auth.route('/register',  methods=['GET', 'POST'])
