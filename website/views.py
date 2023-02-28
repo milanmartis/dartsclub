@@ -302,7 +302,7 @@ def duel_view(season, group):
         seasons = request.form.get('seasons')
         # duel_view(seasons, grno)
 
-        return redirect(url_for('views.duel_view', groups=groups, group=grno, grno=grno, grname=grname, season=seasons, user=dict_log, adminz=adminz))
+        return redirect(url_for('views.duel_view', groups=groups, group=grno, grno=grno, grname=grname, season=seasons, user=current_user, adminz=adminz))
 
     if request.method == "POST" and request.form.get("duelz"):
 
