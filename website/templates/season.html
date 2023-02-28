@@ -10,13 +10,12 @@ block content %}
 {% if seasons %}
 <div class="container">
   <div class="row" style="margin: 0px; padding: 0px;">
-    {% for round in rounds %}
+    {% for season in seasons %}
     <div class="col-12" style="margin: 0px; padding: 0px;">
       <form method="POST" action="javascript:;">
-        <input type="hidden" id="season" name="season" value="{{round.season_id}}" />
-        <input type="hidden" id="round" name="round" value="{{round.id}}" />
+        <input type="hidden" id="season" name="season" value="{{season.id}}" />
         <button
-          id="location_href_season/{{round.season_id}}/round/{{round.id}}/group/9"
+          id="location_href_season/{{season.id}}/group/9"
           name="location_href_season/{{season.id}}/group/9"
           onclick="locationHref('season/{{season.id}}/group/9')"
           type="submit"
