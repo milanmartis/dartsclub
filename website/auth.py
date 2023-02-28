@@ -71,8 +71,8 @@ def login():
 
             return redirect('/home')
         else:
-            flash("Sorry, but you could not log in.")
-            return redirect('/login')
+            flash('Sorry, but you could not log in.', category='error')
+            # return redirect('/login')
             # return render_template("auth.login")
 
 
