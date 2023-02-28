@@ -33,6 +33,9 @@ def add_header(response):
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+            flash('You are already registered.', category='success')
+            return redirect(url_for("views.home"))
 
     
     # user_email = session.get('user_email')
@@ -57,9 +60,9 @@ def login():
             # session["user_email"] = user.email
             # session["user_id"] = user.id
             # session["user_name"] = user.first_name
-            # user.authenticated = True
-            # db.session.add(user)
-            # db.session.commit()
+            user.authenticated = True
+            db.session.add(user)
+            db.session.commit()
 
             login_user(user)
             flash('Logged in successfuly!', category='success')
@@ -69,7 +72,7 @@ def login():
 
     # return render_template('users/login.html', user=current_user)
 
-            return redirect('/home')
+            return redirect(url_for("views.home"))
         else:
             flash('Sorry, but you could not log in.', category='error')
             # return redirect('/login')
@@ -86,10 +89,10 @@ def logout():
     # session["user_email"] = None
     # session["user_id"] = None
     # session["user_name"] = None
-    # user = current_user
-    # user.authenticated = False
-    # db.session.add(user)
-    # db.session.commit()
+    user = current_user
+    user.authenticated = False
+    db.session.add(user)
+    db.session.commit()
     session.clear()
     logout_user()
     # print(user)
