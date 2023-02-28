@@ -136,12 +136,6 @@ def register():
 @login_required
 def user_details():
 
-    print('-----------------------------------')
-    print(session['_user_id'])
-    print('-----------------------------------')
-    print('-----------------------------------')
-    print(current_user)
-    print('-----------------------------------')
     
     if request.method == 'POST':
 
