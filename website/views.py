@@ -84,14 +84,14 @@ def home():
 
     # print(user_group)
     user_group = db.session.query(Groupz).join(User.groupy).filter(
-        User.id == current_user.id).filter(Groupz.season_id == Season.id).filter(Season.id == season).filter(Groupz.round_id == 2).first()
+        User.id == current_user.id).filter(Groupz.season_id == Season.id).filter(Season.id == season).filter(Groupz.round_id == 3).first()
     myduels_user = db.session.query(Groupz.id).join(User.groupy).filter(Groupz.season_id == Season.id).filter(
-        Season.id == season).filter(User.id.in_([current_user.id])).filter(Groupz.round_id == 2).all()
+        Season.id == season).filter(User.id.in_([current_user.id])).filter(Groupz.round_id == 3).all()
 
     # print(myduels_user)
     if current_user.id in adminz:
         # user_group = 7
-        new_ret = duels.create_duels_list(season, 8)
+        new_ret = duels.create_duels_list(season, 13)
         shearch_table = 111
     else:
         new_ret = duels.create_duels_list(season, myduels_user[0][0])
@@ -269,7 +269,7 @@ def duel_id(season, duelz):
 
 
     groups = db.session.query(Groupz).join(
-        Season).filter(Season.id == season).filter(Groupz.round_id == 2).all()
+        Season).filter(Season.id == season).filter(Groupz.round_id == 3).all()
 
     return render_template("duel.html", groups=groups, duel=duel, players=duelz, user=current_user, adminz=adminz)
 
@@ -294,7 +294,7 @@ def duel_view(season, group):
     # print(new_ret)
 
     group = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.id == group).first()
-    groups = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.round_id == 2).all()
+    groups = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.round_id == 3).all()
 
     if request.method == 'POST' and request.form.get('grno'):
         grno = request.form.get('grno')
@@ -351,8 +351,9 @@ def season_manager():
         if season < 1:
             flash('There is a problem!', category='error')
         else:
-            create_new_season(season)
-            flash('Season was not created!!!', category='success')
+            pass
+            # create_new_season(season)
+            # flash('Season was not created!!!', category='success')
             # return redirect(url_for('views.duel_manager', season=season))
 
     # if request.method == 'POST' and request.form.get('season'):
@@ -412,7 +413,7 @@ def create_new_season(season):
 
     for i, group in enumerate(groups):
         gr = Groupz(
-            name=f'Group {i+1}', shorts=list_groups_shorts[i], season_id=season, round_id=2)
+            name=f'Group {i+1}', shorts=list_groups_shorts[i], season_id=season, round_id=3)
         db.session.add(gr)
         db.session.commit()
 

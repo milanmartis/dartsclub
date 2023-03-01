@@ -29,7 +29,7 @@ def create_duels_list(season, group):
         .filter(Duel.round_id == Round.id)\
         .filter(Season.id == season)\
         .filter(Groupz.id == group)\
-        .filter(Round.id == 2)\
+        .filter(Round.id == 3)\
         .order_by(User.id.desc())
         
     
