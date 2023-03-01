@@ -60,9 +60,9 @@ def login():
             # session["user_email"] = user.email
             # session["user_id"] = user.id
             # session["user_name"] = user.first_name
-            user.authenticated = True
-            db.session.add(user)
-            db.session.commit()
+            # user.authenticated = True
+            # db.session.add(user)
+            # db.session.commit()
 
             login_user(user)
             flash('Logged in successfuly!', category='success')
@@ -86,13 +86,15 @@ def login():
 @login_required
 def logout():
     current_user.is_anonymous=True
+    current_user.is_authenticated=False
+    # current_user.is_anonymous=True
     # session["user_email"] = None
     # session["user_id"] = None
     # session["user_name"] = None
-    user = current_user
-    user.authenticated = False
-    db.session.add(user)
-    db.session.commit()
+    # user = current_user
+    # user.authenticated = False
+    # db.session.add(user)
+    # db.session.commit()
     session.clear()
     logout_user()
     # print(user)
