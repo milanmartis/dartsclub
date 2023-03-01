@@ -33,9 +33,9 @@ def add_header(response):
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-            flash('You are already registered.', category='success')
-            return redirect(url_for("views.home"))
+    # if current_user.is_authenticated:
+    #         flash('You are already registered.', category='success')
+    #         return redirect(url_for("views.home"))
 
     
     # user_email = session.get('user_email')
