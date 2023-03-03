@@ -92,11 +92,12 @@ def home():
     if current_user.id in adminz:
         # user_group = 7
         new_ret = duels.create_duels_list(season, 13)
-        shearch_table = 111
+        shearch_table = 13
     else:
         new_ret = duels.create_duels_list(season, myduels_user[0][0])
         shearch_table = myduels_user[0][0]
 
+    # print(myduels_user[0][0])
     players = User.query.all()
     # print(players)
     data_show_table = tabz.show_table(season, shearch_table)
