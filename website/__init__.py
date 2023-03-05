@@ -40,21 +40,15 @@ def create_app():
     db.create_all()
 
     login_manager = LoginManager()
-    login_manager.session_protection = "strong"
+    login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
-    login_manager.login_view = '/login'
-    
-    
-    # user_email = session.get('user_email')
-
 
     @login_manager.user_loader
     def load_user(id):
-        try:
-            return User.query.get(id)
-        except:
-            return None
-        
+        return User.query.get(int(id))
+
+
+   
     return app
 
 # def create_database(app):
