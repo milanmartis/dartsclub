@@ -91,13 +91,13 @@ def home():
     # print(myduels_user)
     if current_user.id in adminz:
         # user_group = 7
-        new_ret = duels.create_duels_list(season, 13)
+        # new_ret = duels.create_duels_list(season, 13)
         shearch_table = 13
     else:
-        new_ret = duels.create_duels_list(season, myduels_user[0][0])
+        # new_ret = duels.create_duels_list(season, myduels_user[0][0])
         shearch_table = myduels_user[0][0]
 
-    # print(myduels_user[0][0])
+    # print(shearch_table)
     players = User.query.all()
     # print(players)
     data_show_table = tabz.show_table(season, shearch_table)
@@ -122,7 +122,7 @@ def home():
 
         return redirect(url_for('views.duel_id', season=season, duelz=duelz, duelz_players=duelz_players))
 
-    return render_template("home.html", user_group=user_group, groups=groups,  dataAll=data_all, duels=new_ret, players=players, data_name_tabz=data_name_tabz, data_show_table=data_show_table, user=current_user, adminz=adminz)
+    return render_template("home.html", user_group=user_group, groups=groups,  dataAll=data_all, players=players, data_name_tabz=data_name_tabz, data_show_table=data_show_table, user=current_user, adminz=adminz)
 
 
 # def make_tab_list():
