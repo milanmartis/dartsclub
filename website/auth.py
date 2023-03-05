@@ -54,16 +54,17 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        # db.session.rollback()
+        db.session.rollback()
+        
         user = User.query.filter_by(email=email).first()
 
         if check_password_hash(user.password, password):
             # session["user_email"] = user.email
             # session["user_id"] = user.id
             # session["user_name"] = user.first_name
-            # user.authenticated = True
-            # db.session.add(user)
-            # db.session.commit()
+            user.authenticated = True
+            db.session.add(user)
+            db.session.commit()
 
             login_user(user, remember=True)
             flash('Logged in successfuly!', category='success')
@@ -78,6 +79,8 @@ def login():
             flash('Sorry, but you could not log in.', category='error')
             # return redirect('/login')
             # return render_template("auth.login")
+        
+        print(current_user)
 
 
     return render_template("users/login.html", user=current_user)
@@ -92,13 +95,13 @@ def logout():
     # session["user_email"] = None
     # session["user_id"] = None
     # session["user_name"] = None
-    # user = current_user
-    # user.authenticated = False
-    # db.session.add(user)
-    # db.session.commit()
+    user = current_user
+    user.authenticated = False
+    db.session.add(user)
+    db.session.commit()
     session.clear()
     logout_user()
-    # print(user)
+    print(current_user)
     # if session.get('was_once_logged_in'):
     #     del session['was_once_logged_in']
     # # return redirect(url_for('auth.login'))
