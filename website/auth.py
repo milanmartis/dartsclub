@@ -17,18 +17,18 @@ import datetime
 #     return redirect(dest_url)
 
 
-@auth.before_request
-def before_request():
-    session.permanent = True
-    app.permanent_session_lifetime = datetime.timedelta(minutes=20)
-    session.modified = True
+# @auth.before_request
+# def before_request():
+#     session.permanent = True
+#     app.permanent_session_lifetime = datetime.timedelta(minutes=20)
+#     session.modified = True
 
 
 
-@auth.after_request
-def add_header(response):
-    response.headers["Cache-Control"] = "no-store, max-age=0"
-    return response
+# @auth.after_request
+# def add_header(response):
+#     response.headers["Cache-Control"] = "no-store, max-age=0"
+#     return response
    
 
 
