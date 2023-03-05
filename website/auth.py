@@ -54,8 +54,6 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        db.session.rollback()
-        
         user = User.query.filter_by(email=email).first()
 
         if check_password_hash(user.password, password):
