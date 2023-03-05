@@ -50,7 +50,7 @@ def login():
     # }
 
     
-    if request.method == 'POST':
+    if request.method == 'POST' and request.form.get('email'):
         email = request.form.get('email')
         password = request.form.get('password')
 
