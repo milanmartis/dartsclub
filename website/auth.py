@@ -43,7 +43,7 @@ def token_required(f):
         #    return jsonify({'message': 'a valid token is missing'})
        try:
            data = jwt.decode(token, 'jiuhihuhiuhgftfuyi564dfsff5ss5f421s5', algorithms=["HS256"])
-           current_user = User.query.filter_by(id=user_id).first()
+           current_user = User.query.filter_by(id=data["id"]).first()
        except:
            return jsonify({'message': 'token is invalid'})
  
