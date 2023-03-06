@@ -86,7 +86,7 @@ class User(db.Model, UserMixin):
     seasony = db.relationship('Season', secondary=user_season, backref='seasons')
     groupy = db.relationship('Groupz', secondary=user_group, backref='groups')
     play = db.relationship('Duel', secondary=user_duel, backref='players')
-
+    # public_id = db.Column(db.Integer)
     authenticated = db.Column(db.Boolean, default=False)
 
     def is_active(self):

@@ -21,7 +21,7 @@ from random import shuffle
 import mysql.connector
 from . import conn
 import psycopg2
-
+from .auth import token_required
 
 views = Blueprint('views', __name__)
 
@@ -65,8 +65,8 @@ def main():
 
 
 @views.route('/home', methods=['GET', 'POST'])
-@login_required
-def home():
+@token_required
+def home(current_user):
     # user_email = session.get('user_email')
     # user_id = session.get('user_id')
     # user_name = session.get('user_name')
@@ -132,7 +132,7 @@ def home():
 
 @views.route('/delete-note', methods=['POST'])
 @login_required
-def delete_note():
+def delete_note(current_user):
     note = json.loads(request.data)
     noteId = note['noteId']
     note = Note.query.get(noteId)
@@ -146,7 +146,7 @@ def delete_note():
 
 @views.route('/delete-duel', methods=['POST'])
 @login_required
-def delete_duel():
+def delete_duel(current_user):
     duel = json.loads(request.data)
     duelId = duel['duelId']
     duel = Duel.query.get(duelId)
@@ -158,8 +158,8 @@ def delete_duel():
 
 
 @views.route('/update-duel', methods=['POST', 'GET'])
-@login_required
-def update_duel():
+@token_required
+def update_duel(current_user):
     duelCheck = json.loads(request.data)
     data = duelCheck["duelCheck"]
     data = data.split(",")
@@ -177,8 +177,8 @@ def update_duel():
 
 
 @views.route('/update-duel2', methods=['POST', 'GET'])
-@login_required
-def update_duel2():
+@token_required
+def update_duel2(current_user):
     try:
         duelResult = json.loads(request.data)
         data = duelResult["duelResult"]
@@ -247,8 +247,8 @@ def update_duel2():
 
 
 @views.route('/season/<season>/duel/<duelz>', methods=['GET', 'POST'])
-@login_required
-def duel_id(season, duelz):
+@token_required
+def duel_id(current_user, season, duelz):
     
     # user_email = session.get('user_email')
     # user_id = session.get('user_id')
@@ -278,8 +278,8 @@ def duel_id(season, duelz):
 
 
 @views.route('/season/<season>/group/<group>', methods=['GET', 'POST'])
-@login_required
-def duel_view(season, group):
+@token_required
+def duel_view(current_user, season, group):
     
     # user_email = session.get('user_email')
     # user_id = session.get('user_id')
@@ -326,8 +326,8 @@ def duel_view(season, group):
 
 
 @views.route('/season', methods=['GET', 'POST'])
-@login_required
-def season_manager():
+@token_required
+def season_manager(current_user):
 
     # user_email = session.get('user_email')
     # user_id = session.get('user_id')
