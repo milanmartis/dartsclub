@@ -9,6 +9,7 @@ import uuid
 import jwt
 import datetime
 from functools import wraps
+import os
 # def redirect_dest(fallback):
 #     dest = request.args.get('next')
 #     try:
@@ -66,13 +67,14 @@ def login():
             db.session.add(user)
             db.session.commit()
 
-            login_user(user, remember=True)
+            # login_user(user, remember=True)
             flash('Logged in successfuly!', category='success')
 
 
             token = jwt.encode({'id' : user.id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=45)}, 'jiuhihuhiuhgftfuyi564dfsff5ss5f421s5', "HS256")
             session['token'] = token
             session['user_id'] = user.id
+            current_user = User.query.get(user.id)
             # return jsonify({'token' : token})
  
             # return make_response('could not verify',  401, {'Authentication': '"login required"'})
@@ -85,7 +87,7 @@ def login():
         print(current_user)
 
 
-    return render_template("users/login.html", user=current_user)
+    return render_template("users/login.html")
 
 
 @auth.route('/logout')
