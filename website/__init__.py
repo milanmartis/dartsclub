@@ -2,6 +2,7 @@ from flask import Flask, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
+from datetime import timedelta
 import os
 from dotenv import load_dotenv
 import string
@@ -25,6 +26,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://poktwcytjzkyew:5bdb99586baef51b1216188e45bb88c9e1af011a78e3a6d609e4938c2f60002a@ec2-52-23-81-126.compute-1.amazonaws.com:5432/db3uoc7j05udub'
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(DB_NAME, 'database.db')
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config['REMEMBER_COOKIE_DURATION'] = timedelta(seconds=30)
 
     db.init_app(app)
     # app.app_context().push()
