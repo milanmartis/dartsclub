@@ -1,4 +1,4 @@
-from flask import Flask, session
+from flask import Flask, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
@@ -46,7 +46,11 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(id):
-        return User.query.get(int(id))
+        idess = session.get('user_id')
+        if idess:
+            return User.query.get(int(idess))
+        else:
+            return redirect(url_for('auth.login'))
 
 
    
