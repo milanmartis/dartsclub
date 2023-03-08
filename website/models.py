@@ -18,6 +18,9 @@ from sqlalchemy import PrimaryKeyConstraint
 #         db.Column('addons', db.Integer, default=1)
 
 
+
+
+
 user_duel = db.Table('user_duel',
                      db.Column('user_id', db.Integer, db.ForeignKey('user.id', onupdate="CASCADE", ondelete="CASCADE")),
                      db.Column('duel_id', db.Integer, db.ForeignKey('duel.id', onupdate="CASCADE", ondelete="CASCADE")),

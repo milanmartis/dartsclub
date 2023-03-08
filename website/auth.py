@@ -1,15 +1,16 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session, app, jsonify
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session, app
 from .models import User
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import InputRequired, Length, ValidationError
+from flask_bcrypt import Bcrypt
 from werkzeug.security import generate_password_hash, check_password_hash
 auth = Blueprint('auth', __name__)
-import bcrypt
-import uuid
-import jwt
 import datetime
-from functools import wraps
-import os
+
+
 # def redirect_dest(fallback):
 #     dest = request.args.get('next')
 #     try:
@@ -32,29 +33,25 @@ import os
 #     response.headers["Cache-Control"] = "no-store, max-age=0"
 #     return response
    
-def token_required(f):
-   @wraps(f)
-   def decorator(*args, **kwargs):
-       token = None
-       token = session.get('token')
-       user_id = session.get('user_id')
-       if not token:
-           return redirect(url_for("auth.login", user=None))
-           
-        #    return jsonify({'message': 'a valid token is missing'})
-       try:
-           data = jwt.decode(token, 'jiuhihuhiuhgftfuyi564dfsff5ss5f421s5', algorithms=["HS256"])
-           current_user = User.query.filter_by(id=data["id"]).first()
-       except:
-           return jsonify({'message': 'token is invalid'})
- 
-       return f(current_user, *args, **kwargs)
-   return decorator
-
 
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    # if current_user.is_authenticated:
+    #         flash('You are already registered.', category='success')
+    #         return redirect(url_for("views.home"))
+
+    
+    # user_email = session.get('user_email')
+    # user_id = session.get('user_id')
+    # user_name = session.get('user_name')
+
+    # dict_log = {
+    #     'id': user_id, 
+    #     'first_name': user_name, 
+    #     'email': user_email,
+    # }
+
     
     if request.method == 'POST' and request.form.get('email'):
         email = request.form.get('email')
@@ -63,22 +60,22 @@ def login():
         user = User.query.filter_by(email=email).first()
 
         if check_password_hash(user.password, password):
+            # session["user_email"] = user.email
+            # session["user_id"] = user.id
+            # session["user_name"] = user.first_name
             user.authenticated = True
             db.session.add(user)
             db.session.commit()
 
-            # login_user(user, remember=True)
+            login_user(user, remember=True)
             flash('Logged in successfuly!', category='success')
 
+            # next = request.args.get('next')
+            # return redirect(next) if next else redirect(url_for('views.home'))
 
-            token = jwt.encode({'id' : user.id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=45)}, 'jiuhihuhiuhgftfuyi564dfsff5ss5f421s5', "HS256")
-            session['token'] = token
-            session['user_id'] = user.id
-            current_user = User.query.get(user.id)
-            # return jsonify({'token' : token})
- 
-            # return make_response('could not verify',  401, {'Authentication': '"login required"'})
-            return redirect(url_for("views.home", user=current_user, token=token))
+    # return render_template('users/login.html', user=current_user)
+
+            return redirect(url_for("views.home"))
         else:
             flash('Sorry, but you could not log in.', category='error')
             # return redirect('/login')
@@ -87,15 +84,14 @@ def login():
         print(current_user)
 
 
-    return render_template("users/login.html")
+    return render_template("users/login.html", user=current_user)
 
 
 @auth.route('/logout')
-@token_required
-
-def logout(current_user):
-    # current_user.is_anonymous=True
-    # current_user.is_authenticated=False
+@login_required
+def logout():
+    current_user.is_anonymous=True
+    current_user.is_authenticated=False
     # current_user.is_anonymous=True
     # session["user_email"] = None
     # session["user_id"] = None
@@ -147,9 +143,8 @@ def register():
 
 
 @auth.route('/account', methods=['GET', 'POST'])
-@token_required
-
-def user_details(current_user):
+@login_required
+def user_details():
 
     
     if request.method == 'POST':
