@@ -9,7 +9,7 @@ import random
 # letters = string.ascii_lowercase
 # my_secret_key = ( ''.join(random.choice(letters) for i in range(10)) )
 load_dotenv()
-from flask_bcrypt import Bcrypt
+# from flask_bcrypt import Bcrypt
 
 db = SQLAlchemy()
 
@@ -25,7 +25,7 @@ def create_app():
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.init_app(app)
-    bcrypt = Bcrypt(app)
+    # bcrypt = Bcrypt(app)
 
     # app.app_context().push()
 
