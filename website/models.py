@@ -49,7 +49,7 @@ user_season = db.Table('user_season',
 
 
 class Note(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     data = db.Column(db.String(10000))
     date_time = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -57,7 +57,7 @@ class Note(db.Model):
 
 class Groupz(db.Model):
     __tablename__ = 'groupz'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(300))
     shorts = db.Column(db.Text)
     season_id = db.Column(db.Integer, db.ForeignKey('season.id'))
@@ -95,7 +95,7 @@ class User(db.Model, UserMixin):
 
 
 class Round(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     season_id = db.Column(db.Integer, db.ForeignKey('season.id'))
 
 
@@ -109,7 +109,7 @@ class Season(db.Model):
 
 class Duel(db.Model):
     __tablename__ = 'duel'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     notice = db.Column(db.String(10000))
 
     date_duel = db.Column(db.DateTime(timezone=True), default=func.now())

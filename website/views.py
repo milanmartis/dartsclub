@@ -84,15 +84,15 @@ def home():
 
     # print(user_group)
     user_group = db.session.query(Groupz).join(User.groupy).filter(
-        User.id == current_user.id).filter(Groupz.season_id == Season.id).filter(Season.id == season).filter(Groupz.round_id == 3).first()
+        User.id == current_user.id).filter(Groupz.season_id == Season.id).filter(Season.id == season).filter(Groupz.round_id == 4).first()
     myduels_user = db.session.query(Groupz.id).join(User.groupy).filter(Groupz.season_id == Season.id).filter(
-        Season.id == season).filter(User.id.in_([current_user.id])).filter(Groupz.round_id == 3).all()
+        Season.id == season).filter(User.id.in_([current_user.id])).filter(Groupz.round_id == 4).all()
 
     # print(myduels_user)
     if current_user.id in adminz:
         # user_group = 7
         # new_ret = duels.create_duels_list(season, 13)
-        shearch_table = 13
+        shearch_table = 18
     else:
         # new_ret = duels.create_duels_list(season, myduels_user[0][0])
         shearch_table = myduels_user[0][0]
@@ -295,7 +295,7 @@ def duel_view(season, group):
     # print(new_ret)
 
     group = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.id == group).first()
-    groups = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.round_id == 3).all()
+    groups = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.round_id == 4).all()
 
     if request.method == 'POST' and request.form.get('grno'):
         grno = request.form.get('grno')
@@ -390,8 +390,8 @@ def create_new_season(season):
     # connection.commit()
     # connection.close()
 
-    list_p = [2, 3, 1, 8, 14, 4, 7, 15, 18, 9, 5, 6, 12,
-              16, 13, 11, 19, 23, 24, 20, 10, 17, 25, 26, 27]
+    list_p = [2, 3, 1, 8, 14, 4, 7, 15, 18, 5, 6, 12,
+              16, 11, 19, 23, 24, 10, 17, 25, 26, 27, 28, 29, 30]
 
     players = db.session.query(User)\
         .filter(User.id.in_(list_p))\
@@ -414,13 +414,14 @@ def create_new_season(season):
 
     for i, group in enumerate(groups):
         gr = Groupz(
-            name=f'Group {i+1}', shorts=list_groups_shorts[i], season_id=season, round_id=3)
+            name=f'Group {i+1}', shorts=list_groups_shorts[i], season_id=season, round_id=4)
         db.session.add(gr)
         db.session.commit()
 
         for player in group:
             player = User.query.get(player.id)
             group_new = Groupz.query.get(gr.id)
+            ## missing season and round id
             player.groupy.append(group_new)
 
         group = random.sample(group, len(group))
@@ -429,7 +430,7 @@ def create_new_season(season):
         couples2 = []
         for lists in to_duels:
 
-            new_duel = Duel(date_duel=datetime.now(), season_id=season)
+            new_duel = Duel(notice='4. kolo', date_duel=datetime.now(), season_id=season, round_id=4)
             db.session.add(new_duel)
             db.session.commit()
 

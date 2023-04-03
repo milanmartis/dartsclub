@@ -15,7 +15,7 @@ virtualplayers = ('h1', 'h2', 'h3', 'h4')
 
 def show_name_table(season):
     
-    groups = db.session.query(Groupz).filter(Groupz.season_id == Season.id).filter(Season.id == season).filter(Groupz.round_id == 3).all()
+    groups = db.session.query(Groupz).filter(Groupz.season_id == Season.id).filter(Season.id == season).filter(Groupz.round_id == 4).all()
 
     # groups = ['A', 'B1', 'B2', 'C1', 'C2']
     print(groups)
@@ -83,7 +83,7 @@ def show_table(season, groupz):
         .filter(Season.id == Duel.season_id)\
         .filter(Groupz.round_id == Round.id)\
         .filter(Season.id == season)\
-        .filter(Round.id == 3)\
+        .filter(Round.id == 4)\
         .group_by(user_duel.c.user_id, user_group.c.groupz_id, User.first_name)\
         .all()
 
