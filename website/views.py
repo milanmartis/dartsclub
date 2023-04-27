@@ -81,12 +81,12 @@ def home():
 
     groups = db.session.query(Groupz).join(
         Season).filter(Season.id == season).all()
+    round = db.session.query(Groupz.round_id).filter(Groupz.season_id==season).order_by(Groupz.round_id.desc()).first()
 
-    # print(user_group)
     user_group = db.session.query(Groupz).join(User.groupy).filter(
         User.id == current_user.id).filter(Groupz.season_id == Season.id).filter(Season.id == season).filter(Groupz.round_id == 4).first()
     myduels_user = db.session.query(Groupz.id).join(User.groupy).filter(Groupz.season_id == Season.id).filter(
-        Season.id == season).filter(User.id.in_([current_user.id])).filter(Groupz.round_id == round).all()
+        Season.id == season).filter(User.id.in_([current_user.id])).filter(Groupz.round_id == round[0]).all()
 
     # print(myduels_user)
     if current_user.id in adminz:
@@ -100,11 +100,11 @@ def home():
     # print(myduels_user[0][0])
     players = User.query.all()
     # print(players)
-    data_show_table = tabz.show_table(season, shearch_table, round)
+    data_show_table = tabz.show_table(season, shearch_table, round[0])
     # dataAll = tabz.show_table_all()
     data_all = tabz.show_table_all()
     round = db.session.query(Round.id).filter(Season.id==season).order_by(Round.id.desc()).first()
-    data_name_tabz = tabz.show_name_table(season, round)
+    data_name_tabz = tabz.show_name_table(season, round[0])
     # print(data_show_table)
     # fooor = make_tab_list()
 
