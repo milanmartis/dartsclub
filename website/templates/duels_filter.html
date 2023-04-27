@@ -83,16 +83,16 @@
         <input type="hidden" id="duelz" name="duelz" value="{{duel.duel_id}}" />
         <button id="location_href_season/1/duel/{{duel.duel_id}}" name="location_href_season/1/duel/{{duel.duel_id}}" onclick="locationHref('season/1/duel/{{duel.duel_id}}')" type="submit" {{disabled}} class="{{checked}}">
           <div class="row">
-                <div class="col-5" style="text-align: right;">
+                <div class="col-5" style="text-align: right;padding: 0px; margin: 0px;">
                   
                   {{duel.player[0].first_name | upper }}
                 </div>
-                <div class="col-2" style="text-align: center;">
+                <div class="col-2" style="text-align: center;padding: 0px; margin: 0px;">
                   
                  {{duel.result_[0].result}} : {{duel.result_[1].result}} 
 
                 </div>
-                <div class="col-5" style="text-align: left;">
+                <div class="col-5" style="text-align: left;padding: 0px; margin: 0px;">
                  {{duel.player[1].first_name | upper}}
 
                 </div>
