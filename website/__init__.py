@@ -15,38 +15,38 @@ db = SQLAlchemy()
 
 DB_NAME = "../instance/"
 
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = os.urandom(24)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://poktwcytjzkyew:5bdb99586baef51b1216188e45bb88c9e1af011a78e3a6d609e4938c2f60002a@ec2-52-23-81-126.compute-1.amazonaws.com:5432/db3uoc7j05udub'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(DB_NAME, 'database.db')
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-db.init_app(app)
-# bcrypt = Bcrypt(app)
-
-# app.app_context().push()
-
-from .views import views
-from .auth import auth
-
-app.register_blueprint(views, url_prefix='/')
-app.register_blueprint(auth, url_prefix='/')
-
-from .models import User, Note, Groupz, Duel
-
-app.app_context().push()
-db.create_all()
-
-login_manager = LoginManager(app)
-login_manager.init_app(app)
+login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+def create_app():
+    app = Flask(__name__)
+    app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("SQLALCHEMY_DATABASE_URI")
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(DB_NAME, 'database.db')
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    # bcrypt = Bcrypt(app)
+
+    # app.app_context().push()
+    login_manager.init_app(app)
+    db.init_app(app)
+
+    from .views import views
+    from .auth import auth
+
+    app.register_blueprint(views, url_prefix='/')
+    app.register_blueprint(auth, url_prefix='/')
+
+    from .models import User, Note, Groupz, Duel
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+    
+    return app
+
 
 # def create_database(app):
 #     if not path.exists(DB_NAME):

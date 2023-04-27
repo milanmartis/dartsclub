@@ -10,47 +10,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 auth = Blueprint('auth', __name__)
 import datetime
 
-
-# def redirect_dest(fallback):
-#     dest = request.args.get('next')
-#     try:
-#         dest_url = url_for(dest)
-#     except:
-#         return redirect(fallback)
-#     return redirect(dest_url)
-
-
-# @auth.before_request
-# def before_request():
-#     session.permanent = True
-#     app.permanent_session_lifetime = datetime.timedelta(minutes=20)
-#     session.modified = True
-
-
-
-# @auth.after_request
-# def add_header(response):
-#     response.headers["Cache-Control"] = "no-store, max-age=0"
-#     return response
    
 
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    # if current_user.is_authenticated:
-    #         flash('You are already registered.', category='success')
-    #         return redirect(url_for("views.home"))
 
-    
-    # user_email = session.get('user_email')
-    # user_id = session.get('user_id')
-    # user_name = session.get('user_name')
-
-    # dict_log = {
-    #     'id': user_id, 
-    #     'first_name': user_name, 
-    #     'email': user_email,
-    # }
 
     
     if request.method == 'POST' and request.form.get('email'):
@@ -60,26 +25,22 @@ def login():
         user = User.query.filter_by(email=email).first()
 
         if check_password_hash(user.password, password):
-            # session["user_email"] = user.email
-            # session["user_id"] = user.id
-            # session["user_name"] = user.first_name
+
             user.authenticated = True
             db.session.add(user)
             db.session.commit()
 
             login_user(user, remember=True)
+            next_page = request.args.get('next')
+
             flash('Logged in successfuly!', category='success')
 
-            # next = request.args.get('next')
-            # return redirect(next) if next else redirect(url_for('views.home'))
 
-    # return render_template('users/login.html', user=current_user)
-
-            return redirect(url_for("views.home"))
+            # return redirect(url_for("views.home"))
+            return redirect(next_page) if next_page else redirect(url_for('views.home'))
         else:
             flash('Sorry, but you could not log in.', category='error')
-            # return redirect('/login')
-            # return render_template("auth.login")
+
         
         print(current_user)
 
@@ -90,23 +51,8 @@ def login():
 @auth.route('/logout')
 @login_required
 def logout():
-    current_user.is_anonymous=True
-    current_user.is_authenticated=False
-    # current_user.is_anonymous=True
-    # session["user_email"] = None
-    # session["user_id"] = None
-    # session["user_name"] = None
-    user = current_user
-    user.authenticated = False
-    db.session.add(user)
-    db.session.commit()
-    session.clear()
     logout_user()
-    print(current_user)
-    # if session.get('was_once_logged_in'):
-    #     del session['was_once_logged_in']
-    # # return redirect(url_for('auth.login'))
-    # next = request.args.get('next')
+
     return redirect(url_for('auth.login'))
 
 
