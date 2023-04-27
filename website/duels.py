@@ -7,9 +7,8 @@ from . import db
 from .models import Groupz, Season, Duel, User, Round, user_duel, user_group
 
 
-def create_duels_list(season, group):
+def create_duels_list(season, group, round):
 
-    # print(group)
     groups = db.session.query(Groupz).join(
         Season).filter(Season.id == season).all()
 
@@ -18,7 +17,8 @@ def create_duels_list(season, group):
         for idx, col in enumerate(cursor.description):
             d[col[0]] = row[idx]
         return d
-
+    # group = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.round_id == round).first()
+    # print(group.id)
     duelss = db.session.query(user_duel.c.duel_id, user_duel.c.result, user_duel.c.user_id, user_duel.c.checked, User.first_name, user_group.c.groupz_id)\
         .outerjoin(user_duel)\
         .filter(user_duel.c.user_id == User.id)\
@@ -29,7 +29,7 @@ def create_duels_list(season, group):
         .filter(Duel.round_id == Round.id)\
         .filter(Season.id == season)\
         .filter(Groupz.id == group)\
-        .filter(Round.id == 4)\
+        .filter(Round.id == round)\
         .order_by(User.id.desc())
         
     

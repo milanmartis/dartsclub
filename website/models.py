@@ -103,6 +103,7 @@ class Season(db.Model):
     __tablename__ = 'season'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(300))
+    
     season_from = db.Column(db.DateTime(timezone=True), default=func.now())
     season_to = db.Column(db.DateTime(timezone=True), default=func.now())
     # user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

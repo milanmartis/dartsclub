@@ -86,7 +86,7 @@ def home():
     user_group = db.session.query(Groupz).join(User.groupy).filter(
         User.id == current_user.id).filter(Groupz.season_id == Season.id).filter(Season.id == season).filter(Groupz.round_id == 4).first()
     myduels_user = db.session.query(Groupz.id).join(User.groupy).filter(Groupz.season_id == Season.id).filter(
-        Season.id == season).filter(User.id.in_([current_user.id])).filter(Groupz.round_id == 4).all()
+        Season.id == season).filter(User.id.in_([current_user.id])).filter(Groupz.round_id == round).all()
 
     # print(myduels_user)
     if current_user.id in adminz:
@@ -100,10 +100,11 @@ def home():
     # print(myduels_user[0][0])
     players = User.query.all()
     # print(players)
-    data_show_table = tabz.show_table(season, shearch_table)
+    data_show_table = tabz.show_table(season, shearch_table, round)
     # dataAll = tabz.show_table_all()
     data_all = tabz.show_table_all()
-    data_name_tabz = tabz.show_name_table(season)
+    round = db.session.query(Round.id).filter(Season.id==season).order_by(Round.id.desc()).first()
+    data_name_tabz = tabz.show_name_table(season, round)
     # print(data_show_table)
     # fooor = make_tab_list()
 
@@ -270,16 +271,16 @@ def duel_id(season, duelz):
 
 
     groups = db.session.query(Groupz).join(
-        Season).filter(Season.id == season).filter(Groupz.round_id == 3).all()
+        Season).filter(Season.id == season).filter(Groupz.round_id == 4).all()
 
     return render_template("duel.html", groups=groups, duel=duel, players=duelz, user=current_user, adminz=adminz)
 
 
 
 
-@views.route('/season/<season>/group/<group>', methods=['GET', 'POST'])
+@views.route('/season/<season>/group/<group>/round/<round>', methods=['GET', 'POST'])
 @login_required
-def duel_view(season, group):
+def duel_view(season, group, round):
     
     # user_email = session.get('user_email')
     # user_id = session.get('user_id')
@@ -291,19 +292,27 @@ def duel_view(season, group):
     #     'email': user_email,
     # }
 
-    new_ret = duels.create_duels_list(season, group)
+    new_ret = duels.create_duels_list(season, group, round)
     # print(new_ret)
 
-    group = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.id == group).first()
-    groups = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.round_id == 4).all()
+    # group = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.round_id == round).first()
+    groups = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.round_id == round).all()
 
-    if request.method == 'POST' and request.form.get('grno'):
-        grno = request.form.get('grno')
+    if request.method == 'POST':
+        grno2 = request.form.get('grno')
         grname = request.form.get('grname')
-        seasons = request.form.get('seasons')
+        seasons2 = request.form.get('season')
+        round2 = request.form.get('round')
+        print('------------------------')
+        print(grname)
+        print(seasons2)
+        print(round2)
+        print(grno2)
+        print('------------------------')
+        
         # duel_view(seasons, grno)
 
-        return redirect(url_for('views.duel_view', groups=groups, group=grno, grno=grno, grname=grname, season=seasons, user=current_user, adminz=adminz))
+        return redirect(url_for('views.duel_view', round=round2, group=grno2, season=seasons2))
 
     if request.method == "POST" and request.form.get("duelz"):
 
@@ -320,7 +329,7 @@ def duel_view(season, group):
 
         return redirect(url_for('views.duel_id', season=season, duelz=duelz, duelz_players=duelz_players))
 
-    return render_template("duels_filter.html", group=group, groups=groups, season=season, duels=new_ret, user=current_user, adminz=adminz)
+    return render_template("duels_filter.html", round=round, group=group, groups=groups, season=season, duels=new_ret, user=current_user, adminz=adminz)
 
 
 
@@ -339,7 +348,9 @@ def season_manager():
     #     'email': user_email,
     # }
 
-    seasons = Season.query.filter(Groupz.season_id==Season.id).filter(Groupz.round_id==Round.id).filter(User.id==user_group.c.user_id).filter(user_group.c.groupz_id==Groupz.id).all()
+    seasons = db.session.query(Season, Round).filter(Groupz.season_id==Season.id).filter(Groupz.round_id==Round.id).filter(User.id==user_group.c.user_id).filter(user_group.c.groupz_id==Groupz.id).all()
+    groupz = db.session.query(Groupz.round_id).all()
+    
     print(seasons)
     
     dic = dictionary.dic
@@ -357,15 +368,17 @@ def season_manager():
             # flash('Season was not created!!!', category='success')
             # return redirect(url_for('views.duel_manager', season=season))
 
-    # if request.method == 'POST' and request.form.get('season'):
-    #     season = int(request.form.get('season'))
+    if request.method == 'POST' and request.form.get('round'):
+        season = int(request.form.get('season'))
+        round = int(request.form.get('round'))
 
-    #     if season < 1:
-    #         flash('There is a problem!', category='error')
-    #     else:
-    #         return redirect(url_for('views.duel_view', group=8, season=season))
+        if not season:
+            flash('There is a problem!', category='error')
+        else:
+            grno=db.session.query(Groupz.id).filter(Groupz.season_id==season).filter(Groupz.round_id==round).first()
+            return redirect(url_for('views.duel_view', round=round, group=grno[0], season=season))
 
-    return render_template("season.html", dic=dic, seasons=seasons, user=current_user, adminz=adminz)
+    return render_template("season.html", groupz=groupz, dic=dic, seasons=seasons, user=current_user, adminz=adminz)
 
 
 def create_new_season(season):

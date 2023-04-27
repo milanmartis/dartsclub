@@ -40,7 +40,7 @@ async function updateDuel(looopindex) {
 }
 
 
-async function viewGroup(group) {
+async function viewGroup(season, group, round) {
   // var location_href = document.getElementById('view_group_'+group+'')
   // location_href.innerHTML =
   //   '<i class="fa fa-circle-o-notch fa-spin" style="margin-left:15px;padding:9px;"></i>'
@@ -51,7 +51,7 @@ async function viewGroup(group) {
   }).then((_res) => {
     setTimeout(function(){
       // location_href.innerHTML = 'Free Demo'
-      window.location.href = "/season/1/group/"+group+"";
+      window.location.href = "/season/"+season+"/group/"+group+"/round/"+round+"";
     },500)
   })
 }

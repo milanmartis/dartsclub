@@ -7,7 +7,7 @@
     width="250"
   />
 </h1>
-
+{{group.id}}
 {% if groups %}
 <div class="container">
   <div class="row">
@@ -17,15 +17,15 @@
       style="padding: 0px; margin: 0px;"
     >
       <!-- action="javascript:;" onclick="chooseGroup('{{loop.index}}')" -->
-      <form action="javascript:;" method="POST">
+      <form method="POST">
         <input type="hidden" id="grno" name="grno" value="{{g.id}}" />
-        <input type="hidden" id="grname" name="grname" value="{{g.name}}" />
-        <input type="hidden" id="seasons" name="seasons" value="{{season}}" />
+        <input type="hidden" id="season" name="season" value="{{season}}" />
+        <input type="hidden" id="round" name="round" value="{{round}}" />
         {% if group.id==g.id %} {% set btn = "btn3" %} {% else %} {% set btn =
         "btn32" %} {% endif %}
         <button
-          id="view_group_{{g.id}}"
-          onclick="viewGroup({{g.id}})"
+          id="view_group"
+          name="view_group"
           type="submit"
           class="{{btn}} btn-outline-dark shadow-none"
         >
@@ -83,11 +83,23 @@
         <input type="hidden" id="duelz" name="duelz" value="{{duel.duel_id}}" />
         <button id="location_href_season/1/duel/{{duel.duel_id}}" name="location_href_season/1/duel/{{duel.duel_id}}" onclick="locationHref('season/1/duel/{{duel.duel_id}}')" type="submit" {{disabled}} class="{{checked}}">
           <div class="row">
-            <div class="col-1" style="text-align: center;"></div>
-            <div class="col-10" style="text-align: center;">
-              {{duel.player[0].first_name | upper }} {{duel.result_[0].result}} : {{duel.result_[1].result}} {{duel.player[1].first_name | upper}}
-            </div>
-            <div class="col-1" style="text-align: center;"></div>
+                <div class="col-5" style="text-align: right;">
+                  
+                  {{duel.player[0].first_name | upper }}
+                </div>
+                <div class="col-1" style="text-align: right;">
+                  
+                 {{duel.result_[0].result}} 
+                </div>
+  
+                <div class="col-1" style="text-align: left;">
+                  {{duel.result_[1].result}} 
+
+                </div>
+                <div class="col-5" style="text-align: left;">
+                 {{duel.player[1].first_name | upper}}
+
+                </div>
           </div>
         </button>
       </form>

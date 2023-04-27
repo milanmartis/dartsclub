@@ -13,9 +13,9 @@ from sqlalchemy import func, case, and_, or_
 
 virtualplayers = ('h1', 'h2', 'h3', 'h4')
 
-def show_name_table(season):
+def show_name_table(season, round):
     
-    groups = db.session.query(Groupz).filter(Groupz.season_id == Season.id).filter(Season.id == season).filter(Groupz.round_id == 4).all()
+    groups = db.session.query(Groupz).filter(Groupz.season_id == Season.id).filter(Season.id == season).filter(Groupz.round_id == round).all()
 
     # groups = ['A', 'B1', 'B2', 'C1', 'C2']
     print(groups)
@@ -24,7 +24,7 @@ def show_name_table(season):
 
 ########################## SHOW TABLE IN GROUPS
 # [('hery', 3, 6, 0, 'true', 1, 5, 4, 17, 17, 2, 3), ('andy', 6, 3, 2, 'true', 2, 5, 10, 30, 11, 5, 0), ('imre', 6, 2, 2, 'true', 3, 4, 6, 22, 9, 3, 1), ('juso', 1, 6, 0, 'true', 4, 8, 8, 28, 38, 4, 4),
-def show_table(season, groupz):
+def show_table(season, groupz, round):
     
     # print(season)
     # print(groupz)
@@ -83,7 +83,7 @@ def show_table(season, groupz):
         .filter(Season.id == Duel.season_id)\
         .filter(Groupz.round_id == Round.id)\
         .filter(Season.id == season)\
-        .filter(Round.id == 4)\
+        .filter(Round.id == round)\
         .group_by(user_duel.c.user_id, user_group.c.groupz_id, User.first_name)\
         .all()
 
