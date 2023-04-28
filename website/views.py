@@ -46,24 +46,25 @@ season = 1
 #             # return jsonify(data)
 
 
+# @views.route('/', methods=['GET', 'POST'])
+# def main():
+
+#     # user_email = session.get('user_email')
+#     # user_id = session.get('user_id')
+#     # user_name = session.get('user_name')
+
+#     # dict_log = {
+#     #     'id': user_id, 
+#     #     'first_name': user_name, 
+#     #     'email': user_email,
+#     # }
+
+#     dic = dictionary.dic
+
+#     return render_template("main.html", dic=dic, user=current_user, adminz=adminz)
+
+
 @views.route('/', methods=['GET', 'POST'])
-def main():
-
-    # user_email = session.get('user_email')
-    # user_id = session.get('user_id')
-    # user_name = session.get('user_name')
-
-    # dict_log = {
-    #     'id': user_id, 
-    #     'first_name': user_name, 
-    #     'email': user_email,
-    # }
-
-    dic = dictionary.dic
-
-    return render_template("main.html", dic=dic, user=current_user, adminz=adminz)
-
-
 @views.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():

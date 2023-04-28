@@ -10,14 +10,21 @@
   {% if data_show_table %}
   <div class="container readinglazy">
     <div class="row">
-      <div class="col">
+      <div class="col-12">
         <div
-          id="carouselExampleControls"
-          class="carousel slide carousel-dark"
-          data-interval="false"
-          data-ride="carousel"
+          id="carouselTabs"
+          class="carousel slide"
+          data-bs-ride="carousel" data-bs-touch="true" data-bs-interval="false"
         >
-          <div class="carousel-inner text-center" role="listbox">
+        <div class="carousel-indicators">
+          <button type="button" class="btn text active" data-bs-target="#carouselTabs" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1">A</button>
+          <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="1" aria-label="Slide 2">B1</button>
+          <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="2" aria-label="Slide 3">B2</button>
+          <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="3" aria-label="Slide 4">C1</button>
+          <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="4" aria-label="Slide 5">C2</button>
+        </div>
+        <center>
+          <div class="carousel-inner w-100"  style="align-items: center;">
             {% for data12 in data_show_table %}
             {% set de = data_name_tabz %}
             {% if not user.id in [adminz[0], adminz[1]] %}
@@ -27,18 +34,12 @@
   
             {% set list1 = de %}
             {% set list1len =  loop.index0 %}  
-            
-            <div class="carousel-item {% if list1[list1len].id == user_groupz %}active{% endif %}">
-              <h1>
-                GROUP {% if loop.index0 == 0 %}A{% endif %} {% if loop.index0 == 1
-                %}B1{% endif %} {% if loop.index0 == 2 %}B2{% endif %} {% if
-                loop.index0 == 3 %}C1{% endif %} {% if loop.index0 == 4 %}C2{%
-                endif %} {% if loop.index0 == 5 %}C3{% endif %} {% if loop.index0
-                == 6 %}C4{% endif %}
-              </h1>
-  
-              <table class="table" id="datas">
-                <thead>
+           <!-- <div class="carousel-item {% if list1[list1len].id == user_groupz %}active{% endif %}" > -->
+
+            <div class="carousel-item {% if loop.index == 1 %}active{% endif %}" >
+   
+              <table class="table" style="display:block;position:relative;" id="datas">
+                <thead style="margin-bottom:5px;">
                   <tr>
                     <th scope="col"></th>
                     <th scope="col"></th>
@@ -85,24 +86,8 @@
             </div>
             {% endfor %}
           </div>
-          <a
-            class="carousel-control-prev"
-            href="#carouselExampleControls"
-            role="button"
-            data-slide="prev"
-          >
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only"></span>
-          </a>
-          <a
-            class="carousel-control-next"
-            href="#carouselExampleControls"
-            role="button"
-            data-slide="next"
-          >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only"></span>
-          </a>
+        </center>
+
         </div>
       </div>
   
@@ -132,20 +117,20 @@
         </div> -->
     </div>
   
-    <div class="row">
-      <div class="col">
+    <div class="row" style="align-items: center;text-align: center; margin: auto 0;">
+      <div class="col" style="align-items: center;margin:auto 0;">
         <h1>ALL</h1>
-        <table class="table" id="datas">
+        <table class="table" id="datas" style="align-items: center; max-width: 420px;">
           <thead>
             <tr>
               <th scope="col"></th>
               <th scope="col"></th>
-              <th scope="col" style="width: 30px;" title="Game Played">G</th>
-              <th scope="col" style="width: 30px;">W</th>
-              <th scope="col" style="width: 30px;">L</th>
-              <th scope="col" style="width: 50px;">Legs</th>
-              <th scope="col" style="width: 30px; text-align: center;">+/-</th>
-              <th scope="col" style="width: 30px;">P</th>
+              <th scope="col" style="width: 20px;" title="Game Played">G</th>
+              <th scope="col" style="width: 20px;">W</th>
+              <th scope="col" style="width: 20px;">L</th>
+              <th scope="col" style="width: 40px;">Legs</th>
+              <th scope="col" style="width: 20px; text-align: center;">+/-</th>
+              <th scope="col" style="width: 20px;">P</th>
             </tr>
           </thead>
           {% for dall in dataAll %} {% for e in dall %} {% for d in e %} {% if
