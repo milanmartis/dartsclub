@@ -1,9 +1,7 @@
 {% extends "base.html" %} {% block title %}User Page{% endblock %} {% block
 content %}
 <br />
-<h6>
 
-</h6>
 <div class="container readinglazy" align="center">
   <div class="row" style="display:block;max-width:320px; text-align: center;">
     <div valign="middle" align="center"  class="col-12">
@@ -12,7 +10,7 @@ content %}
         width="250"
         class="filter-green"
       />
-      <br />
+
 
       <form method="POST" action="{{ url_for('auth.user_details') }}">
         <h3 align="center"></h3>
