@@ -8,11 +8,11 @@ block content %}
   />
 </h1>
 {% if seasons %}
-<div class="container">
-  <div class="row">
+<div class="container readinglazy" align="center">
+  <div class="row" style="display:block;max-width:320px; text-align: center;">
     {% for season in seasons %}
     {% set num = seasons|length %}
-    <div class="col-12 w-100" style="{% if num != loop.index %}opacity:0.5;{% endif %}">
+    <div valign="middle" align="center"  class="col-12" style="{% if num != loop.index %}opacity:0.5;{% endif %}">
       <form method="POST">
         <input type="hidden" id="season" name="season" value="{{season[0].id}}" />
         <input type="hidden" id="round" name="round" value="{{season[1].id}}" />

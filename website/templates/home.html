@@ -8,9 +8,9 @@
     />
   </h1>
   {% if data_show_table %}
-  <div class="container readinglazy">
-    <div class="row">
-      <div class="col-12">
+  <div class="container readinglazy" align="center">
+    <div class="row" style="display:block;max-width:320px; text-align: center;">
+      <div valign="middle" align="center"  class="col-12">
         <div
           id="carouselTabs"
           class="carousel slide"
@@ -117,20 +117,20 @@
         </div> -->
     </div>
   
-    <div class="row" style="align-items: center;text-align: center; margin: auto 0;">
-      <div class="col" style="align-items: center;margin:auto 0;">
+    <div class="row" style="display:block;max-width:320px; text-align: center;">
+      <div valign="middle" align="center"  class="col-12">
         <h1>ALL</h1>
         <table class="table" id="datas" style="align-items: center; max-width: 420px;">
           <thead>
             <tr>
               <th scope="col"></th>
               <th scope="col"></th>
-              <th scope="col" style="width: 20px;" title="Game Played">G</th>
-              <th scope="col" style="width: 20px;">W</th>
-              <th scope="col" style="width: 20px;">L</th>
-              <th scope="col" style="width: 40px;">Legs</th>
-              <th scope="col" style="width: 20px; text-align: center;">+/-</th>
-              <th scope="col" style="width: 20px;">P</th>
+              <th scope="col" style="width: 15px;" title="Game Played">G</th>
+              <th scope="col" style="width: 15px;">W</th>
+              <th scope="col" style="width: 15px;">L</th>
+              <th scope="col" style="width: 35px;">Legs</th>
+              <th scope="col" style="width: 15px; text-align: center;">+/-</th>
+              <th scope="col" style="width: 15px;">P</th>
             </tr>
           </thead>
           {% for dall in dataAll %} {% for e in dall %} {% for d in e %} {% if

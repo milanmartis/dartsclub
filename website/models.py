@@ -1,7 +1,9 @@
 from website import db
+from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 from sqlalchemy import PrimaryKeyConstraint
+from flask import current_app
 
 
 
@@ -77,6 +79,7 @@ class User(db.Model, UserMixin):
     play = db.relationship('Duel', secondary=user_duel, backref='players')
     # public_id = db.Column(db.Integer)
     authenticated = db.Column(db.Boolean, default=False)
+    confirm = db.Column(db.Boolean, default=False)
 
     def is_active(self):
         return True
@@ -93,6 +96,32 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return self.id
 
+
+    def get_reset_token(self):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        return s.dumps({'user_id': self.id})
+
+    def get_confirm_token(self):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        return s.dumps({'user_id': self.id})
+
+    @staticmethod
+    def verify_reset_token(token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(int(user_id))
+
+    @staticmethod
+    def verify_confirm_token(token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(int(user_id))
 
 class Round(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

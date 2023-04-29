@@ -1,9 +1,9 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
 content %}
 <div style="background:transparent !important" class="jumbotron vertical-center">
-  <div class="container">
-    <div class="row row align-items-center text-light">
-      <div valign="middle" class="col-sm-12 col-md-12 col-lg-7 col-xl-7">
+  <div class="container readinglazy" align="center">
+    <div class="row" style="display:block;max-width:320px; text-align: center;">
+      <div valign="middle" align="center"  class="col-12">
         <h1 align="center">
           <img
             src="{{ url_for('static', filename='img/signup.svg') }}"
@@ -12,7 +12,8 @@ content %}
           />
         </h1>
       </div>
-      <div class="col-sm-12 col-md-12 col-lg-5 col-xl-5 mt-34">
+
+      <div class="col-12 align-items-center justify-content-center" style="display:block;min-width:320px; text-align: center;">
         <form method="POST" action="{{ url_for('auth.register', next=request.endpoint) }}">
           <h3 align="center"></h3>
           <div class="form-group">
@@ -63,13 +64,7 @@ content %}
             value="{{ request.form['password2'] }}"
             />
           </div>
-          <div class="form-group">
-            <select class="btn-demo btn-outline-dark btn-block" id="season_id" name="season_id">
-              <option value="0" active>Choose Legue</option>
-              <option value="1">First Season</option>
-            </select>
-          </div>
-          <br />
+
           <button
             type="submit"
             id="location_href_register"

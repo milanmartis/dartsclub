@@ -1,0 +1,63 @@
+{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
+    %}
+    
+    <div
+      style="background: transparent !important;"
+      class="jumbotron vertical-center"
+    >
+      <div class="container">
+        <div class="row">
+          <div valign="middle" align="center"  class="col-12">
+            <h1 align="center">
+              <img
+                src="{{ url_for('static', filename='img/reset_password.svg') }}"
+                width="290"
+                class="filter-green"
+              />
+            </h1>
+          </div>
+          <div class="col-12 align-items-center justify-content-center" style="display:block;maz-width:360px; text-align: center;">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group">
+                    <div class="form-group">
+                        {% if form.password.errors %}
+                            {{ form.password(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.password(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+    
+                    <div class="form-group">
+                        {% if form.confirm_password.errors %}
+                            {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.confirm_password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.confirm_password(class="form-control form-control-lg") }}
+                        {% endif %}
+                        
+                    </div>
+             
+                </fieldset>
+                <div>
+                    {{ form.submit(class="btn-demo btn-outline-dark btn-block") }}
+                </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    {% endblock %}
+    

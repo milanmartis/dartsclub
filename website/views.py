@@ -21,6 +21,7 @@ from random import shuffle
 import mysql.connector
 from . import conn
 import psycopg2
+import email
 
 
 views = Blueprint('views', __name__)
@@ -89,19 +90,19 @@ def home():
     myduels_user = db.session.query(Groupz.id).join(User.groupy).filter(Groupz.season_id == Season.id).filter(
         Season.id == season).filter(User.id.in_([current_user.id])).filter(Groupz.round_id == round[0]).all()
 
-    # print(myduels_user)
-    if current_user.id in adminz:
-        # user_group = 7
-        # new_ret = duels.create_duels_list(season, 13)
-        shearch_table = 18
-    else:
-        # new_ret = duels.create_duels_list(season, myduels_user[0][0])
-        shearch_table = myduels_user[0][0]
+    # # print(myduels_user)
+    # if current_user.id in adminz:
+    #     # user_group = 7
+    #     # new_ret = duels.create_duels_list(season, 13)
+    #     shearch_table = 18
+    # else:
+    #     # new_ret = duels.create_duels_list(season, myduels_user[0][0])
+    #     shearch_table = myduels_user[0][0]
 
     # print(myduels_user[0][0])
     players = User.query.all()
     # print(players)
-    data_show_table = tabz.show_table(season, shearch_table, round[0])
+    data_show_table = tabz.show_table(season, round, round[0])
     # dataAll = tabz.show_table_all()
     data_all = tabz.show_table_all()
     round = db.session.query(Round.id).filter(Season.id==season).order_by(Round.id.desc()).first()
@@ -486,3 +487,4 @@ def create_new_season(season):
 #         player.seasony.append(season)
 
 #     db.session.commit()
+

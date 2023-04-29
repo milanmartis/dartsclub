@@ -5,9 +5,9 @@
   style="background: transparent !important;"
   class="jumbotron vertical-center"
 >
-  <div class="container">
-    <div class="row row align-items-center text-light">
-      <div valign="middle" class="col-sm-12 col-md-12 col-lg-7 col-xl-7">
+  <div class="container readinglazy" align="center">
+    <div class="row" style="display:block;max-width:320px; text-align: center;">
+      <div valign="middle" align="center"  class="col-12">
         <h1 align="center">
           <img
             src="{{ url_for('static', filename='img/login.svg') }}"
@@ -16,7 +16,7 @@
           />
         </h1>
       </div>
-      <div class="col-sm-12 col-md-12 col-lg-5 col-xl-5 mt-34">
+      <div class="col-12 align-items-center justify-content-center" style="display:block;min-width:320px; text-align: center;">
         <form method="POST" action="{{ url_for('auth.login') }}">
           <h3 align="center" class="pt-4"></h3>
           <div class="form-group">
@@ -48,13 +48,15 @@
           <br />
           <button
             type="submit"
-            class="btn-demo btn-outline-dark btn-block shadow-none"
+            class="btn-demo btn-outline-dark btn-block"
           >
             Login
           </button>
         </form>
-
-        <div class="col-12 mt-10">
+        <small class="text-muted ml-1">
+          <a href="{{ url_for('auth.reset_request') }}">Forgot your password?</a>
+      </small>
+        <div class="col-12">
           <h4><a href="register">Sign up</a></h4>
         </div>
       </div>
