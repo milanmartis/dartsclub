@@ -5,8 +5,8 @@
       style="background: transparent !important;"
       class="jumbotron vertical-center"
     >
-      <div class="container">
-        <div class="row">
+    <div class="container readinglazy" align="center">
+        <div class="row" style="display:block;max-width:320px; text-align: center;">
           <div valign="middle" align="center"  class="col-12">
             <h1 align="center">
               <img
@@ -16,7 +16,7 @@
               />
             </h1>
           </div>
-          <div class="col-12 align-items-center justify-content-center" style="display:block;maz-width:360px; text-align: center;">
+          <div valign="middle" align="center"  class="col-12">
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
                 <fieldset class="form-group">
@@ -48,6 +48,7 @@
                     </div>
              
                 </fieldset>
+                <br>
                 <div>
                     {{ form.submit(class="btn-demo btn-outline-dark btn-block") }}
                 </div>

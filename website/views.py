@@ -280,9 +280,9 @@ def duel_id(season, duelz):
 
 
 
-@views.route('/season/<season>/group/<group>/round/<round>', methods=['GET', 'POST'])
+@views.route('/season/<season>/round/<round>', methods=['GET', 'POST'])
 @login_required
-def duel_view(season, group, round):
+def duel_view(season, round):
     
     # user_email = session.get('user_email')
     # user_id = session.get('user_id')
@@ -294,8 +294,8 @@ def duel_view(season, group, round):
     #     'email': user_email,
     # }
 
-    new_ret = duels.create_duels_list(season, group, round)
-    # print(new_ret)
+    new_ret = duels.create_duels_list(season, round)
+    print(len(new_ret))
 
     # group = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.round_id == round).first()
     groups = db.session.query(Groupz).join(Season).filter(Season.id == season).filter(Groupz.round_id == round).all()
@@ -331,7 +331,7 @@ def duel_view(season, group, round):
 
         return redirect(url_for('views.duel_id', season=season, duelz=duelz, duelz_players=duelz_players))
 
-    return render_template("duels_filter.html", round=round, group=group, groups=groups, season=season, duels=new_ret, user=current_user, adminz=adminz)
+    return render_template("duels_filter.html", round=round, groups=groups, season=season, duels=new_ret, user=current_user, adminz=adminz)
 
 
 

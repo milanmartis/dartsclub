@@ -16,77 +16,77 @@
           class="carousel slide"
           data-bs-ride="carousel" data-bs-touch="true" data-bs-interval="false"
         >
-        <div class="carousel-indicators">
-          <button type="button" class="btn text active" data-bs-target="#carouselTabs" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1">A</button>
-          <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="1" aria-label="Slide 2">B1</button>
-          <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="2" aria-label="Slide 3">B2</button>
-          <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="3" aria-label="Slide 4">C1</button>
-          <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="4" aria-label="Slide 5">C2</button>
-        </div>
-        <center>
-          <div class="carousel-inner w-100"  style="align-items: center;">
-            {% for data12 in data_show_table %}
-            {% set de = data_name_tabz %}
-            {% if not user.id in [adminz[0], adminz[1]] %}
-            {% set user_groupz = user_group.id %} 
-             {% else %} 
-             {% set user_groupz = 18 %} {% endif %}
-  
-            {% set list1 = de %}
-            {% set list1len =  loop.index0 %}  
-           <!-- <div class="carousel-item {% if list1[list1len].id == user_groupz %}active{% endif %}" > -->
-
-            <div class="carousel-item {% if loop.index == 1 %}active{% endif %}" >
-   
-              <table class="table" style="display:block;position:relative;" id="datas">
-                <thead style="margin-bottom:5px;">
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col"  title="Game Played">
-                      G
-                    </th>
-                    <th scope="col" >W</th>
-                    <th scope="col" >L</th>
-                    <th scope="col" >Legs</th>
-                    <th scope="col" >
-                      +/-
-                    </th>
-                    <th scope="col" style="width: 30px;">P</th>
-                  </tr>
-                </thead>
-  
-                {% for i in data12 %} {% for j in i %}
-  
-                <tr>
-                  <!-- <tr onclick="javascript:location.href='myduels.html'"> -->
-                  <td class="tab-others">
-                    {{ loop.index }}
-                  </td>
-                  
-                  {% for k in j %}
-                  {% if loop.index == 1 %}
-                  <td class="tab-name">{{ k | upper }}</td>
-                  {% else %}
-                  {% if not loop.index == 7 %}
-                  <td class="tab-others">{{ k | upper }}</td>
-                  {% else %}
-                  <td class="tab-points">{{ k | upper }}</td>
-                  {% endif %}{% endif %} {% endfor %}
-  
-                  {% if (list1[list1len].shorts == 'A' or list1[list1len].shorts == 'B1' or list1[list1len].shorts == 'B2') and (loop.index0 == 3 or loop.index0 == 4) %} <td class="tab-others2"><i class="fa fa-arrow-down" style="color:#0ca00c"></i></td> {% endif %}
-                  {% if loop.index0 == 0 and (list1[list1len].shorts == 'B1' or list1[list1len].shorts == 'B2') %} <td class="tab-others2"><i class="fa fa-arrow-up" style="color:#0ca00c"></i></td> {% endif %}
-                  {% if (loop.index0 == 0) and (list1[list1len].shorts == 'C1') %} <td class="tab-others2"><i class="fa fa-arrow-up" style="color:#0ca00c"></i></td> {% endif %}
-                  {% if (loop.index0 == 0) and (list1[list1len].shorts == 'C2') %} <td class="tab-others2"><i class="fa fa-arrow-up" style="color:#0ca00c"></i></td> {% endif %}
-                  <!-- {% if loop.index0 == 0 or loop.index0 == 1 and (list1[list1len].shorts == 'C1') %} <td class="tab-others"><i class="fa fa-arrow-up" style="color:blue"></i></td> {% endif %} -->
-                  
-                </tr>
-                {% endfor %} {% endfor %}
-              </table>
-            </div>
-            {% endfor %}
+          <div class="carousel-indicators">
+            <button type="button" class="btn text active" data-bs-target="#carouselTabs" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1">A</button>
+            <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="1" aria-label="Slide 2">B1</button>
+            <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="2" aria-label="Slide 3">B2</button>
+            <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="3" aria-label="Slide 4">C1</button>
+            <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="4" aria-label="Slide 5">C2</button>
           </div>
-        </center>
+
+            <div class="carousel-inner w-100"  style="align-items: center;">
+              {% for data12 in data_show_table %}
+              {% set de = data_name_tabz %}
+              {% if not user.id in [adminz[0], adminz[1]] %}
+              {% set user_groupz = user_group.id %} 
+              {% else %} 
+              {% set user_groupz = 18 %} {% endif %}
+    
+              {% set list1 = de %}
+              {% set list1len =  loop.index0 %}  
+              <!-- <div class="carousel-item {% if list1[list1len].id == user_groupz %}active{% endif %}" > -->
+
+              <div class="carousel-item {% if loop.index == 1 %}active{% endif %}" style="align-items: center;height: fit-content;" >
+    
+                <table class="table" style="display:block;position:relative;" id="datas">
+                  <thead style="margin-bottom:5px;">
+                    <tr>
+                      <th scope="col"></th>
+                      <th scope="col"></th>
+                      <th scope="col"  title="Game Played">
+                        G
+                      </th>
+                      <th scope="col" >W</th>
+                      <th scope="col" >L</th>
+                      <th scope="col" >Legs</th>
+                      <th scope="col" >
+                        +/-
+                      </th>
+                      <th scope="col" style="width: 30px;">P</th>
+                    </tr>
+                  </thead>
+    
+                  {% for i in data12 %} {% for j in i %}
+    
+                  <tr>
+                    <!-- <tr onclick="javascript:location.href='myduels.html'"> -->
+                    <td class="tab-others">
+                      {{ loop.index }}
+                    </td>
+                    
+                    {% for k in j %}
+                    {% if loop.index == 1 %}
+                    <td class="tab-name">{{ k | upper }}</td>
+                    {% else %}
+                    {% if not loop.index == 7 %}
+                    <td class="tab-others">{{ k | upper }}</td>
+                    {% else %}
+                    <td class="tab-points">{{ k | upper }}</td>
+                    {% endif %}{% endif %} {% endfor %}
+    
+                    {% if (list1[list1len].shorts == 'A' or list1[list1len].shorts == 'B1' or list1[list1len].shorts == 'B2') and (loop.index0 == 3 or loop.index0 == 4) %} <td class="tab-others2"><i class="fa fa-arrow-down" style="color:#0ca00c"></i></td> {% endif %}
+                    {% if loop.index0 == 0 and (list1[list1len].shorts == 'B1' or list1[list1len].shorts == 'B2') %} <td class="tab-others2"><i class="fa fa-arrow-up" style="color:#0ca00c"></i></td> {% endif %}
+                    {% if (loop.index0 == 0) and (list1[list1len].shorts == 'C1') %} <td class="tab-others2"><i class="fa fa-arrow-up" style="color:#0ca00c"></i></td> {% endif %}
+                    {% if (loop.index0 == 0) and (list1[list1len].shorts == 'C2') %} <td class="tab-others2"><i class="fa fa-arrow-up" style="color:#0ca00c"></i></td> {% endif %}
+                    <!-- {% if loop.index0 == 0 or loop.index0 == 1 and (list1[list1len].shorts == 'C1') %} <td class="tab-others"><i class="fa fa-arrow-up" style="color:blue"></i></td> {% endif %} -->
+                    
+                  </tr>
+                  {% endfor %} {% endfor %}
+                </table>
+              </div>
+              {% endfor %}
+            </div>
+
 
         </div>
       </div>
