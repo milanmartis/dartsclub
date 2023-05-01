@@ -67,7 +67,7 @@ season = 1
 
 @views.route('/', methods=['GET', 'POST'])
 @views.route('/home', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def home():
     # user_email = session.get('user_email')
     # user_id = session.get('user_id')
