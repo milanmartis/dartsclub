@@ -74,7 +74,7 @@ def register():
         
         # season = Season.query.filter_by(id=season).first()
         user = User.query.filter_by(email=email).first()
-        nickname = User.query.filter(User.first_name.like(first_name)).first()
+        nickname = User.query.filter(User.first_name.ilike(first_name)).first()
         if user:
             flash('Email already exist.', category='error')
         elif nickname:
@@ -289,7 +289,7 @@ def user_details():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
         user = User.query.get(useride)
-        nickname = User.query.filter(User.first_name.like(first_name)).first()
+        nickname = User.query.filter(User.first_name.ilike(first_name)).first()
 
         # print(user)
         if user == '':
