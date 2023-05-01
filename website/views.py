@@ -337,8 +337,7 @@ def duel_view(season, round):
 
 
 @views.route('/season', methods=['GET', 'POST'])
-@login_required
-def season_manager():
+def season_list():
 
     # user_email = session.get('user_email')
     # user_id = session.get('user_id')
@@ -350,25 +349,40 @@ def season_manager():
     #     'email': user_email,
     # }
 
-    seasons = db.session.query(Season, Round).filter(Groupz.season_id==Season.id).filter(Groupz.round_id==Round.id).filter(User.id==user_group.c.user_id).filter(user_group.c.groupz_id==Groupz.id).all()
+    seasons = db.session.query(Season).all()
     groupz = db.session.query(Groupz.round_id).all()
     
-    print(seasons)
+
+
+    if request.method == 'POST':
+        season1 = request.form.get('season_id')
+
+        print('ddd')
+        return redirect(url_for('views.season_manager', season=season1))
+
+    return render_template("season_list.html", seasons=seasons, user=current_user, adminz=adminz)
+
+
+@views.route('/season/<season>', methods=['GET', 'POST'])
+@login_required
+def season_manager(season):
+
+    # user_email = session.get('user_email')
+    # user_id = session.get('user_id')
+    # user_name = session.get('user_name')
+
+    # dict_log = {
+    #     'id': user_id, 
+    #     'first_name': user_name, 
+    #     'email': user_email,
+    # }
+
+    rounds = db.session.query(Season, Round).filter(Groupz.season_id==Season.id).filter(Groupz.round_id==Round.id).filter(User.id==user_group.c.user_id).filter(user_group.c.groupz_id==Groupz.id).filter(Season.id==season).order_by(Groupz.round_id.desc()).all()
+    groupz = db.session.query(Groupz.round_id).all()
+    
     
     dic = dictionary.dic
 
-    # pokus = db.session.query(Duel).join(User).all()
-
-    if request.method == 'POST' and request.form.get('ide_season'):
-        season = int(request.form.get('ide_season'))
-
-        if season < 1:
-            flash('There is a problem!', category='error')
-        else:
-            pass
-            # create_new_season(season)
-            # flash('Season was not created!!!', category='success')
-            # return redirect(url_for('views.duel_manager', season=season))
 
     if request.method == 'POST' and request.form.get('round'):
         season = int(request.form.get('season'))
@@ -380,7 +394,7 @@ def season_manager():
             grno=db.session.query(Groupz.id).filter(Groupz.season_id==season).filter(Groupz.round_id==round).first()
             return redirect(url_for('views.duel_view', round=round, group=grno[0], season=season))
 
-    return render_template("season.html", groupz=groupz, dic=dic, seasons=seasons, user=current_user, adminz=adminz)
+    return render_template("season.html", groupz=groupz, dic=dic, seasons=rounds, user=current_user, adminz=adminz)
 
 
 def create_new_season(season):

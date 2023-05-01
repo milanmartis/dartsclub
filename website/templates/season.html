@@ -2,17 +2,18 @@
 block content %}
 <h1 align="center">
   <img
-    src="{{ url_for('static', filename='img/seasons.svg') }}"
+    src="{{ url_for('static', filename='img/rounds.svg') }}"
     class="filter-green"
-    width="290"
-  />
+    width="250"
+  /><br>
+  {{seasons[0][0].name}}
 </h1>
 {% if seasons %}
 <div class="container readinglazy" align="center">
   <div class="row" style="display:block;max-width:320px; text-align: center;">
     {% for season in seasons %}
     {% set num = seasons|length %}
-    <div valign="middle" align="center"  class="col-12" style="{% if num != loop.index %}opacity:0.5;{% endif %}">
+    <div valign="middle" align="center"  class="col-12" style="{% if loop.index != 1 %}opacity:0.5;{% endif %}">
       <form method="POST">
         <input type="hidden" id="season" name="season" value="{{season[0].id}}" />
         <input type="hidden" id="round" name="round" value="{{season[1].id}}" />
@@ -22,7 +23,7 @@ block content %}
           type="submit"
           class="btn btn-outline-dark btn-block shadow-none"
         >
-          {{season[0].name}} | Round #{{season[1].id}}
+         Round #{{season[1].id}}
 
         </button>
       </form>
