@@ -31,9 +31,9 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("SQLALCHEMY_DATABASE_URI")
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(DB_NAME, 'database.db')
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
-    app.config['MAIL_PORT'] = 587
-    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_SERVER'] = os.environ.get("MAIL_SERVER")
+    app.config['MAIL_PORT'] = os.environ.get("MAIL_PORT")
+    app.config['MAIL_USE_TLS'] = os.environ.get("MAIL_USE_TLS")
     app.config['MAIL_USERNAME'] = os.environ.get("MAIL_USERNAME")
     app.config['MAIL_PASSWORD'] = os.environ.get("MAIL_PASSWORD")
     # bcrypt = Bcrypt(app)

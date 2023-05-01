@@ -134,7 +134,7 @@ def reset_request():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         send_reset_email(user)
-        flash('An email has been sent to reset your password.', 'success')
+        flash('An email has been sent to reset your password.', category="success")
         return redirect(url_for('auth.login'))
     return render_template('users/reset_request.html', title='Reset Password', form=form, user=current_user)
 
@@ -145,14 +145,14 @@ def reset_token(token):
         return redirect(url_for('views.home'))
     user = User.verify_reset_token(token)
     if user is None:
-        flash('The used token has expired.', 'warning')
+        flash('The used token has expired.', category="warning")
         return redirect(url_for('auth.reset_request'))
     form = ResetPasswordForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user.password = hashed_password
         db.session.commit()
-        flash('Your password has been changed! You can login.', 'success')
+        flash('Your password has been changed! You can login.', category="success")
         return redirect(url_for('auth.login'))
     return render_template('users/reset_token.html', title='Reset Password', form=form)
 
@@ -177,13 +177,13 @@ def confirm_token(token):
         return redirect(url_for('main.home'))
     user = User.verify_confirm_token(token)
     if user is None:
-        flash('The used token has expired.', 'warning')
+        flash('The used token has expired.', category="warning")
         return redirect(url_for('auth.register'))
     else:
         user.confirm = True
 
         db.session.commit()
-        flash('Your email has been successfully verified! Welcome to the club. You can login.', 'success')
+        flash('Your email has been successfully verified! Welcome to the club. You can login.', category="success")
         return redirect(url_for('auth.login'))
     # return render_template('users/confirm_email.html', title='Confirm Register Email', form=form, teamz=RightColumn.main_menu(), next_match=RightColumn.next_match(), score_table=RightColumn.score_table())
 
@@ -192,11 +192,31 @@ def confirm_token(token):
 def send_reset_email(user):
     token = user.get_reset_token()
     msg = Message('Password Reset Request',
-                  sender='noreply@dartsclub.sk',
+                  sender=('DARTS CLUB', 'info@dartsclub.sk'),
                   recipients=[user.email])
-    msg.body = f'''To reset your password, visit the following link:
-{url_for('auth.reset_token', token=token, _external=True)}
+    msg.html = f'''To reset your password, click on the following button:
+<br>
+<br>
+<a style="
+    border-radius: 14px !important;
+    background-color: #00EE00;
+    border: 2px solid #00EE00;
+    color: #030303;
+    font-weight: 610;
+    font-size: 120%;
+    text-decoration:none;
+    cursor:pointer;
+    padding: 8px 12px 8px 12px;
+    margin: 12px;
+    width:300px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;" 
+    href="{current_app.url_for('auth.reset_token', token=token, _external=True)}">RESET PASSWORD</a>
+<br>
+<br>
 If you did not make this request then simply ignore this email and no changes will be made.
+<br>
+<br>
+<img src="{current_app.url_for('static', filename='img/logo.png')}">
 '''
     mail.send(msg)
 
@@ -204,7 +224,7 @@ If you did not make this request then simply ignore this email and no changes wi
 def send_confirm_email(user):
     token = user.get_confirm_token()
     msg = Message('Confirm your register email',
-                  sender='noreply@dartsclub.sk',
+                  sender='info@dartsclub.sk',
                   recipients=[user.email])
     msg.body = f'''To confirm your email, click on the following link:
 {url_for('auth.confirm_token', token=token, _external=True)}

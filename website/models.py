@@ -158,3 +158,46 @@ class OpenHour(db.Model):
     oh_from = db.Column(db.DateTime(timezone=True), default=func.now())
     oh_to = db.Column(db.DateTime(timezone=True), default=func.now())
     duel_id = db.Column(db.Integer, db.ForeignKey('duel.id'))
+
+
+
+class Product(db.Model):
+    __tablename__ = 'product'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    stripe_link = db.Column(db.String(100), nullable=False)
+    youtube_link = db.Column(db.String(300), nullable=False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=func.now())
+    content = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    is_visible = db.Column(db.Boolean(), default=True)
+    price = db.Column(db.DECIMAL(precision=10, scale=2), nullable=False)
+    old_price = db.Column(db.DECIMAL(precision=10, scale=2), nullable=False)
+    product_category_id = db.Column(db.Integer, db.ForeignKey(
+        'product_category.id'), nullable=False)
+    product_gallery = db.relationship('ProductGallery', backref='gallpr', lazy=True)
+
+    def __repr__(self):
+        return f"Post('{self.title}', '{self.date_posted}', '{self.product_gallery}, '{self.product_category_id}')"
+
+
+class ProductCategory(db.Model):
+    __tablename__ = 'product_category'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+
+
+class Category(db.Model):
+    __tablename__ = 'category'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    
+    
+class ProductGallery(db.Model):
+    __tablename__ = 'product_gallery'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    image_file2 = db.Column(db.String(30), nullable=False)
+    # image_order = db.Column(db.Integer, unique=True, nullable=False)
+    orderz = db.Column(db.Integer)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)

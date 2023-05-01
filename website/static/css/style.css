@@ -156,6 +156,7 @@ nav {
     display: flex;
     justify-content: center;
     max-width: 600px;
+    min-width: 320px;
     border-radius: 14px !important;
     background-color: #420909;
     border: 3px solid #00EE00;
@@ -497,7 +498,7 @@ input[type="textarea"] {
 
 }
 
-.btn:hover{
+.btn:hover, .btn:active{
     background-color: #00EE00;
     border: 2px solid #00EE00;
     color: #030303;
