@@ -289,11 +289,15 @@ def user_details():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
         user = User.query.get(useride)
+        nickname = User.query.filter(User.first_name.like(first_name)).first()
+
         # print(user)
         if user == '':
            flash('This user doesn\'t exist.', category='error')
         elif len(first_name) < 2:
             flash("First Name must be greater than 1 chars", category="error")
+        elif nickname:
+            flash("User name already exist.", category="error")
         else:
             if password1 !='':
                 if not check_password_hash(user.password, password_old):
