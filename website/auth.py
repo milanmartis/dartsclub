@@ -74,7 +74,7 @@ def register():
         
         # season = Season.query.filter_by(id=season).first()
         user = User.query.filter_by(email=email).first()
-        nickname = User.query.filter_by(first_name==first_name).first()
+        nickname = User.query.filter(User.first_name.like(first_name)).first()
         if user:
             flash('Email already exist.', category='error')
         elif nickname:
