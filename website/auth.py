@@ -78,7 +78,7 @@ def register():
         if user:
             flash('Email already exist.', category='error')
         elif nickname:
-            flash("Nick name already exist.", category="error")
+            flash("User name already exist.", category="error")
         elif len(email) < 4:
             flash("Email must be greater than 3 chars", category="error")
         elif len(first_name) < 2:
