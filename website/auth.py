@@ -72,7 +72,7 @@ def register():
         password2 = request.form.get('password2', None)
         # season_id = request.form.get('season_id', None)
         
-        season = Season.query.filter_by(id=season_id).first()
+        # season = Season.query.filter_by(id=season).first()
         user = User.query.filter_by(email=email).first()
 
         if user:

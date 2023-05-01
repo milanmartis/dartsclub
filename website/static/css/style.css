@@ -153,9 +153,6 @@ input[type="checkbox"]:checked::before {
 
 nav {
 
-    display: flex;
-    justify-content: center;
-    max-width: 600px;
     min-width: 320px;
     border-radius: 14px !important;
     background-color: #420909;
@@ -672,8 +669,8 @@ input[type="textarea"] {
     background: transparent;
     text-align: center;
     padding-top: 8px;
-    margin-left: -9px;
-    font-size: 70%;
+    margin-left: 2px;
+    font-size: 80%;
     text-transform: uppercase;
 
 
