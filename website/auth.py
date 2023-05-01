@@ -74,9 +74,11 @@ def register():
         
         # season = Season.query.filter_by(id=season).first()
         user = User.query.filter_by(email=email).first()
-
+        nickname = User.query.filter_by(first_name==first_name).first()
         if user:
             flash('Email already exist.', category='error')
+        elif nickname:
+            flash("Nick name already exist.", category="error")
         elif len(email) < 4:
             flash("Email must be greater than 3 chars", category="error")
         elif len(first_name) < 2:
