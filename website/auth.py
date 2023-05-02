@@ -217,10 +217,11 @@ def send_reset_email(user):
     href="{current_app.url_for('auth.reset_token', token=token, _external=True)}">RESET PASSWORD</a>
 <br>
 <br>
-If you did not make this request then simply ignore this email and no changes will be made.
+<p>If you did not make this request then simply ignore this email and no changes will be made.</p>
 <br>
 <br>
-<img width="190" src="{ current_app.url_for('static', filename='img/logo-darts.png', _external=True) }">
+<img width="190" src="{ current_app.url_for('static', filename='img/sipka-2.svg', _external=True) }">
+<h5>©4NOLIMIT. POWERED BY APPDESIGN.SK</h5>
 </center>
 '''
     mail.send(msg)
