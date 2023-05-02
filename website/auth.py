@@ -198,7 +198,7 @@ def send_reset_email(user):
     msg = Message('Password Reset Request',
                   sender=('Darts Club', 'info@dartsclub.sk'),
                   recipients=[user.email])
-    msg.html = f'''To reset your password, click on the following button:
+    msg.html = f'''<center><h1>To reset your password, click on the following button</h1>
 <br>
 <br>
 <a style="
@@ -220,7 +220,8 @@ def send_reset_email(user):
 If you did not make this request then simply ignore this email and no changes will be made.
 <br>
 <br>
-<img src="{ current_app.url_for('static', filename='img/logo.png', _external=True) }">
+<img width="190" src="{ current_app.url_for('static', filename='img/logo-darts.png', _external=True) }">
+</center>
 '''
     mail.send(msg)
 
