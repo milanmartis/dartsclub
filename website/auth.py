@@ -300,7 +300,7 @@ def user_details():
             flash("User name already exist.", category="error")
         else:
             if password1 !='':
-                if not check_password_hash(user.password, password_old):
+                if not bcrypt.check_password_hash(user.password, password_old):
                     flash('Old password is not correct!', category='error')
                 elif password1 != password2:
                     flash("New passwords don\'t match", category="error")
