@@ -270,14 +270,13 @@ def duel_id(season, duelz):
     duel = db.session.query(User.first_name, user_duel, Duel.round_id).filter(
         user_duel.c.user_id == User.id).filter(user_duel.c.duel_id == Duel.id).filter(Duel.id == duelz).order_by(User.id.desc()).all()
 
-    roundz = db.session.query(Round).filter(Round.season_id==season).filter(Round.open==True).first()
+    roundz = db.session.query(Round).filter(Round.season_id==season).filter(Round.open==True).order_by(Round.id.desc()).first()
     print('---------------------')
     print(roundz)
     print('------------------')
-    groups = db.session.query(Groupz).join(
-        Season).filter(Season.id == season).filter(Groupz.round_id == roundz.id).all()
 
-    return render_template("duel.html", roundz=roundz, groups=groups, duel=duel, players=duelz, user=current_user, adminz=adminz)
+
+    return render_template("duel.html", roundz=roundz,  duel=duel, players=duelz, user=current_user, adminz=adminz)
 
 
 
@@ -387,9 +386,9 @@ def season_manager(season):
     
     
     
-    if request.method == 'POST' and request.form.get('ide_season'):
+    if request.method == "POST" and request.form.get('ide_season'):
         season = int(request.form.get('ide_season'))
-
+        print(season)
         if season < 1:
             flash('There is a problem!', category='error')
         else:
@@ -399,9 +398,11 @@ def season_manager(season):
             return redirect(url_for('views.season_manager', season=season))
 
 
-    if request.method == 'POST' and request.form.get('round'):
+    if request.form.get('round'):
         season = int(request.form.get('season'))
         round = int(request.form.get('round'))
+        print(round)
+        print('---------------')
 
         if not season:
             flash('There is a problem!', category='error')
@@ -435,7 +436,7 @@ def create_new_season(season):
     # connection.close()
 
     list_p = [2, 3, 1, 8, 14, 4, 7, 15, 18, 5, 6, 12,
-              16, 11, 19, 23, 24, 10, 17, 25, 26, 28, 29, 30, 31, 32]
+              16, 11, 19, 23, 24, 10, 25, 26, 28, 29, 30, 31, 32]
 
     players = db.session.query(User)\
         .filter(User.id.in_(list_p))\
@@ -455,10 +456,15 @@ def create_new_season(season):
     # print(groups)
 
     list_groups_shorts = ['A', 'B1', 'B2', 'C1', 'C2', 'C3', 'C4']
+    last_round = db.session.query(Round).filter(Round.season_id==season).order_by(Round.id.desc()).first()
+    # next_round = last_round + 1
+    new_round = Round(season_id=season, open=True)
+    db.session.add(new_round)
+    db.session.commit()
 
     for i, group in enumerate(groups):
         gr = Groupz(
-            name=f'Group {i+1}', shorts=list_groups_shorts[i], season_id=season, round_id=4)
+            name=f'Group {i+1}', shorts=list_groups_shorts[i], season_id=season, round_id=new_round.id)
         db.session.add(gr)
         db.session.commit()
 
@@ -474,7 +480,7 @@ def create_new_season(season):
         couples2 = []
         for lists in to_duels:
 
-            new_duel = Duel(notice='4. kolo', date_duel=datetime.now(), season_id=season, round_id=4)
+            new_duel = Duel(notice=f'{new_round.id}. kolo', date_duel=datetime.now(), season_id=season, round_id=new_round.id)
             db.session.add(new_duel)
             db.session.commit()
 
