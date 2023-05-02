@@ -194,7 +194,7 @@ def confirm_token(token):
 def send_reset_email(user):
     token = user.get_reset_token()
     msg = Message('Password Reset Request',
-                  sender=('DARTS CLUB', 'info@dartsclub.sk'),
+                  sender=('Darts Club', 'info@dartsclub.sk'),
                   recipients=[user.email])
     msg.html = f'''To reset your password, click on the following button:
 <br>
@@ -218,7 +218,7 @@ def send_reset_email(user):
 If you did not make this request then simply ignore this email and no changes will be made.
 <br>
 <br>
-<img src="{current_app.url_for('static', filename='img/logo.png')}">
+<img src="{ current_app.url_for('static', filename='img/logo.png', _external=True) }">
 '''
     mail.send(msg)
 
@@ -226,7 +226,7 @@ If you did not make this request then simply ignore this email and no changes wi
 def send_confirm_email(user):
     token = user.get_confirm_token()
     msg = Message('Confirm your register email',
-                  sender='info@dartsclub.sk',
+                  sender=('Darts Club', 'info@dartsclub.sk'),
                   recipients=[user.email])
     msg.body = f'''To confirm your email, click on the following link:
 {url_for('auth.confirm_token', token=token, _external=True)}
