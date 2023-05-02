@@ -29,6 +29,8 @@ def login():
         password = request.form.get('password')
 
         user = User.query.filter_by(email=email).first()
+        
+        
         if user.confirm==False:
             flash('Váš účet nie je aktivovaný. Potvrďte konfirmačný e-mail!', category='error')
         else:
@@ -296,7 +298,7 @@ def user_details():
            flash('This user doesn\'t exist.', category='error')
         elif len(first_name) < 2:
             flash("First Name must be greater than 1 chars", category="error")
-        elif nickname:
+        elif nickname != current_user.first_name:
             flash("User name already exist.", category="error")
         else:
             if password1 !='':
@@ -309,7 +311,7 @@ def user_details():
                 elif len(password1) < 7:
                     flash("New passwords must be at least 7 chars", category="error")
                 else:
-                    user.password = generate_password_hash(password1, method='sha256')
+                    user.password = bcrypt.generate_password_hash(password1).decode('utf-8')
                     user.first_name = first_name
                     session["user_name"] = first_name
 

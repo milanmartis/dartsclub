@@ -384,6 +384,19 @@ def season_manager(season):
     
     
     dic = dictionary.dic
+    
+    
+    
+    if request.method == 'POST' and request.form.get('ide_season'):
+        season = int(request.form.get('ide_season'))
+
+        if season < 1:
+            flash('There is a problem!', category='error')
+        else:
+            # pass
+            create_new_season(season)
+            flash('New round was created!!!', category='success')
+            return redirect(url_for('views.season_manager', season=season))
 
 
     if request.method == 'POST' and request.form.get('round'):
@@ -422,7 +435,7 @@ def create_new_season(season):
     # connection.close()
 
     list_p = [2, 3, 1, 8, 14, 4, 7, 15, 18, 5, 6, 12,
-              16, 11, 19, 23, 24, 10, 17, 25, 26, 27, 28, 29, 30]
+              16, 11, 19, 23, 24, 10, 17, 25, 26, 28, 29, 30, 31, 32]
 
     players = db.session.query(User)\
         .filter(User.id.in_(list_p))\
