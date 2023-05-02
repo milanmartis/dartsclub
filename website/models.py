@@ -126,6 +126,8 @@ class User(db.Model, UserMixin):
 class Round(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     season_id = db.Column(db.Integer, db.ForeignKey('season.id'))
+    open = db.Column(db.Boolean(), default=True)
+ 
 
 
 class Season(db.Model):

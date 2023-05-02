@@ -21,7 +21,6 @@
   <div class="container-fluid pl-2 pr-8 readinglazy">
     <div class="row justify-content-center text-center">
       {% for player in duel %}
-
       <div valign="middle" align="center" class="col">
         <form
           method="POST"
@@ -40,10 +39,12 @@
             name="user_duel_id[{{loop.index}}]"
             value="{{player[1]}}"
           />
-          {% if not user.id in [player[1], adminz[0], adminz[1]] %} {% set
+          {% if player[9]!=roundz.id %}{% set disabled = "disabled" %} {% endif %}
+          {% if not user.id in [player[1], adminz[0], adminz[1]] %}  {% set
           disabled= "disabled" %}{% set conf= "btn-result" %}{% else %}{% set conf=
           "btn-result" %} {% endif %}
           <select
+          {{disabled}}
             class="custom-select"
             id="user_duel_result[{{loop.index}}]"
             id="user_duel_result[{{loop.index}}]"
@@ -94,8 +95,9 @@
                   name="player[{{loop.index}}]"
                   value="{{player[1]}}"
                 />
+                {% if player[9]!=roundz.id %}{% set disabled = "disabled" %} {% endif %}
                 {% if not user.id in [player[1], adminz[0], adminz[1]] %} {% set
-                dis = "disabled" %} {% endif %} {% if player[6] == 'false' or
+                  disabled = "disabled" %} {% endif %} {% if player[6] == 'false' or
                 player[6] == null or player[6] == '' %} {% set ch = "unchecked"
                 %}{% set confirm = "confirm" %} {% else %} {% set ch = "checked"
                 %} {% set confirm = "" %} {% endif %}
