@@ -63,20 +63,22 @@
           <ul class="navbar-nav">
 
             <li class="nav-item" style="margin-right: 17px;">
+              <a href="/home">
               <img
               src="{{ url_for('static', filename='img/logo-head.svg') }}"
               class="filter-green"
               width="73"
             />
+              </a>
           </h1>
+            </li>
+            <li class="nav-item">
+              <a href="/home" class="nav-item nav-link">Standings</a>
             </li>
             <li class="nav-item">
               <a href="/season" class="nav-item nav-link">
                 Season
               </a>
-            </li>
-            <li class="nav-item">
-              <a href="/home" class="nav-item nav-link">League</a>
             </li>
 
  
@@ -100,7 +102,7 @@
               class="nav-item justify-content-end"
             >
               <a href="{{ url_for('auth.user_details') }}">
-                <i class="fa fa-user fa-sm" style="font-size:116%;padding:6px;margin-right: 4px;"></i>
+                <i class="fa fa-user fa-sm" style="font-size:116%;padding:6px;margin-right: 10px;"></i>
               </a>
             </li>
           </ul>

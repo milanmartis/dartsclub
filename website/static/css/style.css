@@ -669,7 +669,7 @@ input[type="textarea"] {
     background: transparent;
     text-align: center;
     padding-top: 8px;
-    margin-left: 2px;
+    margin-left: -2px;
     font-size: 80%;
     text-transform: uppercase;
 
@@ -1075,7 +1075,7 @@ td.tab-points {
 td.tab-others {
     color: #0ca00c;
     font-size: 85%;
-    padding: 4px;
+    padding: 6px;
     margin: 4px;
 }
 td.tab-others2 {
@@ -1089,7 +1089,7 @@ td.tab-others2 {
 td.tab-name {
     min-width:100px;
     color: #00EE00;
-    font-size: 80%;
+    font-size: 85%;
     text-align: left;
     padding: 6px;
     margin: 4px;
