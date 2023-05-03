@@ -49,6 +49,8 @@ def create_app():
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    from website.errors.handlers import errors
+    app.register_blueprint(errors)
 
     from .models import User, Note, Groupz, Duel
 

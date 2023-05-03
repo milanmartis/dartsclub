@@ -56,7 +56,11 @@ async function viewGroup(season, group, round) {
   })
 }
 
+function spinner() {
 
+  document.getElementsByClassName("loader")[0].style.display = "block";
+  document.getElementsByClassName("loader")[0].style.display = "block";
+}
 
 async function locationHref(url) {
   var location_href = document.getElementById('location_href_'+url+'')
@@ -106,7 +110,7 @@ async function updateDuel2(looopindex) {
     (result.value != result_oponent.value || result.value == 0)
   ) {
     spin.innerHTML =
-      '<i class="fa fa-circle-o-notch fa-spin" style="margin-left:15px;"></i>'
+      '<i class="fa fa-circle-o-notch fa-spin"></i>'
     time = 500
   } else {
     spin.innerHTML = 'OUT OF RANGE'
@@ -122,7 +126,7 @@ async function updateDuel2(looopindex) {
     (result.value != result_oponent.value || result.value == 0)
   ) {
     spin.innerHTML =
-      '<i class="fa fa-circle-o-notch fa-spin" style="margin-left:15px;"></i>'
+      '<i class="fa fa-circle-o-notch fa-spin" ></i>'
     var time = 500
   } else {
     spin.innerHTML = 'OUT OF RANGE'

@@ -28,7 +28,7 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=email).first_or_404()
         
         
         if user.confirm==False:
@@ -75,8 +75,8 @@ def register():
         # season_id = request.form.get('season_id', None)
         
         # season = Season.query.filter_by(id=season).first()
-        user = User.query.filter_by(email=email).first()
-        nickname = User.query.filter(User.first_name.ilike(first_name)).first()
+        user = User.query.filter_by(email=email).first_or_404()
+        nickname = User.query.filter(User.first_name.ilike(first_name)).first_or_404()
         if user:
             flash('Email already exist.', category='error')
         elif nickname:
@@ -113,7 +113,7 @@ class RequestResetForm(FlaskForm):
     submit = SubmitField('Reset password')
 
     def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
+        user = User.query.filter_by(email=email.data).first_or_404()
         if user is None:
             raise ValidationError(
                 'There is no account with that email. Try another one.')
@@ -203,8 +203,8 @@ def send_reset_email(user):
 <br>
 <a style="
     border-radius: 14px !important;
-    background-color: #00EE00;
-    border: 2px solid #00EE00;
+    background-color: #3D3D3D;
+    border: 2px solid #3D3D3D;
     color: #030303;
     font-weight: 610;
     font-size: 120%;
@@ -282,6 +282,9 @@ def environment():
     }
 
 
+
+
+    # role = Role.query.get_or_404(role_id).first_or_404()
 
 
 
