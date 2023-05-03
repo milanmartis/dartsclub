@@ -44,6 +44,7 @@
           disabled= "disabled" %}{% set conf= "btn-result" %}{% else %}{% set conf=
           "btn-result" %} {% endif %}
           <select
+            {{disabled}}
             class="custom-select"
             id="user_duel_result[{{loop.index}}]"
             id="user_duel_result[{{loop.index}}]"

@@ -86,18 +86,22 @@ def home():
     round = db.session.query(Groupz.round_id).filter(Groupz.season_id==season).order_by(Groupz.round_id.desc()).first()
 
     user_group = db.session.query(Groupz).join(User.groupy).filter(
-        User.id == current_user.id).filter(Groupz.season_id == Season.id).filter(Season.id == season).filter(Groupz.round_id == 4).first()
+        User.id == current_user.id).filter(Groupz.season_id == Season.id).filter(Season.id == season).filter(Groupz.round_id == round[0]).first()
+    
     myduels_user = db.session.query(Groupz.id).join(User.groupy).filter(Groupz.season_id == Season.id).filter(
         Season.id == season).filter(User.id.in_([current_user.id])).filter(Groupz.round_id == round[0]).all()
+    
+    print(myduels_user)
+    
+    # myduels_user = db.session.query(User.first_name, user_duel, Duel.round_id).filter(
+    #     user_duel.c.user_id == User.id).filter(user_duel.c.duel_id == Duel.id).filter(User.id == current_user.id).all()
 
-    # # print(myduels_user)
-    # if current_user.id in adminz:
-    #     # user_group = 7
-    #     # new_ret = duels.create_duels_list(season, 13)
-    #     shearch_table = 18
-    # else:
-    #     # new_ret = duels.create_duels_list(season, myduels_user[0][0])
-    #     shearch_table = myduels_user[0][0]
+    # print(myduels_user)
+    if current_user.id in adminz:
+        pass
+    else:
+        new_ret = duels.create_user_duels_list(season, myduels_user[0][0])
+
 
     # print(myduels_user[0][0])
     players = User.query.all()
@@ -125,7 +129,7 @@ def home():
 
         return redirect(url_for('views.duel_id', season=season, duelz=duelz, duelz_players=duelz_players))
 
-    return render_template("home.html", user_group=user_group, groups=groups,  dataAll=data_all, players=players, data_name_tabz=data_name_tabz, data_show_table=data_show_table, user=current_user, adminz=adminz)
+    return render_template("home.html", user_group=user_group, groups=groups, duels=new_ret, dataAll=data_all, players=players, data_name_tabz=data_name_tabz, data_show_table=data_show_table, user=current_user, adminz=adminz)
 
 
 # def make_tab_list():
