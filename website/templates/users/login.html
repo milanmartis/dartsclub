@@ -47,11 +47,18 @@
 
           <br />
           <button
+            id="login_button"
             type="submit"
             class="btn-demo btn-outline-dark btn-block"
+            onclick="javascript:spinner();document.getElementById('login_button').style.color='#00EE00';"
           >
             Login
+            <div class="loader">
+              <div class="loading-login">
+              </div>
+            </div>
           </button>
+          
         </form>
         <small class="text-muted ml-1">
           <a href="{{ url_for('auth.reset_request') }}">Forgot your password?</a>

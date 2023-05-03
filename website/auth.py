@@ -203,8 +203,8 @@ def send_reset_email(user):
 <br>
 <a style="
     border-radius: 14px !important;
-    background-color: #3D3D3D;
-    border: 2px solid #3D3D3D;
+    background-color: #00EE00;
+    border: 2px solid #00EE00;
     color: #030303;
     font-weight: 610;
     font-size: 120%;
@@ -238,8 +238,8 @@ def send_confirm_email(user):
 <br>
 <a style="
     border-radius: 14px !important;
-    background-color: #3D3D3D;
-    border: 2px solid #3D3D3D;
+    background-color: #00EE00;
+    border: 2px solid #00EE00;
     color: #030303;
     font-weight: 610;
     font-size: 120%;

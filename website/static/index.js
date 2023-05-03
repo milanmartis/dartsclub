@@ -57,8 +57,6 @@ async function viewGroup(season, group, round) {
 }
 
 function spinner() {
-
-  document.getElementsByClassName("loader")[0].style.display = "block";
   document.getElementsByClassName("loader")[0].style.display = "block";
 }
 

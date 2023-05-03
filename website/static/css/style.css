@@ -65,6 +65,19 @@ input[type=button] {
   animation: spin 1s infinite ease-in;
   padding: 6px;
 }
+.loading-login {
+    position: absolute;
+    top:-22px;
+    left:31px;
+  border: 3px solid #cccccc00;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border-top-color: #1b1b1b;
+  border-left-color: #1b1b1b;
+  animation: spin 1s infinite ease-in;
+  padding: 6px;
+}
 /* .loading:hover {
   border: 3px solid #cccccc00;
   width: 30px;
@@ -1229,6 +1242,13 @@ thead {
     color: #00EE00;
     opacity: 0.4;
 }
+
+
+.mandatory::before {
+    content: "* ";
+    color: red;
+  }
+
 
 .carousel-control-prev-icon:after {
     background-color: transparent;
