@@ -39,6 +39,8 @@
             name="user_duel_id[{{loop.index}}]"
             value="{{player[1]}}"
           />
+          {% if not user.id in [player[1], adminz[0], adminz[1]] %} {% set conf2 = "opacity:0.5;" %}{% else %}{% set conf2=
+            "opacity:1;" %} {% endif %}
           {% if player[9]!=roundz.id %}{% set disabled = "disabled" %} {% endif %}
           {% if not user.id in [player[1], adminz[0], adminz[1]] %}  {% set
           disabled= "disabled" %}{% set conf= "btn-result" %}{% else %}{% set conf=
@@ -49,7 +51,7 @@
             id="user_duel_result[{{loop.index}}]"
             id="user_duel_result[{{loop.index}}]"
             name="user_duel_result[{{loop.index}}]"
-            style="height: 140px;"
+            style="height: 140px;{{conf2}}"
           >
             {% for o in range(7) %} {% if player[3] == o %}
             <option value="{{o}}" selected>{{o}}</option>
@@ -113,8 +115,7 @@
                 />
               </form>
             </div>
-            {% if not user.id in [player[1], adminz[0], adminz[1]] %} {% set conf2 = "opacity:0.5;" %}{% else %}{% set conf2=
-              "opacity:1;" %} {% endif %}
+         
             <div style="{{conf2}}" id="confirmed[{{loop.index}}]">
               <h4>
                 {{confirm}}
