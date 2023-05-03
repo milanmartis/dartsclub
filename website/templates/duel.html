@@ -44,7 +44,6 @@
           disabled= "disabled" %}{% set conf= "btn-result" %}{% else %}{% set conf=
           "btn-result" %} {% endif %}
           <select
-          {{disabled}}
             class="custom-select"
             id="user_duel_result[{{loop.index}}]"
             id="user_duel_result[{{loop.index}}]"
@@ -113,7 +112,9 @@
                 />
               </form>
             </div>
-            <div id="confirmed[{{loop.index}}]">
+            {% if not user.id in [player[1], adminz[0], adminz[1]] %} {% set conf2 = "opacity:0.5;" %}{% else %}{% set conf2=
+              "opacity:1;" %} {% endif %}
+            <div style="{{conf2}}" id="confirmed[{{loop.index}}]">
               <h4>
                 {{confirm}}
               </h4>

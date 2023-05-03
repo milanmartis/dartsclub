@@ -180,7 +180,7 @@ h6 {
 input[type="checkbox"] {
     appearance: none;
     border: 2px solid #00EE00;
-    border-radius: 6px;
+    border-radius: 2px;
     background-color: #030303;
     color: #00EE00;
     font-weight: 600;
@@ -203,7 +203,6 @@ input[type="checkbox"]::before {
     margin-left: 20px;
     transform: scale(0);
     transition: 80ms transform ease-in-out;
-    box-shadow: inset 1em 1em var(--form-control-color);
 }
 
 input[type="checkbox"]:checked::before {
@@ -492,6 +491,7 @@ input[type="email"] {
 input[type="email"]:focus {
     /* color: #00EE00; */
     background-color: #1d1d1d;
+    font-size: 100%;
 
  
 }
@@ -895,13 +895,19 @@ input[type="textarea"] {
     color: #00EE00;
 }
 
-.btn-result .btn-outline-dark[disabled] {
-    border-color: transparent !important;
-    box-shadow: none !important;
-    outline: none !important;
-    background-color: transparent;
-    border: 0px solid #00EE00;
+.btn-result:disabled {
+    background-color:transparent;
+    border: 2px solid #00EE00;
     color: #00EE00;
+    opacity: 0.5;
+}
+
+.form-control-check:disabled{
+    opacity: 0.5;    
+}
+
+.confirm-check:disabled{
+    opacity: 0.5;
 }
 
 .btn-user .btn-outline-dark[disabled] {
