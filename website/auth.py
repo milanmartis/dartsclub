@@ -16,7 +16,6 @@ import datetime
 from flask import url_for, current_app
 from flask_mail import Message
 from website import mail
-   
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -38,6 +37,9 @@ def login():
                 user.authenticated = True
                 db.session.add(user)
                 db.session.commit()
+                session.permanent = True
+                session['logged_in'] = True
+                session["name"] = email
 
                 login_user(user, remember=True)
                 next_page = request.args.get('next')
@@ -61,7 +63,8 @@ def login():
 @login_required
 def logout():
     logout_user()
-
+    session["name"] = None
+    session['logged_in'] = False
     return redirect(url_for('auth.login'))
 
 

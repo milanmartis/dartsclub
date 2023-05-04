@@ -4,6 +4,7 @@ from os import path
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
+from datetime import timedelta
 
 import os
 from dotenv import load_dotenv
@@ -36,6 +37,9 @@ def create_app():
     app.config['MAIL_USE_TLS'] = os.environ.get("MAIL_USE_TLS")
     app.config['MAIL_USERNAME'] = os.environ.get("MAIL_USERNAME")
     app.config['MAIL_PASSWORD'] = os.environ.get("MAIL_PASSWORD")
+    app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(minutes=1)
+    # stripe.api_key = app.config['STRIPE_SECRET_KEY']
+
     # bcrypt = Bcrypt(app)
 
     # app.app_context().push()

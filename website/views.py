@@ -298,7 +298,7 @@ def duel_view(season, round):
     #     'first_name': user_name, 
     #     'email': user_email,
     # }
-
+    season_obj = Season.query.filter(Season.id==season).first()
     new_ret = duels.create_duels_list(season, round)
     print(len(new_ret))
 
@@ -336,7 +336,7 @@ def duel_view(season, round):
 
         return redirect(url_for('views.duel_id', season=season, duelz=duelz, duelz_players=duelz_players))
 
-    return render_template("duels_filter.html", round=round, groups=groups, season=season, duels=new_ret, user=current_user, adminz=adminz)
+    return render_template("duels_filter.html", season_obj=season_obj, round=round, groups=groups, season=season, duels=new_ret, user=current_user, adminz=adminz)
 
 
 
