@@ -144,13 +144,13 @@ def reset_request():
     form = RequestResetForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user=='':
-            flash('This email does not exist. Try another one.', category="error")
-            return redirect(url_for('auth.reset_request'))
-        else:
+        if user:
             send_reset_email(user)
             flash('An email has been sent to reset your password.', category="success")
             return redirect(url_for('auth.login'))
+        else:
+            flash('This email does not exist. Try another one.', category="error")
+            return redirect(url_for('auth.reset_request'))
 
     return render_template('users/reset_request.html', title='Reset Password', form=form, user=current_user)
 
