@@ -27,33 +27,37 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        user = User.query.filter_by(email=email).first_or_404()
+        user = User.query.filter_by(email=email).first()
         
         
-        if user.confirm==False:
-            flash('Váš účet nie je aktivovaný. Potvrďte konfirmačný e-mail!', category='error')
-        else:
-            if user and bcrypt.check_password_hash(user.password, password):
-                user.authenticated = True
-                db.session.add(user)
-                db.session.commit()
-                session.permanent = True
-                session['logged_in'] = True
-                session["name"] = email
-
-                login_user(user, remember=True)
-                next_page = request.args.get('next')
-
-                flash('Logged in successfuly!', category='success')
-
-
-                # return redirect(url_for("views.home"))
-                return redirect(next_page) if next_page else redirect(url_for('views.home'))
+        
+        if user:
+            if user.confirm==False:
+                flash('Your account is not activated. Please, confirm it by email!', category='error')
             else:
-                flash('Sorry, but you could not log in.', category='error')
+                if user and bcrypt.check_password_hash(user.password, password):
+                    user.authenticated = True
+                    db.session.add(user)
+                    db.session.commit()
+                    session.permanent = True
+                    session['logged_in'] = True
+                    session["name"] = email
 
-            
-            print(current_user)
+                    login_user(user, remember=True)
+                    next_page = request.args.get('next')
+
+                    flash('Logged in successfuly!', category='success')
+
+
+                    # return redirect(url_for("views.home"))
+                    return redirect(next_page) if next_page else redirect(url_for('views.home'))
+                else:
+                    flash('Sorry, but you could not log in.', category='error')
+
+                
+        else:
+            flash('Sorry, but you could not log in.', category='error')
+
 
 
     return render_template("users/login.html", user=current_user)
@@ -140,9 +144,14 @@ def reset_request():
     form = RequestResetForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        send_reset_email(user)
-        flash('An email has been sent to reset your password.', category="success")
-        return redirect(url_for('auth.login'))
+        if user=='':
+            flash('This email does not exist. Try another one.', category="error")
+            return redirect(url_for('auth.reset_request'))
+        else:
+            send_reset_email(user)
+            flash('An email has been sent to reset your password.', category="success")
+            return redirect(url_for('auth.login'))
+
     return render_template('users/reset_request.html', title='Reset Password', form=form, user=current_user)
 
 
