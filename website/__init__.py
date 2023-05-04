@@ -37,7 +37,7 @@ def create_app():
     app.config['MAIL_USE_TLS'] = os.environ.get("MAIL_USE_TLS")
     app.config['MAIL_USERNAME'] = os.environ.get("MAIL_USERNAME")
     app.config['MAIL_PASSWORD'] = os.environ.get("MAIL_PASSWORD")
-    app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(minutes=1)
+    app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(minutes=60)
     # stripe.api_key = app.config['STRIPE_SECRET_KEY']
 
     # bcrypt = Bcrypt(app)

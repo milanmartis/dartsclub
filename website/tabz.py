@@ -84,7 +84,7 @@ def show_table(season, groupz, round):
         .filter(Groupz.round_id == Round.id)\
         .filter(Season.id == season)\
         .filter(Round.id == round)\
-        .group_by(user_duel.c.user_id, user_group.c.groupz_id, User.first_name)\
+        .group_by(user_duel.c.checked=='true',user_duel.c.user_id, user_group.c.groupz_id, User.first_name)\
         .all()
 
 
