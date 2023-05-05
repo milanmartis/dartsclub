@@ -12,17 +12,18 @@
 <div class="container readinglazy" align="center">
   <div class="row" style="display:block;max-width:360px; text-align: center;">
 
+    {% set groupz = request.args.get('group') %}
       <div
         id="carouselTabs"
         class="carousel slide"
         data-bs-ride="carousel" data-bs-touch="true" data-bs-interval="false"
       >
           <div class="carousel-indicators">
-            <button type="button" class="btn text active" data-bs-target="#carouselTabs" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1">A</button>
-            <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="1" aria-label="Slide 2">B1</button>
-            <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="2" aria-label="Slide 3">B2</button>
-            <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="3" aria-label="Slide 4">C1</button>
-            <button class="btn text" data-bs-target="#carouselTabs" data-bs-slide-to="4" aria-label="Slide 5">C2</button>
+            
+            {% for gro in groups %}
+            {% if groupz|int == gro.id %}{% set active2 = 'active' %}{% else %}{% if 1==loop.index and groupz|int < 1 %}{% set active2 = 'active' %}{% else %}{% set active2 = '' %}{% endif %}{% endif %}
+            <button type="button" class="btn text {{active2}}" data-bs-target="#carouselTabs" data-bs-slide-to="{{loop.index0}}" aria-label="Slide {{loop.index}}">{{gro.shorts}}</button>
+            {% endfor %}
           </div>
           <center>
             <div class="carousel-inner carouse-duels-height">

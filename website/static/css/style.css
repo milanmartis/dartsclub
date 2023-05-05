@@ -167,31 +167,23 @@ h6 {
 
 }
 
-.form-control-check {
-    font-family: system-ui, sans-serif;
-    font-size: 6rem;
-    font-weight: bold;
-    line-height: 1.2;
-    display: grid;
-    grid-template-columns: 1em auto;
-    gap: 0.5em;
-    cursor: pointer;
-}
+
 
 input[type="checkbox"] {
     appearance: none;
     border: 2px solid #00EE00;
-    border-radius: 2px;
+    border-radius: 0px;
     background-color: #030303;
     color: #00EE00;
     font-weight: 600;
-    font-size: 280%;
+    font-size: 160%;
     margin-top: 18px;
+    margin-left: -22px;
     width: 0.75em;
     height: 0.75em;
     display: grid;
     place-content: center;
-    transform: translateY(-0.075em);
+    cursor: pointer;
 }
 
 input[type="checkbox"]::before {
@@ -200,8 +192,8 @@ input[type="checkbox"]::before {
     width: 0.110em;
     height: 0.110em;
     padding: 2px 1px 3px 1px;
-    margin-top: -40px;
-    margin-left: 20px;
+    margin-top: -27px;
+    margin-left: -9px;
     transform: scale(0);
     transition: 80ms transform ease-in-out;
 }

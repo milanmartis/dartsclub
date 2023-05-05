@@ -27,7 +27,7 @@ async function updateDuel(looopindex) {
       div1.innerHTML = ''
     } else {
       var div1 = document.getElementById('confirmed[' + looopindex + ']')
-      div1.innerHTML = '<h4>confirm result</h4>'
+      div1.innerHTML = '<h4>confirm</h4>'
     }
 
     inputs = null
