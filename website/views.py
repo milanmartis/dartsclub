@@ -271,7 +271,7 @@ def duel_id(season, duelz):
     season = 1
 
 
-    duel = db.session.query(User.first_name, user_duel, Duel.round_id, User.groupy).filter(
+    duel = db.session.query(User.first_name, user_duel, Duel.round_id).filter(
         user_duel.c.user_id == User.id).filter(user_duel.c.duel_id == Duel.id).filter(Duel.id == duelz).order_by(User.id.desc()).all()
 
     roundz = db.session.query(Round).filter(Round.season_id==season).filter(Round.open==True).order_by(Round.id.desc()).first()
