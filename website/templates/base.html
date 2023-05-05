@@ -121,8 +121,13 @@
         <div class="alert {{ category }}">{{ message|capitalize }}</div>
       </div>
 
-      {% endif %} {% endfor %} {% endif %} {% endwith %} {% block content %} {%
-      endblock %} {% include "footer.html" %}
+      {% endif %} {% endfor %} {% endif %} {% endwith %}
+      <div class="bum">
+         {% block content %} {%
+        endblock %} {% include "footer.html" %}
+
+      </div>
+
     </div>
 
     <script

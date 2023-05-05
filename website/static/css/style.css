@@ -12,6 +12,10 @@ html {
 }
 
 
+.bum{
+    margin-left: -20px;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus,
