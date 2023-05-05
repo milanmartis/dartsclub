@@ -65,6 +65,16 @@ season = 1
 #     return render_template("main.html", dic=dic, user=current_user, adminz=adminz)
 
 
+@views.before_request
+def before_request():
+    if not request.is_secure:
+        url = request.url.replace('http://', 'https://', 1)
+        code = 301
+        return redirect(url, code=code)
+
+
+
+
 @views.route('/', methods=['GET', 'POST'])
 @views.route('/home', methods=['GET', 'POST'])
 @login_required
