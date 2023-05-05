@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, session
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, session, current_app
 from flask_login import login_required, current_user
 import os
 from .models import Note, User, Duel, Season, Groupz, Round, user_duel, user_group
@@ -28,50 +28,6 @@ views = Blueprint('views', __name__)
 
 adminz = [21, 22]
 season = 1
-
-
-# @views.route('/returnjson', methods=['GET'])
-# def ReturnJSON():
-#     if (request.method == 'GET'):
-#         with sqlite3.connect('./instance/database.db') as conn:
-#             cursor = conn.cursor()
-#             cursor.execute("SELECT * FROM user;")
-#             data = cursor.fetchall()
-#             json.dumps(data)
-
-#         with open('./data.json', 'w+') as file:
-#           # First we load existing data into a dict.
-#             new_data = json.load(file)
-#             # convert back to json.
-#             json.dump(new_data, file, indent=4)
-#             # return jsonify(data)
-
-
-# @views.route('/', methods=['GET', 'POST'])
-# def main():
-
-#     # user_email = session.get('user_email')
-#     # user_id = session.get('user_id')
-#     # user_name = session.get('user_name')
-
-#     # dict_log = {
-#     #     'id': user_id, 
-#     #     'first_name': user_name, 
-#     #     'email': user_email,
-#     # }
-
-#     dic = dictionary.dic
-
-#     return render_template("main.html", dic=dic, user=current_user, adminz=adminz)
-
-
-@views.before_request
-def before_request():
-    if not request.is_secure:
-        url = request.url.replace('http://', 'https://', 1)
-        code = 301
-        return redirect(url, code=code)
-
 
 
 

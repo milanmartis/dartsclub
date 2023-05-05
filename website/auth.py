@@ -18,21 +18,10 @@ from flask_mail import Message
 from website import mail
 
 
-@auth.before_request
-def before_request():
-    if not request.is_secure:
-        url = request.url.replace('http://', 'https://', 1)
-        code = 301
-        return redirect(url, code=code)
-
-
-
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
 
-
-    
     if request.method == 'POST' and request.form.get('email'):
         email = request.form.get('email')
         password = request.form.get('password')
