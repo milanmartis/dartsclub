@@ -28,7 +28,7 @@
           <center>
             <div class="carousel-inner carouse-duels-height">
             {% for g in groups %}
-            <div class="carousel-item {% if loop.index == 1 %}active{% endif %}"  style="align-items: center;height: fit-content;">
+            <div class="carousel-item  {% if groupz|int == g.id %}active{% else %}{% if 1==loop.index and groupz|int < 1 %}active{% else %}{% endif %}{% endif %}"  style="align-items: center;height: fit-content;">
               {% for duell in duels %} 
               
               <div class="container readinglazy" align="center">
