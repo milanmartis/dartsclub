@@ -3,17 +3,14 @@
   <h1 align="center">
     <div class="container-fluid pl-0 pr-0">
       <div class="row justify-content-center mb-6">
-        {% for gr in duel[0][10].groupy %}
-        {% if gr.round_id==duel[0][9]%}
-        {% set grno = gr.id %}
+
         <button
         onclick="javascript:location.href='{{url_for('views.duel_view', season=duel[0][8],groupz=grno,round=duel[0][9])}}';"
         class="btn4 btn-outline-dark mt-4 shadow-none"
         >
         BACK
       </button>
-      {% endif %}
-      {% endfor %}
+
       </div>
     </div>
     <br />
