@@ -1,3 +1,8 @@
+//get your element and prevent mousedown from firing  
+document.body.addEventListener('mousedown',function(e){ 
+	e.preventDefault(); 
+}) 
+
 async function deleteNote(noteId) {
   await fetch('/delete-note', {
     method: 'POST',
