@@ -1,5 +1,5 @@
 //get your element and prevent mousedown from firing  
-document.body.addEventListener('mousedown',function(e){ 
+document.body.addEventListener('dblclick',function(e){ 
 	e.preventDefault(); 
 }) 
 
