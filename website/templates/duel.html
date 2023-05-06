@@ -3,12 +3,18 @@
   <h1 align="center">
     <div class="container-fluid pl-0 pr-0">
       <div class="row justify-content-center mb-6">
+        {% for gr in duel[0][10].groupy %}
+        {% if gr.round_id==duel[0][9]%}
+        {% set grno = gr.id %}
+        {{grno}}
         <button
-          onclick="GoBackWithRefresh();return false;"
-          class="btn4 btn-outline-dark mt-4 shadow-none"
+        onclick="javascript:location.href='{{url_for('views.duel_view', season=duel[0][8],groupz=grno,round=duel[0][9])}}';"
+        class="btn4 btn-outline-dark mt-4 shadow-none"
         >
-          BACK
-        </button>
+        BACK
+      </button>
+      {% endif %}
+      {% endfor %}
       </div>
     </div>
     <br />
@@ -103,6 +109,7 @@
                 player[6] == null or player[6] == '' %} {% set ch = "unchecked"
                 %}{% set confirm = "confirm" %} {% else %} {% set ch = "checked"
                 %} {% set confirm = "" %} {% endif %}
+                <center>
                 <input
                   type="checkbox"
                   class="form-control-check"
@@ -113,6 +120,7 @@
                   value="{{player[6]}}"
                   onClick="updateDuel({{loop.index}})"
                 />
+                </center>
               </form>
             </div>
          
