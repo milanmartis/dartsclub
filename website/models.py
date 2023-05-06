@@ -1,17 +1,24 @@
 from website import db
 from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
 from flask_login import UserMixin
+from flask_security import RoleMixin
+
 from sqlalchemy.sql import func
 from sqlalchemy import PrimaryKeyConstraint
 from flask import current_app
 
 
-
+roles_users = db.Table('roles_users',
+                       db.Column('user_id', db.Integer(),
+                                 db.ForeignKey('user.id')),
+                       db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
 
 
 user_duel = db.Table('user_duel',
-                     db.Column('user_id', db.Integer, db.ForeignKey('user.id', onupdate="CASCADE", ondelete="CASCADE")),
-                     db.Column('duel_id', db.Integer, db.ForeignKey('duel.id', onupdate="CASCADE", ondelete="CASCADE")),
+                     db.Column('user_id', db.Integer, db.ForeignKey(
+                         'user.id', onupdate="CASCADE", ondelete="CASCADE")),
+                     db.Column('duel_id', db.Integer, db.ForeignKey(
+                         'duel.id', onupdate="CASCADE", ondelete="CASCADE")),
                      db.Column('result', db.Integer, default=0),
                      db.Column('against', db.Integer, default=0),
                      db.Column('points', db.Integer, default=0),
@@ -21,20 +28,25 @@ user_duel = db.Table('user_duel',
                      )
 
 user_group = db.Table('user_group',
-                     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-                     db.Column('groupz_id', db.Integer, db.ForeignKey('groupz.id')),
-                     db.Column('season_id', db.Integer, db.ForeignKey('season.id')),
-                     db.Column('round_id', db.Integer, db.ForeignKey('round.id'))
-                     )
+                      db.Column('user_id', db.Integer,
+                                db.ForeignKey('user.id')),
+                      db.Column('groupz_id', db.Integer,
+                                db.ForeignKey('groupz.id')),
+                      db.Column('season_id', db.Integer,
+                                db.ForeignKey('season.id')),
+                      db.Column('round_id', db.Integer,
+                                db.ForeignKey('round.id'))
+                      )
 
 user_season = db.Table('user_season',
-                     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-                     db.Column('season_id', db.Integer, db.ForeignKey('season.id')),
-                     db.Column('season_first_date', db.DateTime(timezone=True), default=func.now()),
-                     db.Column('orderz', db.Integer)
-                     )
-
-
+                       db.Column('user_id', db.Integer,
+                                 db.ForeignKey('user.id')),
+                       db.Column('season_id', db.Integer,
+                                 db.ForeignKey('season.id')),
+                       db.Column('season_first_date', db.DateTime(
+                           timezone=True), default=func.now()),
+                       db.Column('orderz', db.Integer)
+                       )
 
 
 # class Role(db.Model):
@@ -46,8 +58,6 @@ user_season = db.Table('user_season',
 
 # class Facility(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
-
-
 
 
 class Note(db.Model):
@@ -74,12 +84,15 @@ class User(db.Model, UserMixin):
 
     orderz = db.Column(db.Integer)
     notes = db.relationship('Note')
-    seasony = db.relationship('Season', secondary=user_season, backref='seasons')
+    seasony = db.relationship(
+        'Season', secondary=user_season, backref='seasons')
     groupy = db.relationship('Groupz', secondary=user_group, backref='groups')
     play = db.relationship('Duel', secondary=user_duel, backref='players')
     # public_id = db.Column(db.Integer)
     authenticated = db.Column(db.Boolean, default=False)
     confirm = db.Column(db.Boolean, default=False)
+    roles = db.relationship('Role', secondary=roles_users, lazy='subquery',
+                            backref=db.backref('roled', lazy=True))
 
     def is_active(self):
         return True
@@ -95,7 +108,6 @@ class User(db.Model, UserMixin):
 
     def get_id(self):
         return self.id
-
 
     def get_reset_token(self):
         s = Serializer(current_app.config['SECRET_KEY'])
@@ -123,21 +135,37 @@ class User(db.Model, UserMixin):
             return None
         return User.query.get(int(user_id))
 
+    def __repr__(self):
+        return f"User('{self.first_name}', '{self.email}', '{self.roles}')"
+
+    def has_roles(self, *args):
+        return set(args).issubset({role.name for role in self.roles})
+
+
+class Role(db.Model, RoleMixin):
+    __tablename__ = 'role'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(180), unique=True)
+    # description = db.Column(db.Text)
+
+
+
+
 class Round(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     season_id = db.Column(db.Integer, db.ForeignKey('season.id'))
     open = db.Column(db.Boolean(), default=True)
- 
 
 
 class Season(db.Model):
     __tablename__ = 'season'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(300))
-    
+
     season_from = db.Column(db.DateTime(timezone=True), default=func.now())
     season_to = db.Column(db.DateTime(timezone=True), default=func.now())
     # user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
 
 class Duel(db.Model):
     __tablename__ = 'duel'
@@ -162,7 +190,6 @@ class OpenHour(db.Model):
     duel_id = db.Column(db.Integer, db.ForeignKey('duel.id'))
 
 
-
 class Product(db.Model):
     __tablename__ = 'product'
     id = db.Column(db.Integer, primary_key=True)
@@ -177,7 +204,8 @@ class Product(db.Model):
     old_price = db.Column(db.DECIMAL(precision=10, scale=2), nullable=False)
     product_category_id = db.Column(db.Integer, db.ForeignKey(
         'product_category.id'), nullable=False)
-    product_gallery = db.relationship('ProductGallery', backref='gallpr', lazy=True)
+    product_gallery = db.relationship(
+        'ProductGallery', backref='gallpr', lazy=True)
 
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}', '{self.product_gallery}, '{self.product_category_id}')"
@@ -193,8 +221,8 @@ class Category(db.Model):
     __tablename__ = 'category'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
-    
-    
+
+
 class ProductGallery(db.Model):
     __tablename__ = 'product_gallery'
     id = db.Column(db.Integer, primary_key=True)
@@ -202,4 +230,5 @@ class ProductGallery(db.Model):
     image_file2 = db.Column(db.String(30), nullable=False)
     # image_order = db.Column(db.Integer, unique=True, nullable=False)
     orderz = db.Column(db.Integer)
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey(
+        'product.id'), nullable=False)

@@ -23,7 +23,6 @@ def show_name_table(season, round):
 
 
 ########################## SHOW TABLE IN GROUPS
-# [('hery', 3, 6, 0, 'true', 1, 5, 4, 17, 17, 2, 3), ('andy', 6, 3, 2, 'true', 2, 5, 10, 30, 11, 5, 0), ('imre', 6, 2, 2, 'true', 3, 4, 6, 22, 9, 3, 1), ('juso', 1, 6, 0, 'true', 4, 8, 8, 28, 38, 4, 4),
 def show_table(season, groupz, round):
     
     # print(season)

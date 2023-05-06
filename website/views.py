@@ -63,10 +63,10 @@ def home():
     #     user_duel.c.user_id == User.id).filter(user_duel.c.duel_id == Duel.id).filter(User.id == current_user.id).all()
 
     # print(myduels_user)
-    if current_user.id in adminz:
-        pass
-    else:
-        new_ret = duels.create_user_duels_list(season, myduels_user[0][0])
+    # if current_user.id in adminz:
+    #     pass
+    # else:
+    #     new_ret = duels.create_user_duels_list(season, myduels_user[0][0])
 
 
     # print(myduels_user[0][0])
