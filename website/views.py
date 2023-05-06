@@ -236,17 +236,17 @@ def duel_id(season, duelz):
 
     season = 1
 
-
     duel = db.session.query(User.first_name, user_duel, Duel.round_id).filter(
         user_duel.c.user_id == User.id).filter(user_duel.c.duel_id == Duel.id).filter(Duel.id == duelz).order_by(User.id.desc()).all()
 
     roundz = db.session.query(Round).filter(Round.season_id==season).filter(Round.open==True).order_by(Round.id.desc()).first()
+    group = db.session.query(User).filter(user_group.c.groupz_id==Groupz.id).filter(user_duel.c.duel_id==duelz).filter(user_duel.c.user_id==User.id).filter(Groupz.round_id==5).first()
     print('---------------------')
     print(duel)
     print('------------------')
 
 
-    return render_template("duel.html", roundz=roundz,  duel=duel, players=duelz, user=current_user, adminz=adminz)
+    return render_template("duel.html", group=group, roundz=roundz,  duel=duel, players=duelz, user=current_user, adminz=adminz)
 
 
 
