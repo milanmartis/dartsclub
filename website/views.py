@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, session, current_app
 from flask_login import login_required, current_user
+from flask_security import roles_required
 import os
 from .models import Note, User, Duel, Season, Groupz, Round, user_duel, user_group
 from . import db
@@ -22,6 +23,11 @@ import mysql.connector
 from . import conn
 import psycopg2
 import email
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, SelectMultipleField, IntegerField, RadioField, TextAreaField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, StopValidation,NumberRange
+from wtforms import DateField, DateTimeField, DateTimeLocalField
 
 
 views = Blueprint('views', __name__)
@@ -307,6 +313,36 @@ def duel_view(season, round):
 
 
 
+####### NEW SEASON
+
+@views.route('/season/new', methods=['GET', 'POST'])
+@login_required
+@roles_required('Admin')
+def season_new():
+    
+    form = NewSeason()
+    
+    players = User.query.all()
+   
+    if form.validate_on_submit():
+        ## season_from=form.season_from.data, 
+        new_season = Season(name=form.name.data, no_round=form.no_round.data, no_group=form.no_group.data, 
+                            winner_points=form.winner_points.data, open=form.open.data)
+        db.session.add(new_season)
+        db.session.commit()
+        return redirect(url_for('views.season_manager', season=new_season.id))
+
+    return render_template("season_create.html", title='Create Season', form=form, players=players, user=current_user, adminz=adminz)
+
+
+
+
+
+
+
+
+
+
 @views.route('/season', methods=['GET', 'POST'])
 def season_list():
 
@@ -319,13 +355,20 @@ def season_list():
     #     'first_name': user_name, 
     #     'email': user_email,
     # }
-
-    seasons = db.session.query(Season).all()
+    print(roles_required('Admin'))
+    seasons = db.session.query(Season).filter(Season.open==True).all()
     groupz = db.session.query(Groupz.round_id).all()
     
+        
+    if request.method == "POST" and request.form.get('season_add'):
+        
+        # print(request.form.get('season_add'))
+        return redirect(url_for('views.season_new'))
+       
+    
+    
 
-
-    if request.method == 'POST':
+    if request.method == "POST" and request.form.get('season_id_button'):
         season1 = request.form.get('season_id')
 
         print('ddd')
@@ -355,6 +398,7 @@ def season_manager(season):
     dic = dictionary.dic
     
     
+
     
     if request.method == "POST" and request.form.get('ide_season'):
         season = int(request.form.get('ide_season'))
@@ -368,7 +412,7 @@ def season_manager(season):
             return redirect(url_for('views.season_manager', season=season))
 
 
-    if request.form.get('round'):
+    if request.method == "POST" and request.form.get('round'):
         season = int(request.form.get('season'))
         round = int(request.form.get('round'))
         print(round)
@@ -492,4 +536,15 @@ def create_new_season(season):
 #         player.seasony.append(season)
 
 #     db.session.commit()
+
+
+class NewSeason(FlaskForm):
+    name = StringField('Season name', validators=[DataRequired()])
+    no_round = IntegerField('Rounds (min 1 - max 10)', validators=[DataRequired(), NumberRange(min=1, max=10, message="blah")])
+    no_group = IntegerField('Players in group (2 - 20)', validators=[DataRequired(), NumberRange(min=2, max=20, message="blah")])
+    winner_points = IntegerField('Points for win (1 - 5)', validators=[DataRequired(), NumberRange(min=1, max=5, message="blah")])
+    season_from = DateTimeLocalField('Break Point')
+    open = BooleanField('Open')
+
+    submit = SubmitField('New Season')
 

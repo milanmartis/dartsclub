@@ -5,6 +5,8 @@ from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
 from datetime import timedelta
+from flask_security import Security, SQLAlchemyUserDatastore
+
 
 import os
 from dotenv import load_dotenv
@@ -61,6 +63,11 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
+    
+    
+    from .models import User, Role
+    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+    app.security = Security(app, user_datastore)
     
     return app
 

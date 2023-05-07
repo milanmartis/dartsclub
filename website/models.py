@@ -161,8 +161,14 @@ class Season(db.Model):
     __tablename__ = 'season'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(300))
+    no_group = db.Column(db.Integer)
+    no_round = db.Column(db.Integer)
+    winner_points = db.Column(db.Integer)
+    
 
-    season_from = db.Column(db.DateTime(timezone=True), default=func.now())
+    open = db.Column(db.Boolean(), default=False)
+
+    season_from = db.Column(db.DateTime(timezone=True))
     season_to = db.Column(db.DateTime(timezone=True), default=func.now())
     # user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
