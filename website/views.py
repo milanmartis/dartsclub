@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, jsonify, redirect,
 from flask_login import login_required, current_user
 from flask_security import roles_required
 import os
-from .models import Note, User, Duel, Season, Groupz, Round, user_duel, user_group
+from .models import Note, User, Duel, Season, Groupz, Round, user_duel, user_group, user_season
 from . import db
 import json
 from . import tabz, duels, dictionary, mysql
@@ -28,7 +28,8 @@ from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, SelectMultipleField, IntegerField, RadioField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, StopValidation,NumberRange
 from wtforms import DateField, DateTimeField, DateTimeLocalField
-
+from psycopg2.errorcodes import UNIQUE_VIOLATION
+from psycopg2 import errors
 
 views = Blueprint('views', __name__)
 
@@ -325,14 +326,42 @@ def season_new():
     players = User.query.all()
    
     if form.validate_on_submit():
+        season = db.session.query(Season).filter(Season.name.like(form.name.data)).first()
+    
         ## season_from=form.season_from.data, 
-        new_season = Season(name=form.name.data, no_round=form.no_round.data, no_group=form.no_group.data, 
-                            winner_points=form.winner_points.data, open=form.open.data)
-        db.session.add(new_season)
-        db.session.commit()
-        return redirect(url_for('views.season_manager', season=new_season.id))
+        if not season:
+                new_season = Season(name=form.name.data, no_round=form.no_round.data, no_group=form.no_group.data, 
+                                    winner_points=form.winner_points.data, open=form.open.data)
+                db.session.add(new_season)
+                db.session.commit()
+                return redirect(url_for('views.season_manager', season=new_season.id))
+        else:
+            flash("Season name must be unique.", category="error")
+
+
+        
 
     return render_template("season_create.html", title='Create Season', form=form, players=players, user=current_user, adminz=adminz)
+
+
+
+@views.route('/season/delete/<season>', methods=['GET', 'POST'])
+@login_required
+@roles_required('Admin')
+def season_delete(season):
+  
+    season = Season.query.get(season)
+    if season:
+        db.session.delete(season)
+        db.session.commit()
+        flash("Season has been deleted.", category="success")
+        seasons = db.session.query(Season).all()
+        # seasons = db.session.query(Season).filter(Season.open==True).all()
+        return redirect(url_for('views.season_list', seasons=seasons, user=current_user, adminz=adminz))
+    else:
+        flash("Season does not exist.", category="error")
+        seasons = db.session.query(Season).all()
+        return redirect(url_for('views.season_list', seasons=seasons, user=current_user, adminz=adminz))
 
 
 
@@ -356,7 +385,8 @@ def season_list():
     #     'email': user_email,
     # }
     print(roles_required('Admin'))
-    seasons = db.session.query(Season).filter(Season.open==True).all()
+    seasons = db.session.query(Season).all()
+    # seasons = db.session.query(Season).filter(Season.open==True).all()
     groupz = db.session.query(Groupz.round_id).all()
     
         
@@ -400,20 +430,25 @@ def season_manager(season):
     
 
     
+    if request.method == "POST" and request.form.get('season_delete'):
+        
+        return redirect(url_for('views.season_delete', season=request.form.get('season_delete')))
+
+
     if request.method == "POST" and request.form.get('ide_season'):
-        season = int(request.form.get('ide_season'))
-        print(season)
-        if season < 1:
+        season1 = int(request.form.get('ide_season'))
+        print(season1)
+        if season1 < 1:
             flash('There is a problem!', category='error')
         else:
             # pass
-            create_new_season(season)
+            create_new_season(season1)
             flash('New round was created!!!', category='success')
-            return redirect(url_for('views.season_manager', season=season))
+            return redirect(url_for('views.season_manager', season=season1))
 
 
     if request.method == "POST" and request.form.get('round'):
-        season = int(request.form.get('season'))
+        season1 = int(request.form.get('season'))
         round = int(request.form.get('round'))
         print(round)
         print('---------------')
@@ -421,10 +456,13 @@ def season_manager(season):
         if not season:
             flash('There is a problem!', category='error')
         else:
-            grno=db.session.query(Groupz.id).filter(Groupz.season_id==season).filter(Groupz.round_id==round).first()
-            return redirect(url_for('views.duel_view', round=round, group=grno[0], season=season))
+            grno=db.session.query(Groupz.id).filter(Groupz.season_id==season1).filter(Groupz.round_id==round).first()
+            return redirect(url_for('views.duel_view', round=round, group=grno[0], season=season1))
+    seas = Season.query.get(season)
+    players = db.session.query(user_season).filter(user_season.c.season_id==season).filter(user_season.c.orderz>=1).all()
 
-    return render_template("season.html", groupz=groupz, dic=dic, seasons=rounds, user=current_user, adminz=adminz)
+
+    return render_template("season.html", players=players, seas=seas, groupz=groupz, dic=dic, season=season, seasons=rounds, user=current_user, adminz=adminz)
 
 
 def create_new_season(season):

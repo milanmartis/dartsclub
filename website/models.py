@@ -160,7 +160,7 @@ class Round(db.Model):
 class Season(db.Model):
     __tablename__ = 'season'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(300))
+    name = db.Column(db.String(300), unique=True)
     no_group = db.Column(db.Integer)
     no_round = db.Column(db.Integer)
     winner_points = db.Column(db.Integer)

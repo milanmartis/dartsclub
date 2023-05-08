@@ -1,3 +1,43 @@
+  const season_delete = document.querySelector('#season_delete');
+
+  season_delete.addEventListener("click", function () {
+
+
+  
+    // $('#update-player-list').val('Loading...');
+    season_delete_ide = $('#season_delete').val();
+    // alert(season_delete_ide);
+    // $.ajax({
+    //   url:"/season/delete/"+season_delete_ide+"",
+    //   type:"POST",
+    //   data:{season_delete_ide: season_delete_ide},
+    //   success:function()
+    //   {
+      //   $('#update-player-list').val('Updated');
+
+        $('#season-delete').modal('show');
+      //   setTimeout(function(){
+      //   $('#info-updated').modal("hide");
+      
+      // }, 2500);
+      // }
+      // });
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //get your element and prevent mousedown from firing  
 document.body.addEventListener('dblclick',function(e){ 
 	e.preventDefault(); 

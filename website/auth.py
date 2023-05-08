@@ -82,7 +82,7 @@ def register():
         
         # season = Season.query.filter_by(id=season).first()
         user = User.query.filter_by(email=email).first()
-        nickname = User.query.filter(User.first_name.ilike(first_name)).first_or_404()
+        nickname = User.query.filter(User.first_name.ilike(first_name)).first()
         if user:
             flash('Email already exist.', category='error')
         elif nickname:
@@ -244,7 +244,7 @@ def send_confirm_email(user):
     msg = Message('Confirm your register email',
                   sender=('Darts Club', 'info@dartsclub.sk'),
                   recipients=[user.email])
-    msg.body = f'''<center><h1>To confirm your email, click on the following link</h1>
+    msg.html = f'''<center><h1>To confirm your email, click on the following link</h1>
 <br>
 <br>
 <a style="
