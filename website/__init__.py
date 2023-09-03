@@ -57,9 +57,10 @@ def create_app():
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(products, url_prefix='/')
-
-    # from website.errors.handlers import errors
-    # app.register_blueprint(errors)
+    
+    # //////////////////////////only on production
+    from website.errors.handlers import errors
+    app.register_blueprint(errors)
     from flask import request, redirect
     @app.before_request
     def before_request():
