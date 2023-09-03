@@ -85,7 +85,7 @@ class User(db.Model, UserMixin):
     orderz = db.Column(db.Integer)
     notes = db.relationship('Note')
     seasony = db.relationship(
-        'Season', secondary=user_season, backref='seasons')
+        'Season', secondary=user_season, backref=db.backref('seasons'))
     groupy = db.relationship('Groupz', secondary=user_group, backref='groups')
     play = db.relationship('Duel', secondary=user_duel, backref='players')
     # public_id = db.Column(db.Integer)
@@ -136,7 +136,7 @@ class User(db.Model, UserMixin):
         return User.query.get(int(user_id))
 
     def __repr__(self):
-        return f"User('{self.first_name}', '{self.email}', '{self.roles}')"
+        return f"User('{self.first_name}', '{self.email}', '{self.roles}, '{self.seasony}')"
 
     def has_roles(self, *args):
         return set(args).issubset({role.name for role in self.roles})
@@ -238,3 +238,15 @@ class ProductGallery(db.Model):
     orderz = db.Column(db.Integer)
     product_id = db.Column(db.Integer, db.ForeignKey(
         'product.id'), nullable=False)
+
+
+class Order(db.Model):
+    __tablename__ = 'order'
+    id = db.Column(db.Integer, primary_key=True)
+    produc_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    quantity = db.Column(db.Integer)
+    amount = db.Column(db.Numeric(precision=10, scale=2), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    is_paid = db.Column(db.Boolean(), default=False)
+    order_date = db.Column(db.DateTime, nullable=False, default=func.now())
+    storno = db.Column(db.Boolean(), default=False)

@@ -189,7 +189,7 @@ def reset_token(token):
 @auth.route("/confirm_email/<token>", methods=['GET', 'POST'])
 def confirm_token(token):
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
+        return redirect(url_for('vuews.home'))
     user = User.verify_confirm_token(token)
     if user is None:
         flash('The used token has expired.', category="warning")

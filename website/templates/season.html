@@ -1,5 +1,7 @@
 {% extends "base.html" %} {% block title %}DartsClub - Season{% endblock %} {%
   block content %}
+  {% set lang = 0 %}
+
   <h1 align="center">
     <img
     src="{{ url_for('static', filename='img/rounds.svg') }}"
@@ -13,7 +15,7 @@
   {% endif %}
   
   {% if players|length==0 %}
-  <h4>No active players</h4>
+  <h4>{{dic.no_active_players_text[lang]}}</h4>
   {% else %}
   <h4>{{players|length}} Active players</h4>
   {% endif %}
@@ -55,17 +57,74 @@
 <br>
 
 <!-- PLAYERS IN SEASON - ADD / DELETE -->
-<div class="container readinglazy" align="center">
+{% for player in players_wait %}
+{% if user.id==player.id or user.id in [adminz[0]] %}{% set dis = '' %}{% else %}{% set dis = 'disabled' %}{% endif %}
+<div id="playerin{{loop.index}}" class="container readinglazy" align="center">
+
   <div class="row" style="display:block;max-width:320px; text-align: center;">
     <div class="col">
-<button type="submit" id="add_player" name="add_player" class="btn btn-sm" value="{{season}}">+ Join this Season</button>
+      <button 
+      {{dis}}
+        type="submit" 
+        id="playerout" 
+        name="playerout" 
+        class="btn btn-sm" 
+        style="text-transform: uppercase;" 
+        onclick="javascript:getOutPlyer({{season}},{{player.id}},{{loop.index}});" 
+        value="{{player.id}}">{{player.first_name}}
+      </button>
     </div>
   </div>
 </div>
+<div
+class="modal fade"
+id="playerout-delete{{loop.index}}"
+tabindex="-1"
+role="dialog"
+aria-labelledby="deleteModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+
+    <div class="modal-header">
+      <h1 class="modal-title" py run.py>Remove from Season?</h1>
+     <br>
+      <form
+        action="{{ url_for('views.season_player_delete', player=player.id, season=season) }}"
+        method="POST"
+      >
+        <button oclick="javascript:getOutPlyerDelete({{season}},{{player.id}},{{loop.index}});" class="btn2 btn-sm" style="font-weight: 700;padding-left: 10px;padding-right: 10px;padding-top: 4px;"  type="submit" value="OK" />REMOVE</button>
+      </form>
+      <button onclick="" style="font-weight: 700;" type="button" class="btn3 btn-sm" data-bs-dismiss="modal">
+        NO
+      </button>
+
+    </div>
+  </div>
+</div>
+</div>
+{% endfor %}
+
+
+{% if not user in players_wait %}
+<div class="container readinglazy" align="center">
+  <div class="row" style="display:block;max-width:320px; text-align: center;">
+    <div class="col">
+      <form method='POST' action="">
+        <button type="submit" id="add_player_to_season" name="add_player_to_season" class="btn btn-reverse" value="{{season}}">+ Join this Season</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endif %}
 
 
 
 
+
+<br>
+    
 {% if players|length>=5 %}
 {% if user.id in [adminz[0]] %}
 <div class="container readinglazy" align="center">
@@ -84,18 +143,22 @@
     <div class="col">
       <form method="POST">
         <button disabled style="font-size: 150%;padding: 0px;margin: 4px;" type="submit" class="btn btn-demo btn-block shadow-none" value="11">
-          <h4 style="color:#010101">{{ 15 - players|length }} players left to new round</h4></button>
-      </form>
+          <h4 style="color:#010101">{{ 5 - players_wait|length }} players left to new round</h4></button>
+        </form>
+      </div>
     </div>
   </div>
-</div>
-
-{% endif %}
-
+  
+  {% endif %}
 <br>
 {% if season and user.id in [adminz[0]] %}
 <button onclick="#" class="btn btn-sm createforms2" />Update</button>
+{{players_wait|length}}
+{% if players_wait|length < 0 %}
 <button id="season_delete" name="season_delete"  class="btn btn-sm createforms2" value="{{season}}" />Delete</button>
+{% else %}
+<button disabled class="btn btn-sm createforms2" value="{{season}}" />Delete</button>
+{% endif %}
 {% endif %}
 
 {% endif %}
@@ -140,32 +203,33 @@
   {% endif %}
 </div>
 
-<div
-class="modal fade"
-id="season-delete"
-tabindex="-1"
-role="dialog"
-aria-labelledby="deleteModalLabel"
-aria-hidden="true"
->
-<div class="modal-dialog" role="document">
-  <div class="modal-content">
+  <div
+  class="modal fade"
+  id="season-delete"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="deleteModalLabel"
+  aria-hidden="true"
+  >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
 
-    <div class="modal-header">
-      <h1 class="modal-title" py run.py>Delete „{{seas.name}}“?</h1>
-<br>
-      <form
-        action="{{ url_for('views.season_delete', season=season) }}"
-        method="POST"
-      >
-        <button class="btn2 btn-sm" style="font-weight: 700;padding-left: 10px;padding-right: 10px;padding-top: 4px;"  type="submit" value="OK" />DELETE</button>
-      </form>
-      <button style="font-weight: 700;" type="button" class="btn3 btn-sm" data-bs-dismiss="modal">
-        NO
-      </button>
+      <div class="modal-header">
+        <h1 class="modal-title" py run.py>Delete „{{seas.name}}“?</h1>
+       <br>
+        <form
+          action="{{ url_for('views.season_delete', season=season) }}"
+          method="POST"
+        >
+          <button class="btn2 btn-sm" style="font-weight: 700;padding-left: 10px;padding-right: 10px;padding-top: 4px;"  type="submit" value="OK" />DELETE</button>
+        </form>
+        <button style="font-weight: 700;" type="button" class="btn3 btn-sm" data-bs-dismiss="modal">
+          NO
+        </button>
 
+      </div>
     </div>
   </div>
 </div>
-</div>
+
 {% endblock %}

@@ -25,6 +25,56 @@
   });
 
 
+  // /season/delete-player/<player>/<season>
+
+
+
+
+function getOutPlyer(season, player, index){
+
+    // alert(season);
+    // alert(player);
+    // $('#playerin'+index+'').fadeOut();
+    // $.ajax({
+    //   url:"/season/delete/"+season_delete_ide+"",
+    //   type:"POST",
+    //   data:{season_delete_ide: season_delete_ide},
+    //   success:function()
+    //   {
+      //   $('#update-player-list').val('Updated');
+
+        $('#playerout-delete'+index+'').modal('show');
+      //   setTimeout(function(){
+      //   $('#info-updated').modal("hide");
+      
+      // }, 2500);
+      // }
+      // });
+}
+
+function getOutPlyerDelete(season, player, index){
+
+    // alert(season);
+    // alert(player);
+    // $('#playerin'+index+'').fadeOut();
+    $.ajax({
+       url:"/season/delete-player/"+season+"/"+player+"",
+       type:"POST",
+       data:{season_delete_ide: season_delete_ide},
+       success:function()
+       {
+         $('#update-player-list').val('Updated');
+
+        $('#playerout-delete'+index+'').modal('show');
+         setTimeout(function(){
+         $('#info-updated').modal("hide");
+      
+       }, 2500);
+       }
+     });
+}
+
+
 
 
 
@@ -41,7 +91,7 @@
 //get your element and prevent mousedown from firing  
 document.body.addEventListener('dblclick',function(e){ 
 	e.preventDefault(); 
-}) 
+}); 
 
 async function deleteNote(noteId) {
   await fetch('/delete-note', {
@@ -102,7 +152,13 @@ async function viewGroup(season, group, round) {
 }
 
 function spinner() {
+  var email = document.getElementById('email').value;
+  var password = document.getElementById('password').value;
+// alert(email);
+
+  if(email!='' && password!=''){
   document.getElementsByClassName("loader")[0].style.display = "block";
+  }
 }
 
 async function locationHref(url) {
@@ -287,8 +343,10 @@ function GoBackWithRefresh(event) {
 }
 
 //CAROUSEL
-// const myCarouselElement = document.querySelector('#carouselExampleControls')
+// const myCarouselElement = document.querySelector('#productForm')
 // const carousel = new bootstrap.Carousel(myCarouselElement, {
 //   interval: 2000,
 //   wrap: false
 // })
+
+

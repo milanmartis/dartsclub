@@ -21,7 +21,12 @@ dic = {
                                          ],
         'button_free_demo_text' : [
                                             'Free Demo',
-                                            'Beyplatné demo',
+                                            'Bezplatné demo',
                                             'Kostenlose Demo',
+                                         ],
+        'no_active_players_text' : [
+                                            'No active players',
+                                            'Žiadny aktívny hráč/ka',
+                                            'Kein active schpielers',
                                          ],
        }

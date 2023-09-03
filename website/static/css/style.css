@@ -46,7 +46,12 @@ input[type=button] {
 }
 
 
-
+.p-viewer {
+    z-index: 9999;
+    position: absolute;
+    top: 30%;
+    right: 10px;
+}
 
 
 
@@ -107,6 +112,16 @@ input[type=button] {
     padding-bottom: 24px;
 }
 
+.modal{
+    position: fixed;
+    top:0px;
+    left:0px;
+    padding: 0px;
+    margin: 0px;
+    background-color: #00000078;
+
+}
+
 .modal-content {
     display: block;
     margin: 0 auto;
@@ -117,10 +132,11 @@ input[type=button] {
     border-bottom: 1px solid #00EE00;
     color: #00EE00;
     font-weight: 600;
-    padding: 2px 6px 3px 6px;
+    padding: 0px;
+
     text-align: center;
     overflow: hidden;
-    margin-bottom: 18px;
+    margin: 0px;
 
   }
   
@@ -281,6 +297,7 @@ nav {
 
 a {
     color: #00EE00;
+    text-decoration: none;
 
 }
 
@@ -336,6 +353,14 @@ a:hover {
 /* // `md` applies to small devices (landscape phones, less than 768px) */
 @media (max-width: 767.98px) {
     .navbar-dark .brand {
+        display: none;
+    }
+
+}
+/* // `md` applies to small devices (landscape phones, less than 768px) */
+@media (max-width: 467.98px) {
+
+    .username_text{
         display: none;
     }
 
@@ -641,6 +666,27 @@ input[type="textarea"] {
     background-color: #00EE00;
     border: 2px solid #00EE00;
     color: #030303;
+
+}
+
+.btn-reverse {
+    width:100%;
+    border-radius: 14px !important;
+    background-color: #00EE00;
+    border: 2px solid #00EE00;
+    color: #030303;
+    font-weight: 600;
+    font-size: 100%;
+    padding: 2px 2px 2px 2px;
+    margin: 2px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+}
+
+.btn-reverse:hover, .btn:active{
+    background-color: #030303;
+    border: 2px solid #00EE00;
+    color: #00EE00;
 
 }
 /* .btn:hover, .btn:active{

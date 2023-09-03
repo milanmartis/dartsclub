@@ -29,8 +29,9 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.password(class="form-control form-control-lg") }}
+                            {{ form.password(class="form-control form-control-lg togglePassword_new1") }}
                         {% endif %}
+
                     </div>
     
                     <div class="form-group">
@@ -42,9 +43,9 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.confirm_password(class="form-control form-control-lg") }}
+                            {{ form.confirm_password(class="form-control form-control-lg confirm_password") }}
                         {% endif %}
-                        
+
                     </div>
              
                 </fieldset>

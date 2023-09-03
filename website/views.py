@@ -82,7 +82,12 @@ def home():
     data_show_table = tabz.show_table(season, round, round[0])
     # dataAll = tabz.show_table_all()
     data_all = tabz.show_table_all()
-    round = db.session.query(Round.id).filter(Season.id==season).order_by(Round.id.desc()).first()
+    # round = db.session.query(Round.id).filter(Season.id==season).order_by(Round.id.desc()).first()
+    round = (db.session.query(Round.id)
+         .join(Season, Round.season_id == Season.id)
+         .filter(Season.id == season)
+         .order_by(Round.id.desc())
+         .first())
     data_name_tabz = tabz.show_name_table(season, round[0])
     # print(data_show_table)
     # fooor = make_tab_list()
@@ -108,6 +113,16 @@ def home():
 # def make_tab_list():
 #     length_tab_list = len(tabz.show_name_table(season, 2))
 #     return list(range(0, int(length_tab_list)))
+
+
+@views.route('/business-conditions', methods=['GET'])
+# @login_required
+def business_conditions():
+    return render_template("business_conditions.html", user=current_user, adminz=adminz)
+
+
+
+
 
 
 @views.route('/delete-note', methods=['POST'])
@@ -223,6 +238,10 @@ def update_duel2():
 
     except:
         print('error')
+        
+        
+        
+        
 
 
 
@@ -365,10 +384,20 @@ def season_delete(season):
 
 
 
+@views.route('/season/delete-player/<player>/<season>', methods=['GET', 'POST'])
+@login_required
+def season_player_delete(player, season):
 
-
-
-
+    if player and season:
+        season = Season.query.get(season)
+        user = User.query.get(player)
+        user.seasony.remove(season)
+        db.session.commit()
+    
+        flash('Removed from list', category='success')
+    
+    return redirect(url_for('views.season_manager', season=season.id))
+    
 
 
 
@@ -401,7 +430,6 @@ def season_list():
     if request.method == "POST" and request.form.get('season_id_button'):
         season1 = request.form.get('season_id')
 
-        print('ddd')
         return redirect(url_for('views.season_manager', season=season1))
 
     return render_template("season_list.html", seasons=seasons, user=current_user, adminz=adminz)
@@ -430,6 +458,17 @@ def season_manager(season):
     
 
     
+    if request.method == "POST" and request.form.get('add_player_to_season'):
+        
+        player_join_season = User.query.get(current_user.id)
+        season = Season.query.get(season)
+        player_join_season.seasony.append(season)
+        db.session.commit()
+        
+        return redirect(url_for('views.season_manager', season=season.id))
+
+
+
     if request.method == "POST" and request.form.get('season_delete'):
         
         return redirect(url_for('views.season_delete', season=request.form.get('season_delete')))
@@ -460,9 +499,10 @@ def season_manager(season):
             return redirect(url_for('views.duel_view', round=round, group=grno[0], season=season1))
     seas = Season.query.get(season)
     players = db.session.query(user_season).filter(user_season.c.season_id==season).filter(user_season.c.orderz>=1).all()
+    players_wait = db.session.query(User).filter(User.seasony).filter(Season.id==season).all()
 
 
-    return render_template("season.html", players=players, seas=seas, groupz=groupz, dic=dic, season=season, seasons=rounds, user=current_user, adminz=adminz)
+    return render_template("season.html", players_wait=players_wait, players=players, seas=seas, groupz=groupz, dic=dic, season=season, seasons=rounds, user=current_user, adminz=adminz)
 
 
 def create_new_season(season):

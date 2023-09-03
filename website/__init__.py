@@ -52,9 +52,12 @@ def create_app():
     
     from .views import views
     from .auth import auth
+    from .products import products
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(products, url_prefix='/')
+
     # from website.errors.handlers import errors
     # app.register_blueprint(errors)
 

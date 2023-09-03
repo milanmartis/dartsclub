@@ -44,14 +44,15 @@ content %}
           <div class="form-group">
             <!-- <label for="password1">Password</label> -->
             <input
-              type="password"
-              class="form-control"
-              required
-              id="password1"
-              name="password1"
-              placeholder="Enter password"
-              value="{{ request.form['password1'] }}"
+            type="password"
+            class="form-control"
+            required
+            id="password1"
+            name="password1"
+            placeholder="Enter password"
+            value="{{ request.form['password1'] }}"
             />
+            <i class="far fa-eye" id="togglePassword1" style="float:right;position:relative; right:12px; top:-25px;color:#00EE00;cursor: pointer;padding:0px;margin:0px;"></i>
           </div>
           <div class="form-group">
             <!-- <label for="password2">Password (Confirm)</label> -->
@@ -64,6 +65,7 @@ content %}
             placeholder="Confirm password"
             value="{{ request.form['password2'] }}"
             />
+            <i class="far fa-eye" id="togglePassword2" style="float:right;position:relative; right:12px; top:-25px;color:#00EE00;cursor: pointer;padding:0px;margin:0px;"></i>
           </div>
 <br>
           <button
@@ -71,8 +73,13 @@ content %}
             id="location_href_register"
             name="location_href_register"
             class="btn-demo btn-outline-dark btn-block"
+            onclick="javascript:spinner();document.getElementById('login_button').style.color='#00EE00';"
           >
             Sign up
+            <div class="loader">
+              <div class="loading-login">
+              </div>
+            </div>
           </button>
         </form>
         <div class="col mt-10">
