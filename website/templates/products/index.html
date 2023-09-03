@@ -27,11 +27,11 @@
                 <td data-name="title" style="font-weight: 700;">{{ product.title }}</td>
                 <td data-name="price">{{ product.price }}</td>
                 <td>
-                    <button class="edit"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                    <button class="edit" ><i class="fa fa-edit" aria-hidden="true"></i></button>
                 </td>
                 
                 <td>
-                    <button class="delete"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    <button class="delete" ><i class="fa fa-trash" aria-hidden="true"></i></button>
                 </td>
                 <td>
                 </td>
@@ -41,7 +41,6 @@
         </tbody>
     </table>
     <script>
-        alert('jj');
 
         //////////PRODUCTS
         const productForm = document.querySelector('#productForm');
@@ -63,7 +62,7 @@
                                       <td data-name="title">${data.title}</td>
                                       <td data-name="price">${data.price}</td>
                                       <td>
-                                        <button class="edit">Edit</button>
+                                        <button class="edit"><i class="fa fa-edit" aria-hidden="true"></i></button>
                                     </td>
                                     
                                     <td>
@@ -78,9 +77,13 @@
         });
         
 
-        $(document).on('click', '.edit', function() {
-        
+        const productEdit = document.querySelector('.edit');
+
+        productEdit.addEventListener('click',function(){ 
+            
+            
           const row = $(this).closest('tr');
+          console.log(row); 
           const id = row.data('id');
           const title = row.find('[data-name="title"]').text();
           const price = row.find('[data-name="price"]').text();
@@ -101,7 +104,9 @@
         });
         
 
-        $(document).on('click', '.delete', function() {
+        const productDelete = document.querySelector('.delete');
+
+        productDelete.addEventListener('click',function(){ 
           const row = $(this).closest('tr');
           const id = row.data('id');
         

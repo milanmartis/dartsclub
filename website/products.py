@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 from .models import Product, Note, User, Duel, Season, Groupz, Round, user_duel, user_group, user_season
 from . import db, bcrypt
 from flask_login import login_user, login_required, logout_user, current_user
+from flask_security import roles_required
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
@@ -24,6 +26,8 @@ adminz = [21, 22]
 
 
 @products.route('/products')
+@login_required
+@roles_required('Admin')
 def index():
     products = Product.query.all()
     return render_template('products/index.html', products=products, user=current_user, adminz=adminz)
